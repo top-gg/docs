@@ -72,50 +72,56 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../../styles/_variables.styl'
+@import '../../styles/_variables.styl';
 
-.search
-  &__container
-    width: 100%
-    padding-left: 16px
-    padding-right: 30px
-    user-select: none
+.search {
+  &__container {
+    width: 100%;
+    padding: 0 16px;
+    user-select: none;
 
-    input
-      width: 100%
-      padding: 8px 12px
-      border: 1px solid $gray
-      box-shadow: none
-      border-radius: 4px
-      appearance: none
-      outline: none
-      background-color: $gray
+    input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid $gray;
+      box-shadow: none;
+      border-radius: 4px;
+      appearance: none;
+      outline: none;
+      background-color: $gray;
 
-      &:hover
-      &:focus
-        border-color: #888
+      &:hover, &:focus {
+        border-color: #888;
+      }
+    }
+  }
 
-  &__body
-    position: relative
+  &__body {
+    position: relative;
+  }
 
-  &__list
-    position: absolute
-    left: 0
-    top: 5px
-    width: 100%
-    padding: 1.2em 1em
-    box-shadow: 5px 5px 25px 0px rgba(46, 61, 73, 0.1)
-    background-color: $white
+  &__list {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 100%;
+    padding: 1.2em 1em;
+    box-shadow: 5px 5px 25px 0px rgba(46, 61, 73, 0.1);
+    background-color: $white;
+  }
 
-  &__item
-    width: 100%
-    margin: 4px 0
-    list-style: none
-    white-space: nowrap
-    overflow: hidden
-    text-overflow: ellipsis
+  &__item {
+    width: 100%;
+    margin: 4px 0;
+    list-style: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-    a
-      display: block
-      color: $textColor
+    a {
+      display: block;
+      color: $textColor;
+    }
+  }
+}
 </style>

@@ -6,6 +6,16 @@
     @click="savePosition"
   >
     <div class="group">
+      <div class="category__link">
+        <div class="docs__header">
+          <a :href="`${this.$localePath}`">
+            <img class="docs__logo" src="/dblnew.png" />
+          </a>
+          <h1 class="docs__title">{{ siteTitle }}</h1>
+        </div>
+      </div>
+    </div>
+    <div class="group">
       <div class="group__title">Search</div>
       <div class="group__body">
         <Search v-model="searchKeyword" :options="searchedOptions" />
@@ -13,13 +23,28 @@
     </div>
     <div v-if="shouldShowLangSelect" class="group">
       <div class="group__title">{{ languageSelectText }}</div>
-      <div class="group__body">
-        <div class="sidebar__lang">
-          <Select
-            :options="localePathList"
-            :value="currentPagePath"
-            @change="toggleLocale"
-          ></Select>
+      <div v-for="locale in localePathList" :key="locale.value">
+        <div class="group__body">
+          <div class="sidebar__lang">
+            <div
+              :class="[
+                'group__category',
+                'category',
+                {
+                  'category--selected': currentPagePath === locale.value,
+                  'category--active': currentPagePath === locale.value,
+                },
+              ]"
+            >
+              <div class="category__label">
+                <NavLink
+                  class="category__link sidebar-link"
+                  :to="locale.value"
+                  >{{ title(locale.prop) }}</NavLink
+                >
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -206,6 +231,9 @@ export default {
     shouldShowLangSelect() {
       return Object.keys(this.$site.locales || {}).length > 1
     },
+    siteTitle() {
+      return config.get(this.$site, 'title', this.$localePath)
+    },
     languageSelectText() {
       return (
         config.get(this.$site, 'selectText', this.$localePath) || 'languages'
@@ -261,7 +289,7 @@ export default {
       }
 
       order.sort()
-      order.unshift('home')
+      // order.unshift('home')
 
       return order
     },
@@ -285,7 +313,7 @@ export default {
   methods: {
     title,
     toggleLocale(path) {
-      this.$router.push(path)
+      this.$router.push(`${path}/0-introduction`)
     },
     refreshContainerWidth() {
       const width = this.$refs.container.parentNode.getBoundingClientRect()
@@ -340,78 +368,102 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../../styles/_variables.styl'
+@import '../../styles/_variables.styl';
 
-.sidebar
-  position: fixed
-  top: 0
-  bottom: 0
-  z-index: 2
-  width: 100%
-  margin-left 1px
-  padding-top: 3rem
-  overflow: auto
-  background: $white
-  user-select: none
+.docs__logo {
+  margin-right: 20px;
+  width: 40px;
+  height: 40px;
+}
 
-.group
-  margin-bottom: 4rem
+.docs__title {
+  color: #0d1c36;
+  font-size: 1rem;
+}
 
-  &__title
-    padding-left: 30px
-    margin-bottom: 1em
-    font-size: 14px
-    font-weight: 300
-    letter-spacing: 1.3px
-    text-transform: uppercase
-    color: #888
+.docs__header {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
 
-.category
-  a,
-  a:hover
-    color: $black
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 100%;
+  margin-left: 1px;
+  padding-top: 3rem;
+  overflow: auto;
+  background: $white;
+  user-select: none;
+}
 
-  &__label,
-  &__header-item
-    margin: 0.6em 0
-    line-height: 2em
+.group {
+  margin-bottom: 4rem;
 
-  &__label,
-  &__headers
-    border-left: 4px solid $white
-    border-right: 4px solid $white
+  &__title {
+    padding-left: 30px;
+    margin-bottom: 1em;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    color: #888;
+  }
+}
 
-  &__link
-    display: block
-    padding: 0 26px
+.category {
+  a, a:hover {
+    color: $black;
+  }
 
-  &__headers
-    display: none
+  &__label, &__header-item {
+    margin: 0.6em 0;
+    line-height: 2em;
+  }
 
-  &--active,
-  &--selected
-    & ^[0]__headers
-      display: block
+  &__label, &__headers {
+    border-left: 4px solid $white;
+    border-right: 4px solid $white;
+  }
 
-  &:hover &__label,
-  &__headers:hover,
-  &--active &__label,
-  &--active&__headers,
-  .router-link-exact-active
-    font-weight: 600
-    border-left-color: $black
+  &__link {
+    display: block;
+    padding: 0 26px;
+  }
 
-  &__header-item
-    position: relative
-    padding-left: 30px
-    margin: 0.1em 0
+  &__headers {
+    display: none;
+  }
 
-    & ^[0]__link
-      padding-left: 20px
+  &--active, &--selected {
+    & ^[0]__headers {
+      display: block;
+    }
+  }
 
-    &::before
+  &:hover &__label, &__headers:hover, &--active &__label, &--active&__headers, .router-link-exact-active {
+    font-weight: 600;
+    border-left-color: $black;
+  }
+
+  &__header-item {
+    position: relative;
+    padding-left: 30px;
+    margin: 0.1em 0;
+
+    & ^[0]__link {
+      padding-left: 20px;
+    }
+
+    &::before {
       position: absolute;
-      margin-right: 4px
-      color: #979797
-      content: "-"
+      margin-right: 4px;
+      color: #979797;
+      content: '-';
+    }
+  }
+}
 </style>

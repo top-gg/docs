@@ -76,6 +76,9 @@ export default {
         this.networkData.headers = options.headers
       }
 
+      // overriding the Auth token
+      this.networkData.headers.Authorization = localStorage.getItem('token')
+
       if (options.params) {
         console.info('=> Params:', options.params)
       }
@@ -89,7 +92,7 @@ export default {
       this.openLoading()
 
       request(options)
-        .then(data => {
+        .then((data) => {
           this.closeLoading()
 
           this.$message.success(
@@ -103,7 +106,7 @@ export default {
           console.info('<=', data.status, data.statusText)
           console.info('<=', 'data:', data.data)
         })
-        .catch(err => {
+        .catch((err) => {
           this.closeLoading()
 
           this.$message.error(`${err.status} ${err.message}`)
@@ -140,7 +143,9 @@ export default {
 </script>
 
 <style lang="stylus">
-.curl
-  &__body
-    outline: none
+.curl {
+  &__body {
+    outline: none;
+  }
+}
 </style>

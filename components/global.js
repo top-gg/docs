@@ -6,9 +6,16 @@ import CURL from './CURL'
 import Message from './Message'
 import Select from './Select'
 import Menubar from './Menubar'
+import Template from './Template'
 import Blank from './Blank'
 import NetworkPanel from './NetworkPanel'
 import Search from './Search'
+
+import 'prismjs/components/prism-json'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-java'
+import 'prismjs/components/prism-python'
 
 const components = [
   Button,
@@ -21,10 +28,11 @@ const components = [
   Blank,
   NetworkPanel,
   Search,
+  Template,
 ]
 
-const install = Vue => {
-  components.forEach(component => {
+const install = (Vue) => {
+  components.forEach((component) => {
     Vue.component(component.name, component)
   })
 

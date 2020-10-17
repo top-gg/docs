@@ -39,8 +39,9 @@
               <div class="network-section__title">Payload</div>
               <div class="network-section__body">
                 <div class="network-section__cont">
-                  <!-- display: inline -->{{ formatJSON(request)
-                  }}<!-- display: inline -->
+                  <pre>
+                    <code> {{ formatJSON(request) }} </code>
+                    </pre>
                 </div>
               </div>
             </div>
@@ -57,8 +58,9 @@
               <div class="network-section__title">Body</div>
               <div class="network-section__body">
                 <div class="network-section__cont">
-                  <!-- display: inline -->{{ formatJSON(response)
-                  }}<!-- display: inline -->
+                  <pre>
+                    <code class="language-json">{{ formatJSON(response) }}</code>
+                    </pre>
                 </div>
               </div>
             </div>
@@ -70,6 +72,12 @@
 </template>
 
 <script>
+import Prism from 'prismjs'
+import 'prismjs/components/prism-json'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-java'
+import 'prismjs/components/prism-python'
 export default {
   name: 'NetworkPanel',
   props: {
@@ -111,10 +119,15 @@ export default {
       collapse: true,
     }
   },
+  mounted() {
+    Vue.$nextTick(() => {
+      Prism.highlightAll()
+    })
+  },
   computed: {
     headerTexts() {
       return Object.keys(this.headers)
-        .map(item => `${item}: ${this.headers[item]}`)
+        .map((item) => `${item}: ${this.headers[item]}`)
         .join('\n')
     },
   },
@@ -127,7 +140,7 @@ export default {
       } else {
         document.body.className = document.body.className
           .split(' ')
-          .filter(item => item !== 'global-style__body__scroll-disabled')
+          .filter((item) => item !== 'global-style__body__scroll-disabled')
           .join(' ')
       }
     },
@@ -141,7 +154,7 @@ export default {
     formatJSON(data) {
       return data === null || data === undefined
         ? ''
-        : JSON.stringify(data, null, 4)
+        : JSON.stringify(data, null, 2)
     },
     toggleCollapseStatus() {
       this.collapse = !this.collapse
@@ -151,116 +164,144 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../../styles/_variables.styl'
+@import '../../styles/_variables.styl';
 
-.global-style__body__scroll-disabled
-  height: 100%
-  overflow: hidden
+.global-style__body__scroll-disabled {
+  height: 100%;
+  overflow: hidden;
+}
 
-.fade-enter-active, .fade-leave-active
-  transition: opacity .3s ease-in-out
-.fade-enter, .fade-leave-to
-  opacity: 0
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
 
-.network
-  &__container
-    position: fixed
-    top: 0
-    left: 0
-    z-index: 10
-    width: 100%
-    height: 100%
-    text-align: left
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 
-  &__mask
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    background-color: rgba(0, 0, 0, 0.3)
+.network {
+  &__container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+  }
 
-  &__box
-    position: absolute
-    top: 6rem
-    left: 50%
-    max-width: 90%
-    padding: 1.625rem 2rem
-    transform: translateX(-50%)
-    border-radius: 0.25rem
-    color: #000
-    background-color: #fff
+  &__mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 
-    @media screen and (max-width: $container-max-widths.md)
-      width: 90%
+  &__box {
+    position: absolute;
+    top: 6rem;
+    left: 50%;
+    max-width: 90%;
+    padding: 1.625rem 2rem;
+    transform: translateX(-50%);
+    border-radius: 0.25rem;
+    color: #000;
+    background-color: #fff;
 
-  &__heading
-    position: relative
-    font-size: 1.25rem
-    user-select: none
-    cursor: ew-resize
+    @media screen and (max-width: $container-max-widths.md) {
+      width: 90%;
+    }
+  }
 
-  &__close-btn
-    position: absolute
-    top: 0
-    right: 0
-    width: 26px
-    height: 26px
-    font-size: 26px
-    line-height: 22px
-    text-align: center
-    transition: all 0.6s ease-in-out
-    cursor: pointer
+  &__heading {
+    position: relative;
+    font-size: 1.25rem;
+    user-select: none;
+    cursor: ew-resize;
+  }
 
-    &:hover
-      transform: rotateZ(360deg)
+  &__close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    font-size: 26px;
+    line-height: 22px;
+    text-align: center;
+    transition: all 0.6s ease-in-out;
+    cursor: pointer;
 
-  &__body
-    display: flex
-    margin-top: 2rem
-    margin-left: -1rem
-    margin-right: -1rem
+    &:hover {
+      transform: rotateZ(360deg);
+    }
+  }
 
-  &__cont
-    flex: 1 1 auto
-    width: 50%
-    padding: 0 1rem
+  &__body {
+    display: flex;
+    margin-top: 2rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
 
-    @media screen and (max-width: $container-max-widths.md)
-      width: 100%
+  &__cont {
+    flex: 1 1 auto;
+    width: 50%;
+    padding: 0 1rem;
 
-  &__request
-    @media screen and (max-width: $container-max-widths.md)
-      display: none
+    @media screen and (max-width: $container-max-widths.md) {
+      width: 100%;
+    }
+  }
 
-    &--collapse
-      display: none
-      flex: 0 0 auto
-      width: 0
-      padding: 0
+  &__request {
+    @media screen and (max-width: $container-max-widths.md) {
+      display: none;
+    }
 
-.network-section
-  &__title
-    user-select: none
+    &--collapse {
+      display: none;
+      flex: 0 0 auto;
+      width: 0;
+      padding: 0;
+    }
+  }
+}
 
-  &__body
-    max-width: 34rem
-    padding: 0.875rem
-    margin: 0.5rem 0
-    overflow: auto
-    border-radius: 4px
-    background-color: #f6f8fa
+.network-section {
+  &__title {
+    user-select: none;
+  }
 
-  &__cont
-    white-space: pre
+  &__body {
+    max-width: 34rem;
+    padding: 0.875rem;
+    margin: 0.5rem 0;
+    overflow: auto;
+    border-radius: 4px;
+    background-color: #f6f8fa;
+  }
 
-    @media screen and (min-width: $container-max-widths.md)
-      min-width: 38rem
+  &__cont {
+    white-space: pre;
 
-.network__header .network-section__body
-  height: 4rem
-.network__payload .network-section__body
-  height: 18rem
-.network__response-body .network-section__body
-  height: 24rem
+    @media screen and (min-width: $container-max-widths.md) {
+      min-width: 38rem;
+    }
+  }
+}
+
+.network__header .network-section__body {
+  height: 4rem;
+}
+
+.network__payload .network-section__body {
+  height: 18rem;
+}
+
+.network__response-body .network-section__body {
+  height: 24rem;
+}
 </style>

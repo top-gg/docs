@@ -105,10 +105,10 @@ curl -X POST http://api.example.com/api/auth/login \
     "password": "my-password"
   }'
 ```
+
 </CURL>
 
 </Example>
-
 
 例如：
 
@@ -142,11 +142,11 @@ Button 组件可以使用在任何页面的任何地方。你可以用来指向�
 
 支持的参数如下：
 
-| Name | Type | Description | Default |
-| :-: | :-: | :-: | :-: | :-: |
-| to | String | 链接地址 | `""` |
-| size | String | 按钮大小，可选值有 `small | large` | `""` |
-| light | Boolean | 是否采用亮色主题 | `false` |
+| Name  |  Type   |            Description             | Default |
+| :---: | :-----: | :--------------------------------: | :-----: |
+|  to   | String  |              链接地址              |  `""`   |
+| size  | String  | 按钮大小，可选值有 `small | large` |  `""`   |
+| light | Boolean |          是否采用亮色主题          | `false` |
 
 使用下面的代码即可放置一个按钮：
 
@@ -182,7 +182,9 @@ Button 组件可以使用在任何页面的任何地方。你可以用来指向�
 <Button light>亮色主题</Button>
 
 ```vue
-<Button to="https://github.com/sqrthree/vuepress-theme-api" light>指定为一个链接</Button>
+<Button
+  to="https://github.com/sqrthree/vuepress-theme-api"
+  light>指定为一个链接</Button>
 ```
 
 <Button to="https://github.com/sqrthree/vuepress-theme-api" light>指定为一个链接</Button>
@@ -203,11 +205,11 @@ Button 组件可以使用在任何页面的任何地方。你可以用来指向�
 
 `Section` 组件是一种特殊的布局形式，主要用于 [首页](/zh/#%E4%B8%BA-restful-api-%E8%80%8C%E7%94%9F)。具体效果可参考 [首页 | 为 RESTful API 而生](/zh/#%E4%B8%BA-restful-api-%E8%80%8C%E7%94%9F)。
 
-| Name | Type | Description | Default |
-| :-: | :-: | :-: | :-: | :-: |
-| theme | String | 主题颜色，可选值有 `dark | light` | `"dark"` |
-| center | Boolean | 内容是否居中 | `true` |
-| enhanceMode | Boolean | 是否启用增强模式 | `true` |
+|    Name     |  Type   |            Description            | Default  |
+| :---------: | :-----: | :-------------------------------: | :------: |
+|    theme    | String  | 主题颜色，可选值有 `dark | light` | `"dark"` |
+|   center    | Boolean |           内容是否居中            |  `true`  |
+| enhanceMode | Boolean |         是否启用增强模式          |  `true`  |
 
 ::: tip 增强模式
 增强模式是指该 `Section` 组件突破父级元素宽度限制，达到和浏览器窗口宽度一致的效果。

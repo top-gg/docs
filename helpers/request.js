@@ -69,8 +69,8 @@ const statusText = {
 }
 
 instance.interceptors.response.use(
-  response => response,
-  err => {
+  (response) => response,
+  (err) => {
     const error = {}
 
     if (err.response) {
