@@ -10,12 +10,9 @@ import Template from './Template'
 import Blank from './Blank'
 import NetworkPanel from './NetworkPanel'
 import Search from './Search'
-
-import 'prismjs/components/prism-json'
-import 'prismjs/components/prism-javascript'
-import 'prismjs/components/prism-bash'
-import 'prismjs/components/prism-java'
-import 'prismjs/components/prism-python'
+import Pill from './Pill'
+import TokenInput from './TokenInput'
+import HTable from './HTable'
 
 const components = [
   Button,
@@ -29,6 +26,9 @@ const components = [
   NetworkPanel,
   Search,
   Template,
+  Pill,
+  TokenInput,
+  HTable,
 ]
 
 const install = (Vue) => {

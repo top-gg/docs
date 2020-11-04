@@ -2,21 +2,12 @@
 export default {
   name: 'Template',
   props: {},
-  methods: {
-    replaceAllTokenStrings(node) {
-      if (node.text) {
-        node.text = node.text.replace(/{{\s*token\s*}}/g, this.valueText)
-      }
-      if (node.children) {
-        for (const child of node.children) {
-          this.replaceAllTokenStrings(child)
-        }
-      }
-    },
-  },
   computed: {
     value() {
-      return localStorage.getItem('token')
+      if (typeof window === 'undefined') {
+        return this.errMessage
+      }
+      return window?.localStorage.getItem('token')
     },
     notDefined() {
       return this.value === undefined
@@ -26,6 +17,18 @@ export default {
     },
     errMessage() {
       return `your-bot-token-here`
+    },
+  },
+  methods: {
+    replaceAllTokenStrings(node) {
+      if (node.text) {
+        node.text = node.text.replace(/{{\s*token\s*}}/g, this.valueText.trim())
+      }
+      if (node.children) {
+        for (const child of node.children) {
+          this.replaceAllTokenStrings(child)
+        }
+      }
     },
   },
   render(h) {

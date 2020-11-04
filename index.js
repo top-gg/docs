@@ -1,8 +1,3 @@
-import 'prismjs/components/prism-json'
-import 'prismjs/components/prism-javascript'
-import 'prismjs/components/prism-bash'
-import 'prismjs/components/prism-java'
-import 'prismjs/components/prism-python'
 const { defaultLocales, getDefaultLocales } = require('./helpers/locales')
 
 const locales = Object.keys(defaultLocales)
@@ -38,9 +33,7 @@ containerConfig.push([
 ])
 
 module.exports = {
-  plugins: [
-    '@vuepress/active-header-links',
-    '@vuepress/last-updated',
-    ['smooth-scroll', true],
-  ].concat(containerConfig),
+  plugins: ['@vuepress/active-header-links', '@vuepress/last-updated'].concat(
+    containerConfig
+  ),
 }

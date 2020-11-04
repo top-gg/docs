@@ -1,21 +1,27 @@
-<Block>
-# Getting Started
-Sorry, but I'm still writing this doc.
+---
+title: Introduction
+---
 
-Stay tuned, it will appear in a day or two.
+# Introduction
 
-<Example>
+top.gg uses a REST API for general operations such as sending POST requests and receiving GET requests.
 
-<CURL>
-<Template>
-```sh
-curl -X GET https://top.gg/api/bots \
- -H 'Content-Type: application/json' \
- -H 'Authorization: {{token}}'
-```
-</Template>
-</CURL>
+### Base url
 
-</Example>
+`https://top.gg/api`
 
-</Block>
+## Authentication
+
+To access the API you must first authorize yourself. This can be done by using your top.gg token which can be obtained from your bot's webhook page in the dashboard `https://top.gg/bots/:id/webhooks`.
+
+::: warning ⚠️ Warning
+Your top.gg token, much like your discord bot token, is equivalent to a password. Do <strong>NOT</strong> share it or put it in version control.
+:::
+
+### Token
+
+You can paste your token here to pre-populate the examples in the docs with a valid token.
+
+<TokenInput />
+
+_The token you paste here is stored locally on your browser and not sent anywhere._

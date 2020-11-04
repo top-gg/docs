@@ -15,12 +15,12 @@
         </div>
       </div>
     </div>
-    <div class="group">
+    <!-- <div class="group">
       <div class="group__title">Search</div>
       <div class="group__body">
         <Search v-model="searchKeyword" :options="searchedOptions" />
       </div>
-    </div>
+    </div> -->
     <div v-if="shouldShowLangSelect" class="group">
       <div class="group__title">{{ languageSelectText }}</div>
       <div v-for="locale in localePathList" :key="locale.value">
@@ -371,12 +371,12 @@ export default {
 @import '../../styles/_variables.styl';
 
 .docs__logo {
-  margin-right: 20px;
   width: 40px;
   height: 40px;
 }
 
 .docs__title {
+  margin-left: 20px;
   color: #0d1c36;
   font-size: 1rem;
 }
@@ -394,20 +394,20 @@ export default {
   z-index: 2;
   width: 100%;
   margin-left: 1px;
-  padding-top: 3rem;
+  padding-top: 1rem;
   overflow: auto;
   background: $white;
   user-select: none;
 }
 
 .group {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 
   &__title {
     padding-left: 30px;
     margin-bottom: 1em;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 500;
     letter-spacing: 1.3px;
     text-transform: uppercase;
     color: #888;
@@ -446,7 +446,7 @@ export default {
 
   &:hover &__label, &__headers:hover, &--active &__label, &--active&__headers, .router-link-exact-active {
     font-weight: 600;
-    border-left-color: $black;
+    border-left-color: $theme;
   }
 
   &__header-item {
@@ -462,7 +462,7 @@ export default {
       position: absolute;
       margin-right: 4px;
       color: #979797;
-      content: '-';
+      content: '§';
     }
   }
 }

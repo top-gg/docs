@@ -76,9 +76,6 @@ export default {
         this.networkData.headers = options.headers
       }
 
-      // overriding the Auth token
-      this.networkData.headers.Authorization = localStorage.getItem('token')
-
       if (options.params) {
         console.info('=> Params:', options.params)
       }

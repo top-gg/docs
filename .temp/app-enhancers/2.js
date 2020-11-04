@@ -1,1 +1,0 @@
-export { default } from "/home/xetera/topggdocs/node_modules/vuepress-plugin-define/enhanceAppFile.js"

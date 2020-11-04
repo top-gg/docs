@@ -24,20 +24,20 @@
           >
             <div class="network__url network-section">
               <div class="network-section__title">Request</div>
-              <div class="network-section__body">
+              <div class="network-section__body network-section--padded">
                 <span class="network__method">{{ method }}</span>
                 <span class="network__url">{{ url }}</span>
               </div>
             </div>
             <div class="network__header network-section">
               <div class="network-section__title">Header</div>
-              <div class="network-section__body">
+              <div class="network-section__body network-section--padded">
                 <div class="network-section__cont">{{ headerTexts }}</div>
               </div>
             </div>
             <div class="network__payload network__section">
               <div class="network-section__title">Payload</div>
-              <div class="network-section__body">
+              <div class="network-section__body network-section--padded">
                 <div class="network-section__cont">
                   <pre>
                     <code> {{ formatJSON(request) }} </code>
@@ -49,7 +49,7 @@
           <div class="network__cont network__response">
             <div class="network__status network-section">
               <div class="network-section__title">Response</div>
-              <div class="network-section__body">
+              <div class="network-section__body network-section--padded">
                 <span class="network__code">{{ statusCode }}</span>
                 <span class="network__text">{{ statusText }}</span>
               </div>
@@ -58,9 +58,7 @@
               <div class="network-section__title">Body</div>
               <div class="network-section__body">
                 <div class="network-section__cont">
-                  <pre>
-                    <code class="language-json">{{ formatJSON(response) }}</code>
-                    </pre>
+                  <pre><code class="language-json" v-html="body"></code></pre>
                 </div>
               </div>
             </div>
@@ -72,12 +70,6 @@
 </template>
 
 <script>
-import Prism from 'prismjs'
-import 'prismjs/components/prism-json'
-import 'prismjs/components/prism-javascript'
-import 'prismjs/components/prism-bash'
-import 'prismjs/components/prism-java'
-import 'prismjs/components/prism-python'
 export default {
   name: 'NetworkPanel',
   props: {
@@ -119,12 +111,17 @@ export default {
       collapse: true,
     }
   },
-  mounted() {
-    Vue.$nextTick(() => {
-      Prism.highlightAll()
-    })
-  },
   computed: {
+    body() {
+      const responseString = this.formatJSON(this.response)
+      const a = this.$prism.highlight(
+        responseString,
+        this.$prism.languages.json,
+        'json'
+      )
+      console.log(a)
+      return a
+    },
     headerTexts() {
       return Object.keys(this.headers)
         .map((item) => `${item}: ${this.headers[item]}`)
@@ -275,9 +272,12 @@ export default {
     user-select: none;
   }
 
+  &--padded {
+    padding: 0.875rem;
+  }
+
   &__body {
     max-width: 34rem;
-    padding: 0.875rem;
     margin: 0.5rem 0;
     overflow: auto;
     border-radius: 4px;
