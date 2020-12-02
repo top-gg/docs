@@ -13,6 +13,8 @@ jobs:
         node-version: [12.x]
     steps:
       - uses: actions/checkout@v2
+      - name: Install deps
+        run: yarn
       - name: Deploy
         run: yarn docs:build
       - name: Deploy
