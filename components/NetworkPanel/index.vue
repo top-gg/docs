@@ -203,7 +203,7 @@ export default {
     padding: 1.625rem 2rem;
     transform: translateX(-50%);
     border-radius: 0.25rem;
-    color: #000;
+    color: #dadada;
     background-color: #fff;
 
     @media screen and (max-width: $container-max-widths.md) {
