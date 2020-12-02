@@ -119,7 +119,6 @@ export default {
         this.$prism.languages.json,
         'json'
       )
-      console.log(a)
       return a
     },
     headerTexts() {

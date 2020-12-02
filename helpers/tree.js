@@ -44,10 +44,14 @@ export function getDirTree($site, $localePath) {
           children: [],
         }
 
-        return
+        return;
       }
 
-      const groupName = matchGroupNameFromPath(item.path, $localePath)
+      let groupName = matchGroupNameFromPath(item.path, $localePath)
+
+      if(item.frontmatter.category) {
+        groupName = item.frontmatter.category;
+      }
 
       if (!sidebars[groupName]) {
         sidebars[groupName] = {

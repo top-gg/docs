@@ -67,67 +67,78 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../../styles/_variables.styl'
+@import '../../styles/_variables.styl';
 
-.btn
-  position: relative
-  display: inline-block
-  padding: 1.5em 6em
-  border: 2px solid $black
-  font-size: 12px
-  border-radius: 4px
-  transition: border 0.2s, background 0.2s, color 0.2s ease-out
+.btn {
+  position: relative;
+  display: inline-block;
+  padding: 1.5em 6em;
+  border: 2px solid $black;
+  font-size: 12px;
+  border-radius: 4px;
+  transition: border 0.2s, background 0.2s, color 0.2s ease-out;
 
-  &:hover
-    color: $black
-    background-color: $white
-    cursor: pointer
+  &:hover {
+    color: $gray;
+    background-color: $white;
+    cursor: pointer;
+  }
 
-  &--default
-    color: $white
-    background-color: $black
+  &--default {
+    color: $white;
+    background-color: $black;
+  }
 
-  &--light
-    color: $black
-    border-color: $white
-    background-color: $white
+  &--light {
+    color: $black;
+    border-color: $white;
+    background-color: $white;
 
-    &:hover
-      color: $white
-      background-color: $black
+    &:hover {
+      color: $white;
+      background-color: $black;
+    }
+  }
 
-  &--small
-    padding: 1em 4em
-  &--large
-    font-size: 14px
+  &--small {
+    padding: 1em 4em;
+  }
 
-  &--loading img
-    width: 1em
-    height: 1em
+  &--large {
+    font-size: 14px;
+  }
 
-  &__loading-wrapper
-    position: absolute
-    top: 0
-    left: 0
-    display: flex
-    width: 100%
-    height: 100%
-    justify-content: center
-    align-items: center
-    background-color: $black
+  &--loading img {
+    width: 1em;
+    height: 1em;
+  }
 
-    img
-      animation: loadingCircle 1s infinite linear
+  &__loading-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: $black;
+
+    img {
+      animation: loadingCircle 1s infinite linear;
+    }
+  }
+}
 
 @keyframes loadingCircle {
   from {
-    transform-origin: 50% 50%
-    transform: rotate(0deg)
+    transform-origin: 50% 50%;
+    transform: rotate(0deg);
   }
 
   to {
-    transform-origin: 50% 50%
-    transform: rotate(1turn)
+    transform-origin: 50% 50%;
+    transform: rotate(1turn);
   }
 }
 </style>

@@ -1,6 +1,6 @@
 ---
 title: Bot
-order: 2
+category: API
 ---
 
 <Block>
@@ -8,7 +8,7 @@ order: 2
 
 Gets a list of bots that match a specific query.
 
-<code style="color: green">GET</code> `/bots`
+`GET` /bots
 
 ### Query String Parameters
 
@@ -36,53 +36,57 @@ Gets a list of bots that match a specific query.
 <Template>
 ```sh
 curl -X GET https://top.gg/api/bots?limit=20 \
- -H 'Content-Type: application/json' \
- -H 'Authorization: {{token}}'
+-H 'Content-Type: application/json' \
+-H 'Authorization: {{token}}'
 ```
 </Template>
 </CURL>
 
-Example return value
+  Example return value
 
-```json
-{
-  "results": [
-    {
-      "defAvatar": "6debd47ed13483642cf09e832ed0bc1b",
-      "invite": "",
-      "website": "https://discordbots.org",
-      "support": "KYZsaFb",
-      "github": "https://github.com/DiscordBotList/Luca",
-      "longdesc": "Luca only works in the **Discord Bot List** server.    \r\nPrepend commands with the prefix `-` or `@Luca#1375`.    \r\n**Please refrain from using these commands in non testing channels.**\r\n- `botinfo @bot` Shows bot info, title redirects to site listing.\r\n- `bots @user`* Shows all bots of that user, includes bots in the queue.\r\n- `owner / -owners @bot`* Shows all owners of that bot.\r\n- `prefix @bot`* Shows the prefix of that bot.\r\n* Mobile friendly version exists. Just add `noembed` to the end of the command.\r\n",
-      "shortdesc": "Luca is a bot for managing and informing members of the server",
-      "prefix": "- or @Luca#1375",
-      "lib": "discord.js",
-      "clientid": "264811613708746752",
-      "avatar": "7edcc4c6fbb0b23762455ca139f0e1c9",
-      "id": "264811613708746752",
-      "discriminator": "1375",
-      "username": "Luca",
-      "date": "2017-04-26T18:08:17.125Z",
-      "server_count": 2,
-      "guilds": ["417723229721853963", "264445053596991498"],
-      "shards": [],
-      "monthlyPoints": 19,
-      "points": 397,
-      "certifiedBot": false,
-      "owners": ["129908908096487424"],
-      "tags": ["Moderation", "Role Management", "Logging"],
-      "donatebotguildid": ""
-    }
-  ],
-  "limit": 1,
-  "offset": 0,
-  "count": 1,
-  "total": 7
-}
-```
-
+  ```json
+  {
+    "results": [
+      {
+        "defAvatar": "6debd47ed13483642cf09e832ed0bc1b",
+        "invite": "",
+        "website": "https://discordbots.org",
+        "support": "KYZsaFb",
+        "github": "https://github.com/DiscordBotList/Luca",
+        "longdesc": "Luca only works in the **Discord Bot List** server.    \r\nPrepend commands 
+        with the prefix `-` or `@Luca#1375`.    \r\n**Please refrain from using these commands in 
+        non testing channels.**\r\n- `botinfo @bot` Shows bot info, title redirects to site 
+        listing.\r\n- `bots @user`* Shows all bots of that user, includes bots in the queue.\r\n- 
+        `owner / -owners @bot`* Shows all owners of that bot.\r\n- `prefix @bot`* Shows the prefix 
+        of that bot.\r\n* Mobile friendly version exists. Just add `noembed` to the end of the 
+        command.\r\n",
+        "shortdesc": "Luca is a bot for managing and informing members of the server",
+        "prefix": "- or @Luca#1375",
+        "lib": "discord.js",
+        "clientid": "264811613708746752",
+        "avatar": "7edcc4c6fbb0b23762455ca139f0e1c9",
+        "id": "264811613708746752",
+        "discriminator": "1375",
+        "username": "Luca",
+        "date": "2017-04-26T18:08:17.125Z",
+        "server_count": 2,
+        "guilds": ["417723229721853963", "264445053596991498"],
+        "shards": [],
+        "monthlyPoints": 19,
+        "points": 397,
+        "certifiedBot": false,
+        "owners": ["129908908096487424"],
+        "tags": ["Moderation", "Role Management", "Logging"],
+        "donatebotguildid": ""
+      }
+    ],
+    "limit": 1,
+    "offset": 0,
+    "count": 1,
+    "total": 7
+  }
+  ```
 </Example>
-
 </Block>
 
 <Block>
@@ -90,33 +94,31 @@ Example return value
 
 Gets a list of bots that match a specific query.
 
-<code style="color: green">GET</code> `/bot/:id`
+``GET` /bot/:id
 
 <Example>
-
 <CURL>
 <Template>
 ```sh
 curl -X GET https://top.gg/api/bots/264811613708746752 \
- -H 'Content-Type: application/json' \
- -H 'Authorization: {{token}}'
+-H 'Content-Type: application/json' \
+-H 'Authorization: {{token}}'
 ```
 </Template>
 </CURL>
-
 </Example>
-
 </Block>
 
 <Block>
 ## Last 1000 Votes
 
-Gets the last 1000 votees for your bot.
+Gets the last 1000 voters for your bot.
 
-<code style="color: green">GET</code> `/bots/:id/votes`
+`GET` /bots/:id/votes
 
 ::: warning ⚠️ Warning
-If your bot receives more than 1000 votes monthly you cannot use this endpoint and must use `webhooks` and implement your own caching instead.
+If your bot receives more than 1000 votes monthly you cannot use this endpoint and must use 
+`webhooks` and implement your own caching instead.
 :::
 
 <HTable

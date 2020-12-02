@@ -377,7 +377,7 @@ export default {
 
 .docs__title {
   margin-left: 20px;
-  color: #0d1c36;
+  color: $white;
   font-size: 1rem;
 }
 
@@ -396,8 +396,8 @@ export default {
   margin-left: 1px;
   padding-top: 1rem;
   overflow: auto;
-  background: $white;
   user-select: none;
+  background-color: #1d1f21;
 }
 
 .group {
@@ -410,23 +410,18 @@ export default {
     font-weight: 500;
     letter-spacing: 1.3px;
     text-transform: uppercase;
-    color: #888;
+    color: #aaa;
   }
 }
 
 .category {
   a, a:hover {
-    color: $black;
+    color: $white;
   }
 
   &__label, &__header-item {
     margin: 0.6em 0;
     line-height: 2em;
-  }
-
-  &__label, &__headers {
-    border-left: 4px solid $white;
-    border-right: 4px solid $white;
   }
 
   &__link {
@@ -462,7 +457,7 @@ export default {
       position: absolute;
       margin-right: 4px;
       color: #979797;
-      content: '§';
+      content: '•';
     }
   }
 }

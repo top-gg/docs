@@ -13,9 +13,7 @@ export default {
 <style scoped>
 .pill {
   letter-spacing: 0;
-  color: rgb(17, 23, 53);
   border-radius: 16px;
   font-size: 0.9rem;
-  background: #eee;
 }
 </style>

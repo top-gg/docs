@@ -1,6 +1,6 @@
 ---
 title: User
-order: 1
+category: API
 ---
 
 <Block>
@@ -13,7 +13,7 @@ A user represents a User account in top.gg. It is not associated with any other 
 <Block>
 ## Find One User
 
-<code style="color: green">GET</code> `User`
+`GET` /user
 
 Retrieves information about a particular user by Discord user id.
 

@@ -37,7 +37,7 @@ import { isExternalLink } from '../helpers/is'
 import config from '../helpers/config'
 import { getDefaultLocales } from '../helpers/locales'
 
-const isHeading = el => {
+const isHeading = (el) => {
   const tagname = el.tagName.toLowerCase()
 
   return tagname === 'h1' || tagname === 'h2'
@@ -147,7 +147,7 @@ export default {
 
       let html = ''
 
-      Array.from(contentContainer.children).forEach(el => {
+      Array.from(contentContainer.children).forEach((el) => {
         if (isHeading(el)) {
           if (html) {
             html += `
@@ -190,134 +190,157 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '../styles/_variables.styl'
+@import '../styles/_variables.styl';
 
-.page__container
-  min-height: 100vh
-  padding: 4rem 6rem 0
-  overflow: auto
-  background-color: $gray
+.page__container {
+  min-height: 100vh;
+  padding: 4rem 6rem 0;
+  overflow: auto;
+  background-color: #23272b;
 
-  .curl__container
-    text-align: center
+  .curl__container {
+    text-align: center;
+  }
 
-  @media screen and (max-width: $container-max-widths.md)
-    padding: 2rem 2rem 0
+  @media screen and (max-width: $container-max-widths.md) {
+    padding: 2rem 2rem 0;
 
-    .content-block
-      &,
-      &__cont,
-      &__heading
-        width: 100%
-        padding: 1rem 0 0
-        margin: 0
-        background-color: $gray
+    .content-block {
+      &, &__cont, &__heading {
+        width: 100%;
+        padding: 1rem 0 0;
+        margin: 0;
+        background-color: $gray;
+      }
 
-      &__cont
-        padding-top: 0
+      &__cont {
+        padding-top: 0;
+      }
 
-      &::after
-        background-image: none
+      &::after {
+        background-image: none;
+      }
 
-      &__body
-        flex-direction: column
+      &__body {
+        flex-direction: column;
+      }
 
-      &__examples
-        padding: 0
-        margin: 0
-        width: 100%
+      &__examples {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+      }
+    }
 
-    .examples
-      width: 100%
-      padding: 1rem
-      background-color: $black
-      border-radius: 6px
+    .examples {
+      width: 100%;
+      padding: 1rem;
+      background-color: $black;
+      border-radius: 6px;
+    }
+  }
+}
 
-.content__footer
-  display: flex
-  justify-content: space-between
-  padding: 2em 0
-  font-size: 14px
-  color: #999
+.content__footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 2em 0;
+  font-size: 14px;
+  color: #999;
 
-  .edit-link
-    display: flex
-    align-items: center
+  .edit-link {
+    display: flex;
+    align-items: center;
 
-    a
-      margin-right: 0.5em
-      font-weight: 600
-      color: #000
+    a {
+      margin-right: 0.5em;
+      font-weight: 600;
+      color: #000;
+    }
 
-    svg
-      vertical-align: middle
+    svg {
+      vertical-align: middle;
+    }
+  }
+}
 
-.page--block-layout
-  .content__footer-container
-    margin: 0 -3rem
-    background-color: #000
+.page--block-layout {
+  .content__footer-container {
+    margin: 0 -3rem;
+    background-color: #000;
+  }
 
-  .content__footer
-    width: 50%
-    padding: 0 3rem 2rem
-    background-color: #fafafa
+  .content__footer {
+    width: 50%;
+    padding: 0 3rem 2rem;
+    background-color: #23272b;
+  }
+}
 
-.content-block
-  margin: -4rem -6rem 4rem
-  background-color: $black
+.content-block {
+  margin: -4rem -6rem 4rem;
+  background-color: $black;
 
-  &:last-child
-    margin-bottom: 0
+  &:last-child {
+    margin-bottom: 0;
+  }
 
-  &:after
-    height: 1px
-    display: block
-    content: ''
-    width: 100%
-    background-image: linear-gradient(90deg, #eaeaea 50%, #333 50%)
+  &:after {
+    height: 1px;
+    display: block;
+    content: '';
+    width: 100%;
+    background-color: #1d1f21;
+  }
 
-  &:last-child:after
-    display: none
+  &:last-child:after {
+    display: none;
+  }
 
-  &__heading
-    width: 50%
-    padding: 0
-    overflow: auto
-    background-color: #fafafa
+  &__heading {
+    width: 50%;
+    padding: 0;
+    overflow: auto;
+    background-color: #23272b;
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6
-      padding: 4rem 3rem 0
+    h1, h2, h3, h4, h5, h6 {
+      padding: 4rem 3rem 0;
 
-      @media screen and (max-width: $container-max-widths.md)
-        padding: 0
+      @media screen and (max-width: $container-max-widths.md) {
+        padding: 0;
+      }
+    }
+  }
 
-  &__body
-    display: flex
-    overflow-x: hidden
+  &__body {
+    display: flex;
+    overflow-x: hidden;
+  }
 
-  &__cont,
-  &__examples
-    width: 50%
-    padding: 0 3rem 2rem
+  &__cont, &__examples {
+    width: 50%;
+    padding: 0 3rem 2rem;
+  }
 
-  &__cont
-    background-color: $gray
+  &__cont {
+    background-color: $gray;
+  }
 
-  &__examples
-    color: $white
+  &__examples {
+    color: $white;
 
-    .btn
-      margin: 2em 0
+    .btn {
+      margin: 2em 0;
+    }
 
     // reset style
-    blockquote
-      border-left-color: $white
+    blockquote {
+      border-left-color: $white;
 
-      p
-        color: #888
+      p {
+        color: #888;
+      }
+    }
+  }
+}
 </style>

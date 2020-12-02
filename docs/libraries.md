@@ -1,7 +1,6 @@
 ---
 title: Libraries
-meta:
-  order: 3
+category: Resources
 ---
 
 <Block>

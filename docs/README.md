@@ -1,45 +1,11 @@
 ---
-home: true
-title: Hello, World.
-description: Not sure where to start? We’ve put together some handy guides and reference documentation you can use to start building.
-actionText: Getting Started
-actionLink: /0-introduction/
-footer: Open Source on [GitHub](https://github.com/sqrthree/vuepress-theme-api), Made by [@sqrthree](https://github.com/sqrthree), Power by [vuepress](https://github.com/vuejs/vuepress).
+title: Reference
 ---
 
-### As Easy as 1, 2, 3
+# Reference
 
-```bash
-# install vuepress
-yarn global add vuepress # OR npm install -g vuepress
-
-# install theme
-yarn global add vuepress-theme-api # OR npm install -g vuepress-theme-api
-
-# create a markdown file and write something
-echo '# Hello, World.' > Hello.md
-
-# start writing
-vuepress dev
-
-# build to static files
-vuepress build
-```
+Casing currently is inconsistent and will be fixed in future versions.
 
 ::: tip
-VuePress requires [Node.js](http://nodejs.org/) >= 8.
+`?` in a **response field** indicates that a _key_ in a response json might be missing. `?` in a **response type** indicates that a value in a response json might be `null`.
 :::
-
-<Section>
-
-## Build for RESTful API
-
-A easy-to-use, minimalist theme for vuepress.
-
-With out-of-the-box feature, all you need to do is install it and write something.
-
-<br>
-
-<Button type="light" to="/getting-started/">Getting Started</Button>
-
-</Section>
