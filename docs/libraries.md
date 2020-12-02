@@ -51,9 +51,8 @@ const app = express()
 
 const webhook = new Topgg.Webhook('your webhook auth')
 
-app.post('/dblwebhook', webhook.middleware(), (req, res) =>{
-  req.vote // your vote object, e.g
-
+app.post('/dblwebhook', webhook.middleware(), (req, res) => {
+  // req.vote wil lbe your vote object, e.g
   console.log(req.vote.user) // 395526710101278721 < user who voted
 })
 
