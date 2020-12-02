@@ -13,9 +13,17 @@ jobs:
         node-version: [12.x]
     steps:
       - uses: actions/checkout@v2
+      - name: Install deps
+        run: yarn
+      - name: Link deps
+        run: yarn link
+      - name: Link vuepress theme
+        run: yarn link vuepress-theme-api
+      - name: Deploy
+        run: yarn docs:build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./docs/.vuepress/dist
 

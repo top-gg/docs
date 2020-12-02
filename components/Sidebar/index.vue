@@ -393,7 +393,6 @@ export default {
   bottom: 0;
   z-index: 2;
   width: 100%;
-  margin-left: 1px;
   padding-top: 1rem;
   overflow: auto;
   user-select: none;
