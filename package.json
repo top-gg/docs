@@ -1,0 +1,22 @@
+{
+  "keywords": [],
+  "name": "topgg-docs",
+  "description": "Top.gg documentation",
+  "license": "MIT",
+  "scripts": {
+    "start": "gatsby develop",
+    "build": "gatsby build"
+  },
+  "dependencies": {
+    "@apollo/space-kit": "^8.7.2",
+    "babel-plugin-styled-components": "^1.12.0",
+    "gatsby": "^2.25.0",
+    "gatsby-plugin-styled-components": "^3.7.0",
+    "gatsby-theme-apollo-core": "^3.0.23",
+    "gatsby-theme-apollo-docs": "4.5.12",
+    "react": "^16.12.0",
+    "react-copy-to-clipboard": "^5.0.2",
+    "react-dom": "^16.12.0",
+    "styled-components": "^5.2.1"
+  }
+}

@@ -1,0 +1,36 @@
+---
+title: Webhooks
+description: Webhook integration for receiving vote data
+---
+
+Instead of requesting our API to see the users who have voted for your bot, you can now use webhooks! Webhooks will send a post request to a URL of your choice when your bot has been voted for.
+
+## Getting Started
+
+Start by setting up your webhook URL in the edit form of your bot on this site, it can be found at https://top.gg/bot/:your-bot-id/webhooks. Once you've entered the URL you want the webhook to be sent to, you're all set! If you need help setting up webhooks inside of your bot don't be afraid to ask in our [discord server](https://discord.gg/dbl) in the `#api` channel.
+
+## Verifying the request
+
+On the edit page you can see another input for `Authorization`. Here you can provide a shared secret that you can check for on the server side.
+
+To verify requests are coming from us, look for the value in the `Authorization` header and make sure it is the same as the value you provided in the form.
+
+## Data Format
+
+The format of the data your webhook URL will receive in a POST request.
+
+### Schema
+
+| Field     | Type        | Description                                                                                         |
+| --------- | ----------- | --------------------------------------------------------------------------------------------------- |
+| bot       | `snowflake` | Discord ID of the bot that received a vote.                                                         |
+| user      | `snowflake` | Discord ID of the user who voted.                                                                   |
+| type      | `string`    | The type of the vote (should always be `"upvote"` except when using the test button it's `"test"`). |
+| isWeekend | `boolean`   | Whether the weekend multiplier is in effect, meaning users votes count as two.                      |
+| query?    | `string`    | Query string params found on the /bot/:ID/vote page. Example: ?a=1&b=2.                             |
+
+## More Events
+
+Looking for webhooks events other than votes? They are only available starting from **v1** of the API.
+
+<footer className="text-tertiary">You are currently viewing v0.</footer>

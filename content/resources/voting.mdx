@@ -1,0 +1,52 @@
+---
+title: Voting
+description: Voting guidelines for bot developers
+---
+
+> If you have over 1000 votes per month you **have** to use webhooks instead of polling
+
+Users can currently vote every 12 hours for each bot. The `/votes` endpoint for your bot only exposes the last 1000 votes. Please implement the webhook functionality instead if you plan to process over 1000 votes.
+
+## Unacceptable API Use 🙅
+
+Breaking these rules will result in appropriate punishments:
+
+### User Punishment
+
+You may not punish users for not voting for your bot, voting rewards are strictly meant to be an added bonus for bots and its abscence cannot be punished.
+
+### External Bot Rewards
+
+You may not reward users for voting for another bot other than the one being used. This includes other bots you may own.
+
+> A user votes for `Bot A`, they should not be receiving `Bot B`'s currency.
+
+### Votelocking
+
+Bot developers commonly choose to limit functionality of their bots through the voting system by only allowing certain features or increasing the limit of certain commands after a user has voted.
+
+This should only be reserved for a small percentage of your bot's commands, you may not wall a large or entirety of your bot's functionality behind a voting requirement for your users.
+
+### Vote Botting
+
+Trying to automatically vote for a bot you use OR creating user accounts to automatically vote for your own bot will result in getting banned from the site.
+
+## Acceptable API Use 👌
+
+- Rewarding users of your bot for voting.
+- Trying to limit voting required commands to 2-3.
+
+## Consequences
+
+**First Offence:**
+A stern warning from one of our beautiful moderators and possible reverting of bot votes.
+
+**Second Offence:**
+If you haven't changed your ways after your first offence, or you are caught breaking these rules a second time, we will lock your access to the voting endpoint(s) and reset your votes.
+
+<hr />
+<footer>
+  We reserve the right to not follow these consequences in the exact order they
+  are laid out here and take action how we see fit depending on the
+  circumstances.
+</footer>

@@ -1,0 +1,24 @@
+---
+# files that should be pinned to the top like reference
+# are prefixed with a @ symbol
+title: 🌟 Getting Started
+description: Basics of the API
+---
+
+Our API is HTTPS/REST for general operations such as sending `POST` requests and receiving `GET` requests.
+
+#### Base Url
+
+[https://top.gg/api](https://top.gg/api)
+
+## Authentication
+
+To access our API you need to authorize yourself, this can be done by using your discord bot list token. Your token can be obtained from the My Bots page.
+
+Authentication is performed with the `Authorization` HTTP header as such
+
+```json:title=HTTP%20Headers
+{
+  "Authorization": "your-topgg-token-here"
+}
+```
