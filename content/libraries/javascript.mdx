@@ -7,17 +7,22 @@ description: Official Top.gg Javascript library
 
 `npm install @top-gg/sdk` or `yarn add @top-gg/sdk`
 
-We recommend keeping your configuration inside a separate config file like `config.json` (or the configuration storage of your choice) instead of harcoding it in your source code so you can keep it out of version control.
-
-```json:title=/config.json
-{
-  "token": "your-token-here"
-}
-```
-
 ## Posting bot stats
 
-Posting your bot's statistics is a quick and easy way to show how many people use your bot. There's a simple library that uses our SDK to post statistics: topgg-autoposter
+Posting your bot's statistics is a quick and easy way to show how many people use your bot. There's a simple library that uses our SDK to post statistics: [topgg-autoposter](https://npmjs.com/package/topgg-autoposter)
+
+`npm i topgg-autoposter`
+
+```js:title=/index.js
+const client = new Discord.Client() // Your discord.js or eris client (or djs ShardingManager)
+const AutoPoster = require('topgg-autoposter')
+
+const ap = AutoPoster('Your Top.gg Token', client)
+
+ap.on('posted', () => {
+  console.log('Posted stats to Top.gg!')
+})
+```
 
 ## Webhooks
 
