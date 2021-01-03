@@ -35,7 +35,7 @@ The format of the data your webhook URL will receive in a POST request.
 | guild     | `snowflake` | Discord ID of the guild that received a vote.                                                       |
 | user      | `snowflake` | Discord ID of the user who voted.                                                                   |
 | type      | `string`    | The type of the vote (should always be `"upvote"` except when using the test button it's `"test"`). |
-| query?    | `string`    | Query string params found on the /servers/:ID/vote page. Example: ?a=1&b=2.                             |
+| query?    | `string`    | Query string params found on the /servers/:ID/vote page. Example: ?a=1&b=2.                         |
 ## More Events
 
 Looking for webhooks events other than votes? They are only available starting from **v1** of the API.
