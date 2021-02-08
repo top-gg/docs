@@ -20,7 +20,7 @@ To verify requests are coming from us, look for the value in the `Authorization`
 The format of the data your webhook URL will receive in a POST request.
 
 ### Schema
-#### Bot-Webhooks
+#### Bot Webhooks
 | Field     | Type        | Description                                                                                         |
 | --------- | ----------- | --------------------------------------------------------------------------------------------------- |
 | bot       | `snowflake` | Discord ID of the bot that received a vote.                                                         |
@@ -29,7 +29,7 @@ The format of the data your webhook URL will receive in a POST request.
 | isWeekend | `boolean`   | Whether the weekend multiplier is in effect, meaning users votes count as two.                      |
 | query?    | `string`    | Query string params found on the /bot/:ID/vote page. Example: ?a=1&b=2.                             |
 
-#### Server-Webhooks
+#### Server Webhooks
 | Field     | Type        | Description                                                                                         |
 | --------- | ----------- | --------------------------------------------------------------------------------------------------- |
 | guild     | `snowflake` | Discord ID of the guild that received a vote.                                                       |
