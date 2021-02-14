@@ -3,7 +3,7 @@ title: Home
 description: Welcome to Top.gg
 ---
 
-Hi developer 🥰, welcome to top.gg developer docs. You are currently viewing **v0** of our API documentation. We're going to be working on the next version of the top.gg API (v1) soon, stay tuned!
+Hi developer, welcome to top.gg developer docs. You are currently viewing **v0** of our API documentation. We're going to be working on the next version of the top.gg API (v1) soon, stay tuned!
 
 ## Getting Started
 
