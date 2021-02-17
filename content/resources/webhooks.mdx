@@ -15,6 +15,10 @@ On the edit page you can see another input for `Authorization`. Here you can pro
 
 To verify requests are coming from us, look for the value in the `Authorization` header and make sure it is the same as the value you provided in the form.
 
+## Acknowledgement
+
+Webhooks sent by top.gg **must** be acknowledged with an HTTP `200` response. Webhook requests that time out or return a non-200 response will be retried once after 1 minute. Top.gg libraries will perform this response automatically.
+
 ## Data Format
 
 The format of the data your webhook URL will receive in a POST request.
