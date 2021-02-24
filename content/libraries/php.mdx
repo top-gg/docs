@@ -1,0 +1,27 @@
+---
+title: PHP
+description: Official Top.gg PHP library
+---
+
+# PHP Library
+
+This is our official PHP Library for top.gg, if you have any issues/bugs please submit an issue on our github.
+
+- [GitHub Link](https://github.com/top-gg/php-sdk)
+
+## Usage
+
+For our full/comprehensive list of usage, please refer to the github docs.
+
+### Posting bot stats
+
+Posting your bot's statistics is very simple and easily able to be done through the code shown here.
+
+```php
+$bot = new Discord(["token" => "YOUR_BOT_TOKEN"]); # DiscordPHP/Restcord Client
+$DBL = new TopGG("YOUR_API_TOKEN");
+
+// You could also pass a check with $DBL->POST->stats(...)->RESP instead.
+$DBL->POST->stats($bot->id, count($bot->guilds));
+if($DBL->RESP == 200) echo "Stats were successfully updated.";
+```
