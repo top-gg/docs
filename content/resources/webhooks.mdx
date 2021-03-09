@@ -24,7 +24,7 @@ Webhooks sent by top.gg **must** be acknowledged with an HTTP `200` response. We
 The format of the data your webhook URL will receive in a POST request.
 
 ### Schema
-
+#### Bot Webhooks
 | Field     | Type        | Description                                                                                         |
 | --------- | ----------- | --------------------------------------------------------------------------------------------------- |
 | bot       | `snowflake` | Discord ID of the bot that received a vote.                                                         |
@@ -33,6 +33,13 @@ The format of the data your webhook URL will receive in a POST request.
 | isWeekend | `boolean`   | Whether the weekend multiplier is in effect, meaning users votes count as two.                      |
 | query?    | `string`    | Query string params found on the /bot/:ID/vote page. Example: ?a=1&b=2.                             |
 
+#### Server Webhooks
+| Field     | Type        | Description                                                                                         |
+| --------- | ----------- | --------------------------------------------------------------------------------------------------- |
+| guild     | `snowflake` | Discord ID of the guild that received a vote.                                                       |
+| user      | `snowflake` | Discord ID of the user who voted.                                                                   |
+| type      | `string`    | The type of the vote (should always be `"upvote"` except when using the test button it's `"test"`). |
+| query?    | `string`    | Query string params found on the /servers/:ID/vote page. Example: ?a=1&b=2.                         |
 ## More Events
 
 Looking for webhooks events other than votes? They are only available starting from **v1** of the API.
