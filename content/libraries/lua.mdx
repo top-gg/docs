@@ -38,11 +38,11 @@ For full usage/library documentation, please refer to the github [repo](https://
 
 ```lua
 local topgg = require('topgg');
-local Api = topgg.Api:init('your-top.gg-token-goes-here', 'your-client-ID-goes-here');
+local Api = topgg.Api:init('your-top.gg-token-goes-here');
 
 local postStats = coroutine.create(function()
   local stats = Api:postStats({
-    serverCount = -- Your server count goes here (e.g. client.guilds.len())
+    serverCount = -- Your server count goes here (e.g. client.guilds.__len())
   });
   print(stats);
 end);
