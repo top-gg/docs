@@ -64,6 +64,7 @@ code[class*="language-"] {
 }
 
 .ds-dropdown-menu .ds-dataset-1 {
+  color-scheme: dark;
   border: 1px solid var(--border) !important;
   background: var(--background) !important;
 }
