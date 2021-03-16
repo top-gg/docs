@@ -13,6 +13,8 @@ module.exports = {
       resolve: "gatsby-theme-apollo-docs",
       options: {
         root: __dirname,
+        algoliaApiKey: "9bfd968ece86da2054ca34939340f716",
+        algoliaIndexName: "top-gg",
         siteName: "Top.gg documentation",
         description: "Top.gg developer documentation",
         githubRepo: "top-gg/docs",
