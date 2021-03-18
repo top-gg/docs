@@ -9,11 +9,17 @@ Instead of requesting our API to see the users who have voted for your bot, you 
 
 Start by setting up your webhook URL in the edit form of your bot on this site, it can be found at https://top.gg/bot/:your-bot-id/webhooks. Once you've entered the URL you want the webhook to be sent to, you're all set! If you need help setting up webhooks inside of your bot don't be afraid to ask in our [discord server](https://discord.gg/dbl) in the `#api` channel.
 
-## Verifying the request
+## Security
 
 On the edit page you can see another input for `Authorization`. Here you can provide a shared secret that you can check for on the server side.
 
 To verify requests are coming from us, look for the value in the `Authorization` header and make sure it is the same as the value you provided in the form.
+
+If you're running a firewall, you can whitelist the following IPs, which will be used to deliver webhooks for the foreseeable future.
+
+| IP                |
+| ----------------- |
+| `159.203.105.187` |
 
 ## Acknowledgement
 
