@@ -46,6 +46,8 @@ const webhook = new Topgg.Webhook("your webhook auth");
 app.post("/dblwebhook", webhook.middleware(), (req, res) => {
   // req.vote will be your vote object, e.g
   console.log(req.vote.user); // 395526710101278721 < user who voted
+  
+  return res.status(204).send(); // Without a 2xx status code this route will be executed 10 times.
 });
 
 app.listen(80);
