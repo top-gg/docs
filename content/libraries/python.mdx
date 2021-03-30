@@ -82,5 +82,6 @@ bot.dblpy = dbl.DBLClient(bot, dbl_token, autopost=True)
 
 @bot.event
 async def on_guild_post():
+    """An event that is called whenever autopost successfully posts server count."""
     print(f'Posted server count ({bot.dblpy.guild_count})')
 ```
