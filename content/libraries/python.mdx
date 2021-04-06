@@ -38,7 +38,6 @@ import dbl
 
 dbl_token = 'top.gg token'  # set this to your bot's top.gg token
 bot.dblpy = dbl.DBLClient(bot, dbl_token)
-update_stats.start()
 
 @tasks.loop(minutes=30)
 async def update_stats():
@@ -48,6 +47,8 @@ async def update_stats():
         print(f'Posted server count ({bot.dblpy.guild_count})')
     except Exception as e:
         print('Failed to post server count\n{}: {}'.format(type(e).__name__, e))
+
+update_stats.start()
 ```
 
 Webhook
