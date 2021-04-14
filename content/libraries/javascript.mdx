@@ -36,17 +36,19 @@ ap.on('posted', () => {
 The API can also be configured to receive events for when users vote for your bot through webhooks via express. You must first configure webhooks in your bot through the dashboard before using this.
 
 ```js:title=/index.js
-const Topgg = require("@top-gg/sdk");
-const express = require("express");
+const Topgg = require("@top-gg/sdk")
+const express = require("express")
 
-const app = express();
+const app = express()
 
-const webhook = new Topgg.Webhook("your webhook auth");
+const webhook = new Topgg.Webhook("your webhook auth")
 
-app.post("/dblwebhook", webhook.middleware(), (req, res) => {
-  // req.vote will be your vote object, e.g
-  console.log(req.vote.user); // 395526710101278721 < user who voted
-});
+app.post("/dblwebhook", webhook.listener(vote => {
+  // vote will be your vote object, e.g
+  console.log(vote.user) // 395526710101278721 < user who voted\
+  
+  // You can also throw an error to the listener callback in order to resend the webhook after a few seconds
+}))
 
-app.listen(80);
+app.listen(80)
 ```
