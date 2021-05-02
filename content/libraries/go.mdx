@@ -3,12 +3,108 @@ title: Go
 description: Official Top.gg Go library
 ---
 
-# Go Library
+## Links
+[Documentation](https://pkg.go.dev/github.com/DiscordBotList/go-dbl)
 
-This is our official Go Library for top.gg, if you have any issues/bugs please submit an issue on our github.
+[Go Package](https://pkg.go.dev/github.com/DiscordBotList/go-dbl)
 
-- [GitHub Link](https://github.com/top-gg/go-sdk)
+[Github](https://github.com/top-gg/go-sdk)
 
-## Usage
+## Installation
 
-Please refer to the github docs
+```
+go get -u github.com/top-gg/go-dbl
+```
+
+## Posting bot stats
+```go
+package main
+
+import (
+	"log"
+
+	"github.com/top-gg/go-dbl"
+)
+
+func main() {
+	dblClient, err := dbl.NewClient("token")
+	if err != nil {
+		log.Fatalf("Error creating new Discord Bot List client: %s", err)
+	}
+
+	err = dblClient.PostBotStats("botID", &dbl.BotStatsPayload{
+		Shards: []int{2500}, // If non-sharded, just pass total server count as the only integer element
+	})
+	if err != nil {
+		log.Printf("Error sending bot stats to Discord Bot List: %s", err)
+	}
+
+	// ...
+}
+```
+
+## Setting Options
+```go
+ackage main
+
+import (
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/top-gg/go-dbl"
+)
+
+const clientTimeout = 5 * time.Second
+
+func main() {
+	httpClient := &http.Client{}
+
+	dblClient, err := dbl.NewClient(
+		"token",
+		dbl.HTTPClientOption(httpClient), // Setting a custom HTTP client. Default is *http.Client with default timeout.
+		dbl.TimeoutOption(clientTimeout), // Setting timeout option. Default is 3 seconds
+	)
+	if err != nil {
+		log.Fatalf("Error creating new Discord Bot List client: %s", err)
+	}
+
+	// ...
+}
+```
+
+## Webhook
+
+```go
+package main
+
+import (
+	"errors"
+	"log"
+	"net/http"
+
+	"github.com/top-gg/go-dbl"
+)
+
+const listenerPort = ":9090"
+
+func main() {
+	listener := dbl.NewListener("token", handleVote)
+
+	// Serve is a blocking call
+	err := listener.Serve(listenerPort)
+	if !errors.Is(err, http.ErrServerClosed) {
+		log.Fatalf("HTTP server error: %s", err)
+	}
+}
+
+func handleVote(payload *dbl.WebhookPayload) {
+	// perform on payload
+}
+```
+## Rate limits
+There's a local token bucket rate limiter, allowing for 60 requests a minute (single/burst)
+
+Upon reaching the local rate limit, `ErrLocalRatelimit` error will be returned
+
+If remote rate limit is exceeded, `ErrRemoteRatelimit` error will be returned and `RetryAfter` in client fields will be updated with the retry time
