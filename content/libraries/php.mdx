@@ -1,0 +1,38 @@
+---
+title: PHP
+description: Official Top.gg PHP library
+---
+
+# PHP Library
+
+This is our official PHP Library for Top.gg. If you have any issues, please submit an Issue on our GitHub.
+
+- [GitHub Link](https://github.com/top-gg/php-sdk)
+
+## Installation
+
+### Install via composer (recommended)
+
+```
+composer require top-gg/php-sdk
+```
+
+## Examples
+
+### Get statistics of a user
+
+```php
+include_once __DIR__ . "vendor/autoload.php";
+use DBL\DBL;
+use DBL\API\SearchType;
+
+$token = "YOUR TOP.GG API TOKEN HERE.";
+$api = new DBL([
+      "token" => $token
+]);
+
+if($api->connected)
+{
+      print_r($api->find_info(SearchType::USER, 242351388137488384));
+}
+```
