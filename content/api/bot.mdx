@@ -9,7 +9,7 @@ import HTTPHeader from "@components/HTTPHeader";
 
 ## Search Bots
 
-<HTTPHeader type="GET" path="/bots" />
+<HTTPHeader type="GET" path="bots" />
 
 Gets a list of bots that match a specific query.
 
@@ -72,7 +72,7 @@ Gets a list of bots that match a specific query.
 
 ## Find One Bot
 
-<HTTPHeader type="GET" path="/bots/:bot_id" />
+<HTTPHeader type="GET" path="bots/:bot_id" />
 
 Finds a single bot
 
@@ -82,7 +82,7 @@ Finds a single bot
 
 ## Last 1000 Votes
 
-<HTTPHeader type="GET" path="/bots/:bot_id/votes" />
+<HTTPHeader type="GET" path="bots/:bot_id/votes" />
 
 Gets the last 1000 voters for your bot.
 
@@ -104,7 +104,7 @@ This example uses Luca but users are restricted to only receiving their own bots
 
 ## Bot stats
 
-<HTTPHeader type="GET" path="/bots/:bot_id/stats" />
+<HTTPHeader type="GET" path="bots/:bot_id/stats" />
 
 Specific stats about a bot.
 
@@ -118,7 +118,7 @@ Specific stats about a bot.
 
 ## Individual User Vote
 
-<HTTPHeader type="GET" path="/bots/:bot_id/check" />
+<HTTPHeader type="GET" path="bots/:bot_id/check" />
 
 Checking whether or not a user has voted for your bot. Safe to use even if you have over 1k monthly votes.
 
@@ -138,7 +138,7 @@ Checking whether or not a user has voted for your bot. Safe to use even if you h
 
 ## Post Stats
 
-<HTTPHeader type="POST" path="/bots/:bot_id/stats" />
+<HTTPHeader type="POST" path="bots/:bot_id/stats" />
 
 ### Post Body
 

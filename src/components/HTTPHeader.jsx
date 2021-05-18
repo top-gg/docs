@@ -64,7 +64,8 @@ export default function HTTPHeader({ type, path }) {
       setTimeout(() => setCopy(false), 3000);
     }
   }, [copied]);
-  const fullUrl = `https://top.gg/api${path}`;
+  const BASE_URL = "https://top.gg/api/";
+  const fullUrl = new URL(path, BASE_URL).href;
   const url = path;
   return (
     <HeaderWrapper method={type}>
