@@ -132,3 +132,13 @@ if($api->connected)
       if($isVoted) echo "This user voted!";
 }
 ```
+
+## Error Handling
+
+This library uses extensions of the PHP `BaseException()` throwable class.
+The list below are the current exceptions able to be given.
+
+* `GlobalRatelimitException`
+* `ResourceRatelimitException`
+* `MissingStatsException`
+* `MissingTokenException`
