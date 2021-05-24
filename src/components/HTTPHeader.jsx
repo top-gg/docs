@@ -64,8 +64,19 @@ export default function HTTPHeader({ type, path }) {
       setTimeout(() => setCopy(false), 3000);
     }
   }, [copied]);
-  const BASE_URL = "https://top.gg/";
-  path = `${path.startsWith("/") ? "" : "/"}${path}`
+  const BASE_URL = "https://top.gg/api";
+  if (path.startsWith(BASE_URL)) {
+    path = path.replace(BASE_URL, "");
+  }
+  if (path.startsWith("api")) {
+    path = path.replace("api", "");
+  }
+  else if (path.startsWith("/api")) {
+    path = path.replace("/api", "")
+  }
+  else if (!path.startsWith("/")) {
+    path = `/${path}`
+  }
   const fullUrl = new URL(`api${path}`, BASE_URL).href;
   const url = path;
   return (
