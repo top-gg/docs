@@ -27,10 +27,10 @@ If you exceed the set rate limit for the API you will receive a HTTP 429 and be 
 
 ```json:title=HTTP%20429
 {
-  "retry-after": 3600000
+  "retry-after": 3600
 }
 ```
 
-| Field       | Type    | Description                                                        |
-| ----------- | ------- | ------------------------------------------------------------------ |
-| retry-after | integer | The millisecond timeout before you are able to send requests again |
+| Field       | Type    | Description                                                       |
+| ----------- | ------- | ----------------------------------------------------------------- |
+| retry-after | integer | The timeout in seconds before you are able to send requests again |
