@@ -8,13 +8,13 @@ description: Official Top.gg Javascript library
 
 [NPM Package](https://npmjs.com/package/@top-gg/sdk)
 
-[Deno Package](https://deno.land/x/topgg_deno)
-
 [GitHub](https://github.com/top-gg/node-sdk)
 
 ## Installation
 
 `npm install @top-gg/sdk` or `yarn add @top-gg/sdk`
+
+If you're using deno, check out the [unofficial deno sdk](https://github.com/LINKdiscordd/topgg-deno)
 
 ## Posting bot stats
 
@@ -33,18 +33,6 @@ ap.on('posted', () => {
 })
 ```
 
-If you are using Deno you can post statistics as shown below.
-
-```js:title=/index.js
-import { Client } from "https://deno.land/x/topgg_deno/mod.ts"
-
-const client = new Client("Your Top.gg Token")
-
-client.postStats({ 
-   server_count: 0 // Guild count of your bot
-})
-```
-
 ## Webhooks
 
 The API can also be configured to receive events for when users vote for your bot through webhooks via express. You must first configure webhooks in your bot through the dashboard before using this.
@@ -60,25 +48,9 @@ const webhook = new Topgg.Webhook("your webhook auth")
 app.post("/dblwebhook", webhook.listener(vote => {
   // vote will be your vote object, e.g
   console.log(vote.user) // 395526710101278721 < user who voted\
-  
+
   // You can also throw an error to the listener callback in order to resend the webhook after a few seconds
 }))
 
 app.listen(80)
-```
-
-If you are using Deno you can just pass webhook options when creating the client and then listen for the vote event. You must first configure webhooks in your bot through the dashboard before using this.
-
-```js:title=/index.js
-import { Client } from "https://deno.land/x/topgg_deno/mod.ts"
-
-const client = new Client("Your Top.gg Token", {
-  port: 3000 // The port you want to listen to
-  path: '/dblwebhook' // On which path you want to recieve vote events
-})
-
-client.on('vote', (vote) => {
-  // vote will be your vote object, e.g
-  console.log(vote.user) // 395526710101278721 < user who voted\
-})
 ```
