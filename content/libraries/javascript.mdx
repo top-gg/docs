@@ -14,6 +14,8 @@ description: Official Top.gg Javascript library
 
 `npm install @top-gg/sdk` or `yarn add @top-gg/sdk`
 
+If you're using deno, check out the [unofficial deno sdk](https://github.com/LINKdiscordd/topgg-deno)
+
 ## Posting bot stats
 
 Posting your bot's statistics is a quick and easy way to show how many people use your bot. There's a simple library that uses our SDK to post statistics: [topgg-autoposter](https://npmjs.com/package/topgg-autoposter)
@@ -46,7 +48,7 @@ const webhook = new Topgg.Webhook("your webhook auth")
 app.post("/dblwebhook", webhook.listener(vote => {
   // vote will be your vote object, e.g
   console.log(vote.user) // 395526710101278721 < user who voted\
-  
+
   // You can also throw an error to the listener callback in order to resend the webhook after a few seconds
 }))
 
