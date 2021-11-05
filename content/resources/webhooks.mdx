@@ -25,7 +25,7 @@ If you're running a firewall, you can whitelist the following IPs, which will be
 
 Webhooks sent by top.gg **must** be acknowledged with a 200 response in order to be considered successful. Unsuccessful webhooks are [retried](#retrial).
 
-Official Top.gg libraries that handle webhooks acknowledge webhooks automatically.
+Top.gg libraries that handle webhooks acknowledge webhooks automatically.
 
 ## Timeouts
 
@@ -42,7 +42,9 @@ Errors resulting with status `4XX` (like 404) will not be retried as these are c
 The format of the data your webhook URL will receive in a `POST` request.
 
 ### Schema
+
 #### Bot Webhooks
+
 | Field     | Type        | Description                                                                                         |
 | --------- | ----------- | --------------------------------------------------------------------------------------------------- |
 | bot       | `snowflake` | Discord ID of the bot that received a vote.                                                         |
@@ -52,12 +54,14 @@ The format of the data your webhook URL will receive in a `POST` request.
 | query?    | `string`    | Query string params found on the /bot/:ID/vote page. Example: ?a=1&b=2.                             |
 
 #### Server Webhooks
-| Field     | Type        | Description                                                                                         |
-| --------- | ----------- | --------------------------------------------------------------------------------------------------- |
-| guild     | `snowflake` | Discord ID of the guild that received a vote.                                                       |
-| user      | `snowflake` | Discord ID of the user who voted.                                                                   |
-| type      | `string`    | The type of the vote (should always be `"upvote"` except when using the test button it's `"test"`). |
-| query?    | `string`    | Query string params found on the /servers/:ID/vote page. Example: ?a=1&b=2.                         |
+
+| Field  | Type        | Description                                                                                         |
+| ------ | ----------- | --------------------------------------------------------------------------------------------------- |
+| guild  | `snowflake` | Discord ID of the guild that received a vote.                                                       |
+| user   | `snowflake` | Discord ID of the user who voted.                                                                   |
+| type   | `string`    | The type of the vote (should always be `"upvote"` except when using the test button it's `"test"`). |
+| query? | `string`    | Query string params found on the /servers/:ID/vote page. Example: ?a=1&b=2.                         |
+
 ## More Events
 
 Looking for webhooks events other than votes? They are only available starting from **v1** of the API.

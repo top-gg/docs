@@ -1,11 +1,11 @@
 ---
 title: Python
-description: Official Top.gg Python library
+description: Top.gg Python library
 ---
 
 # Python Library
 
-This is our official Python Library for top.gg, if you have any issues please submit an issue on our github.
+The community-maintained Python Library for Top.gg, if you experience any issues please submit an issue on our github.
 
 - [Full documentation](https://topggpy.rtfd.io/)
 - [GitHub Link](https://github.com/top-gg/python-sdk)
@@ -17,7 +17,7 @@ This is our official Python Library for top.gg, if you have any issues please su
 ```
 pip install topggpy
 ```
-      
+
 ### Install from source
 
 ```
@@ -29,6 +29,7 @@ pip install -R requirements.txt
 ## Examples
 
 Manual server count post every 30 minutes:
+
 ```py
 from discord.ext import tasks
 
@@ -54,6 +55,7 @@ update_stats.start()
 ```
 
 Webhook:
+
 ```py
 import topgg
 
@@ -82,6 +84,7 @@ async def on_dbl_test(data):
 ```
 
 Automatically post server count every 30 minutes:
+
 ```py
 import topgg
 

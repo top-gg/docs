@@ -1,11 +1,11 @@
 ---
 title: PHP
-description: Official Top.gg PHP library
+description: Top.gg PHP library
 ---
 
 # PHP Library
 
-This is our official PHP Library for Top.gg. If you have any issues, please submit an Issue on our GitHub.
+The community-maintained PHP Library for Top.gg. If you experience any issues, please submit an issue on GitHub.
 
 - [GitHub Link](https://github.com/top-gg/php-sdk)
 
@@ -38,11 +38,11 @@ $api = new DBL([
 
 Below are the currently accepted list of parameters when initializing the API.
 
-| Option       | Type       | Description                      | Optional? |
-| ------------ | ---------- | -------------------------------- | --------- |
-| `token`      | `string`   | The token key of the Top.gg API. | No        |
-| `auto_stats` | `array[]`  | Details for automatic stats.     | Yes       |
-| `safety`     | `bool`     | Webserver code protection.       | Yes       |
+| Option       | Type      | Description                      | Optional? |
+| ------------ | --------- | -------------------------------- | --------- |
+| `token`      | `string`  | The token key of the Top.gg API. | No        |
+| `auto_stats` | `array[]` | Details for automatic stats.     | Yes       |
+| `safety`     | `bool`    | Webserver code protection.       | Yes       |
 
 The API wrapper also presents you with a boolean instance, `connected` which may be used
 to check if your API token key is still valid or not.
@@ -68,13 +68,13 @@ if($api->connected)
 {
       /**
        * You will always be presented two constants to choose.
-       * 
+       *
        * Http::BOT = "bots"
        * Http::USER = "users"
        */
       $user = $api->find_info(Http::USER, 242351388137488384);
       $bot = $api->find_info(Http::BOT, 799697654279307314);
-      
+
       print_r($user) . print_r($bot) . PHP_EOL;
 }
 ```
@@ -106,7 +106,7 @@ if($api->connected)
                   "sort" => "-"
             ]
       );
-      
+
       print_r($small_list) . PHP_EOL;
 }
 ```
@@ -120,10 +120,10 @@ Below is the given example of how to do this.
 public function get_user_vote(int $id, int $user): array
 ```
 
-| Argument | Type     | Description                               |
-| -------- | -------- | ----------------------------------------- |
-| `$id`    | `int`    | The bot ID.                               |
-| `$user`  | `int`    | The user's snowflake ID.                  |
+| Argument | Type  | Description              |
+| -------- | ----- | ------------------------ |
+| `$id`    | `int` | The bot ID.              |
+| `$user`  | `int` | The user's snowflake ID. |
 
 ```php
 if($api->connected)
