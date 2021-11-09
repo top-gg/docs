@@ -1,0 +1,52 @@
+---
+title: Ruby
+description: A community maintained Top.gg Ruby Library
+---
+
+# Ruby Library
+
+This is a community maintained Ruby Library for top.gg, if you have any issues/bugs please submit an issue on our github.
+
+- [GitHub Link](https://github.com/top-gg/ruby-sdk)
+
+## Documentation
+
+- [Api Reference](https://rubydoc.info/gems/topgg/)
+
+## Installation
+
+```bash
+
+gem install topgg
+
+```
+
+## Autoposting Statistics
+
+```ruby
+require 'topgg'
+require 'discordrb'
+
+bot = Discordrb::Bot.new token: "TOKEN"
+
+client = Topgg.new("AUTH_TOKEN", "BOTID")
+ bot.ready do |event|
+ client.auto_post_stats(bot) # The discordrb bot client.
+end
+bot.run
+```
+
+## Example Usage
+
+Here's an example on how to use the library!
+
+```ruby
+require 'topgg'
+bot = Discordrb::Bot.new token: "TOKEN"
+
+client = Topgg.new("AUTH_TOKEN", "BOTID")
+# check if the speicified user id voted or not.
+p client.voted?("1234")
+```
+
+You can check out the [API Reference](https://rubydoc.info/gems/topgg/) to know about the other methods!
