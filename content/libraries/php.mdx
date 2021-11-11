@@ -21,9 +21,8 @@ composer require top-gg/php-sdk
 
 ### Getting Started
 
-This library follows the PSR standards given by PHP. Because of compliance with this, some things are
-done differently compared to other API wrappers. Below is sample code on how to initialize the API
-for use.
+This library does certain things differently from other API wrappers because it follows PHP's PSR standards. 
+Below is sample code on how to initialize and use the API wrapper.
 
 ```php
 # Automatically load up the source library code.
@@ -50,7 +49,7 @@ to check if your API token key is still valid or not.
 ### Get statistics from Top.gg
 
 In order to get statistics about a bot or user from Top.gg, you are able to select between
-the two interchangably with the same method, `find_info()`.
+the two interchangably with the same method: `find_info()`.
 
 ```php
 public function find_info(string $type, int $id): array
@@ -113,7 +112,7 @@ if($api->connected)
 
 ### Checking a vote from a user
 
-It's very important to be able and see if a user has voted for you bot.
+It's very important to be able and see if a user has voted for your bot.
 Below is the given example of how to do this.
 
 ```php
