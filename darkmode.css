@@ -154,7 +154,7 @@ div[class*="BodyContent"] a[href]:not([class]) {
 deprecated::after {
   content: 'deprecated';
   font-size: 12px;
-  padding: 5px 3px;
+  padding: 3px 5px;
   margin-left: 5px;
   border-radius: 10px;
   color: var(--text-secondary);
