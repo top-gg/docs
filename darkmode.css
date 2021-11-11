@@ -150,3 +150,12 @@ div[class*="BodyContent"] a[href]:not([class]) {
     background-color: var(--background-secondary) !important;
   }
 }
+
+deprecated::after {
+  content: 'deprecated';
+  font-size: 12px;
+  padding: 3px 5px;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  background-color: #202b3b;
+}
