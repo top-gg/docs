@@ -23,7 +23,7 @@ Posting your bot's statistics is a quick and easy way to show how many people us
 `npm i topgg-autoposter`
 
 ```js:title=/index.js
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] }) // Your discord.js or eris client (or djs ShardingManager)
+const client = new Discord.Client() // Your discord.js or eris client (or djs ShardingManager)
 const { AutoPoster } = require('topgg-autoposter')
 
 const ap = AutoPoster('Your Top.gg Token', client)
