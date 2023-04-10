@@ -74,7 +74,7 @@ Gets a list of bots that match a specific query.
 
 <HTTPHeader type="GET" path="bots/:bot_id" />
 
-Finds a single bot
+Finds a single bot.
 
 ### Example Response
 
@@ -84,7 +84,7 @@ Finds a single bot
 
 <HTTPHeader type="GET" path="bots/:bot_id/votes" />
 
-Gets the last 1000 voters for your bot.
+Gets the last 1000 voters within the past month for your bot.
 
 > If your bot receives more than 1000 votes monthly you cannot use this endpoints and must use `webhooks` and implement your own caching instead.
 
@@ -104,25 +104,13 @@ This example uses Luca but users are restricted to only receiving their own bots
 ]
 ```
 
-## Bot stats
-
-<HTTPHeader type="GET" path="bots/:bot_id/stats" />
-
-Specific stats about a bot.
-
-### Response
-
-| Field         | Type       | Description                                                                    |
-| ------------- | ---------- | ------------------------------------------------------------------------------ |
-| server_count? | `number`   | The amount of servers the bot is in                                            |
-| shards        | `string[]` | The amount of servers the bot is in per shard. Always present but can be empty |
-| shard_count?  | `number`   | The amount of shards a bot has                                                 |
-
 ## Individual User Vote
 
 <HTTPHeader type="GET" path="bots/:bot_id/check" />
 
 Checking whether or not a user has voted for your bot. Safe to use even if you have over 1k monthly votes.
+
+> If you are checking votes often, it is highly advised you use `webhooks` and store votes yourself - this prevents the command not working due to API rate-limits!
 
 ### Params
 
@@ -138,9 +126,26 @@ Checking whether or not a user has voted for your bot. Safe to use even if you h
 }
 ```
 
+## Bot stats
+
+<HTTPHeader type="GET" path="bots/:bot_id/stats" />
+
+Get specific stats about a bot.
+
+### Response
+
+| Field         | Type       | Description                                                                    |
+| ------------- | ---------- | ------------------------------------------------------------------------------ |
+| server_count? | `number`   | The amount of servers the bot is in                                            |
+| shards        | `number[]` | The amount of servers the bot is in per shard. Always present but can be empty |
+| shard_count?  | `number`   | The amount of shards a bot has                                                 |
+
+
 ## Post Stats
 
 <HTTPHeader type="POST" path="bots/:bot_id/stats" />
+
+Post your bot's stats to the API.
 
 ### Post Body
 
