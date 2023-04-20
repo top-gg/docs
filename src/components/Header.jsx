@@ -76,17 +76,17 @@ export const Header = forwardRef(function Header({ className }, ref) {
           </ul>
         </nav>
         <div className="hidden md:block md:w-px md:bg-zinc-900/10 md:dark:bg-white/15 items-center" />
-        <div className="flex gap-4 justify-right">
+        <div className="flex gap-4 justify-right mr-3">
           <ModeToggle />
           <select
             className="flex items-center px-4 py-1 justify-center rounded-md text-black dark:text-white transition dark:bg-zinc-500/25 hover:bg-zinc-300/25 dark:hover:bg-white/25 block lg:hidden"
             aria-label="Toggle dark mode"
             onChange={(e) => {
               router.push(e.target.value)
-              e.target.value = 'Select a location'
+              e.target.value = 'Select a section'
             }}
           >
-            <option selected hidden key="default">Select a location</option>
+            <option selected hidden key="default">Select a section</option>
             {navItems.map((item, index) => (
               <optgroup label={item.title} key={index}>
                 {item.links.map((subItem, subIndex) => (

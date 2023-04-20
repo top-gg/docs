@@ -206,7 +206,8 @@ export const navigation = [
       { title: 'Javascript', href: '/libraries/javascript' },
       { title: 'PHP', href: '/libraries/php' },
       { title: 'Python', href: '/libraries/python' },
-      { title: 'Ruby', href: '/libraries/ruby' }
+      { title: 'Ruby', href: '/libraries/ruby' },
+      { title: 'Rust', href: '/libraries/rust' },
     ],
   },
   {
@@ -217,6 +218,14 @@ export const navigation = [
       { title: 'Users', href: '/endpoints/users' }
     ],
   },
+  {
+    title: "Misc",
+    links: [
+      { title: "Credits", href: "/credits" },
+      { title: "Top.gg", href: "https://top.gg" },
+      { title: "Discord API Docs", href: "https://discord.dev" }
+    ]
+  }
 ]
 
 export function getNavItems() {
