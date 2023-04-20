@@ -219,9 +219,8 @@ export const navigation = [
     ],
   },
   {
-    title: "Misc",
+    title: "Useful Links",
     links: [
-      { title: "Credits", href: "/credits" },
       { title: "Top.gg", href: "https://top.gg" },
       { title: "Discord API Docs", href: "https://discord.dev" }
     ]
