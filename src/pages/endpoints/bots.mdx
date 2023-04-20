@@ -133,6 +133,43 @@
 
 ---
 
+## Individual User Vote {{ tag: 'GET', label: '/bots/:id/check' }}
+
+<Row>
+  <Col>
+
+    Checking whether or not a user has voted for your bot.
+
+    <Note>
+      <p className="text-white">If you are checking votes often, it is highly advised you use [webhooks](/resources/webhooks) and store votes yourself - this prevents the command not working due to API rate-limits!</p>
+    </Note>
+
+    ### Query Parameters
+
+    <Properties>
+      <Property name="userId" type="snowflake">
+        The user ID to check
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/bots/:id/check?userId=
+    ```
+
+    ```json {{ title: 'Response' }}
+    {
+      "voted": 1
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
 ## Last 1000 Votes {{ tag: 'GET', label: '/bots/:id/votes' }}
 
 <Row>
@@ -186,43 +223,6 @@
       "shard_count": 0
     }
     ```
-  </Col>
-</Row>
-
----
-
-## Individual User Vote {{ tag: 'GET', label: '/bots/:id/check' }}
-
-<Row>
-  <Col>
-
-    Checking whether or not a user has voted for your bot.
-
-    <Note>
-      <p className="text-white">If you are checking votes often, it is highly advised you use [webhooks](/resources/webhooks) and store votes yourself - this prevents the command not working due to API rate-limits!</p>
-    </Note>
-
-    ### Query Parameters
-
-    <Properties>
-      <Property name="userId" type="snowflake">
-        The user ID to check
-      </Property>
-    </Properties>
-
-  </Col>
-  <Col sticky>
-
-    ```bash {{ title: 'Request' }}
-    https://top.gg/api/bots/:id/check?userId=
-    ```
-
-    ```json {{ title: 'Response' }}
-    {
-      "voted": 1
-    }
-    ```
-
   </Col>
 </Row>
 
