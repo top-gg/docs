@@ -33,14 +33,14 @@ DiscordBotListApi DblApi = new DiscordBotListApi();
 
 ```cs
 //                            discord id
-IBot bot = DblApi.GetBotAsync(160105994217586689);
+IBot bot = DblApi.GetBotAsync(BOT_DISCORD_ID);
 ```
 
 #### Getting Users
 
 ```cs
 //                              discord id
-IUser bot = DblApi.GetUserAsync(121919449996460033);
+IUser bot = DblApi.GetUserAsync(USER_DISCORD_ID);
 ```
 
 ### Authorized API Usage
@@ -72,9 +72,9 @@ await me.UpdateStatsAsync(2133);
 
 ```cs
 string widgetUrl = new SmallWidgetOptions()
-	.SetType(WidgetType.OWNER)
+	.SetType(WidgetType.STATUS)
 	.SetLeftColor(255, 255, 255)
-	.Build(160105994217586689);
+	.Build(BOT_DISCORD_ID);
 ```
 
 Generates the following:
