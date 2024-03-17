@@ -17,6 +17,8 @@ jobs:
         run: yarn
       - name: Deploy
         run: yarn build
+        env:
+          NODE_OPTIONS: "--openssl-legacy-provider"
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
