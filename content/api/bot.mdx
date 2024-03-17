@@ -19,7 +19,6 @@ Gets a list of bots that match a specific query.
 | ------ | -------- | -------------------------------------------------------------- | ---------- |
 | limit  | `number` | The amount of bots to return. Max. 500                         | 50         |
 | offset | `number` | Amount of bots to skip                                         | 0          |
-| search | `string` | A search string in the format of `field: value field2: value2` |            |
 | sort   | `string` | The field to sort by. Prefix with - to reverse the order       |            |
 | fields | `string` | A comma separated list of fields to show                       | All fields |
 
@@ -115,7 +114,7 @@ Specific stats about a bot.
 | Field         | Type       | Description                                                                    |
 | ------------- | ---------- | ------------------------------------------------------------------------------ |
 | server_count? | `number`   | The amount of servers the bot is in                                            |
-| shards        | `string[]` | The amount of servers the bot is in per shard. Always present but can be empty |
+| shards        | `number[]` | The amount of servers the bot is in per shard. Always present but can be empty |
 | shard_count?  | `number`   | The amount of shards a bot has                                                 |
 
 ## Individual User Vote
