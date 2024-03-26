@@ -64,3 +64,16 @@ body {
 .docItemCol_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module {
   padding-inline: 48px;
 }
+
+/* hide the default homepage. */
+.theme-doc-sidebar-item-link [href="/docs/"] {
+  display: none;
+}
+
+a {
+  color: unset;
+}
+a:hover {
+  color: unset;
+  text-decoration: underline;
+}
