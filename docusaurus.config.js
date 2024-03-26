@@ -53,6 +53,12 @@ const config = {
     ],
   ],
 
+  stylesheets: [
+    'https://raw.githubusercontent.com/top-gg/docs/master/src/css/custom.css',
+  ],
+
+  onBrokenAnchors: 'log',
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
