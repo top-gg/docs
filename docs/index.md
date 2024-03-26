@@ -1,6 +1,7 @@
 ---
 title: Home
 description: Welcome to Top.gg
+order: 1
 ---
 
 Hi developer 🥰, welcome to top.gg developer docs. You are currently viewing **v0** of our API documentation. We're going to be working on the next version of the top.gg API (v1) soon, stay tuned!
