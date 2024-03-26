@@ -31,10 +31,6 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 
   --background: #070510;
-  
-  .navbar__logo {
-    filter: none;
-  }
 }
 
 html {
@@ -59,6 +55,9 @@ body {
   width: 52px;
   height: 52px;
   filter: invert(1);
+}
+[data-theme='dark'] .navbar__logo {
+  filter: invert(0);
 }
 
 .docItemCol_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module {
