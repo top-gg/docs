@@ -10,6 +10,7 @@ import HTTPHeader from "../../src/components/HTTPHeader";
 ## Search Bots
 
 <HTTPHeader type="GET" path="bots" />
+<deprecated/>
 
 Gets a list of bots that match a specific query.
 
@@ -44,7 +45,6 @@ Gets a list of bots that match a specific query.
       "longdesc": "Luca only works in the **Discord Bot List** server.    \r\nPrepend commands with the prefix `-` or `@Luca#1375`.    \r\n**Please refrain from using these commands in non testing channels.**\r\n- `botinfo @bot` Shows bot info, title redirects to site listing.\r\n- `bots @user`* Shows all bots of that user, includes bots in the queue.\r\n- `owner / -owners @bot`* Shows all owners of that bot.\r\n- `prefix @bot`* Shows the prefix of that bot.\r\n* Mobile friendly version exists. Just add `noembed` to the end of the command.\r\n",
       "shortdesc": "Luca is a bot for managing and informing members of the server",
       "prefix": "- or @Luca#1375",
-      "lib": "discord.js",
       "clientid": "264811613708746752",
       "avatar": "7edcc4c6fbb0b23762455ca139f0e1c9",
       "id": "264811613708746752",
@@ -158,7 +158,7 @@ Checking whether or not a user has voted for your bot. Safe to use even if you h
 | username         | `string`      | The username of the bot                                                       |
 | discriminator    | `string`      | The discriminator of the bot                                                  |
 | avatar?          | `string`      | The avatar hash of the bot's avatar                                           |
-| defAvatar        | `string`      | The cdn hash of the bot's avatar if the bot has none                          |
+| defAvatar?       | `string`      | The cdn hash of the bot's avatar if the bot has none                          |
 | lib <deprecated/>| `string`      | The library of the bot                                                        | 
 | prefix           | `string`      | The prefix of the bot                                                         |
 | shortdesc        | `string`      | The short description of the bot                                              |
@@ -191,7 +191,6 @@ Checking whether or not a user has voted for your bot. Safe to use even if you h
   "longdesc": "Luca only works in the **Discord Bot List** server.    \r\nPrepend commands with the prefix `-` or `@Luca#1375`.    \r\n**Please refrain from using these commands in non testing channels.**\r\n- `botinfo @bot` Shows bot info, title redirects to site listing.\r\n- `bots @user`* Shows all bots of that user, includes bots in the queue.\r\n- `owner / -owners @bot`* Shows all owners of that bot.\r\n- `prefix @bot`* Shows the prefix of that bot.\r\n* Mobile friendly version exists. Just add `noembed` to the end of the command.\r\n",
   "shortdesc": "Luca is a bot for managing and informing members of the server",
   "prefix": "- or @Luca#1375",
-  "lib": "discord.js",
   "clientid": "264811613708746752",
   "avatar": "7edcc4c6fbb0b23762455ca139f0e1c9",
   "id": "264811613708746752",

@@ -41,7 +41,7 @@ This library provides several feature flags that can be enabled/disabled in `Car
 
 ### Fetching a user from its Discord ID
 
-```rs
+```rust
 use topgg::Client;
 
 #[tokio::main]
@@ -58,7 +58,7 @@ async fn main() {
 
 ### Posting your bot's statistics
 
-```rs
+```rust
 use topgg::{Client, Stats};
 
 #[tokio::main]
@@ -75,7 +75,7 @@ async fn main() {
 
 ### Checking if a user has voted your bot
 
-```rs
+```rust
 use topgg::Client;
 
 #[tokio::main]
@@ -103,7 +103,7 @@ topgg = { version = "1.4", features = ["autoposter", "serenity-cached"] }
 
 In your code:
 
-```rs
+```rust
 use core::time::Duration;
 use serenity::{client::{Client, Context, EventHandler}, model::{channel::Message, gateway::Ready}};
 use topgg::Autoposter;
@@ -160,7 +160,7 @@ topgg = { version = "1.4", features = ["autoposter", "twilight-cached"] }
 
 In your code:
 
-```rs
+```rust
 use core::time::Duration;
 use topgg::Autoposter;
 use twilight_gateway::{Event, Intents, Shard, ShardId};
@@ -212,7 +212,7 @@ topgg = { version = "1.4", default-features = false, features = ["actix-web"] }
 
 In your code:
 
-```rs
+```rust
 use actix_web::{
   error::{Error, ErrorUnauthorized},
   get, post, App, HttpServer,
@@ -257,7 +257,7 @@ topgg = { version = "1.4", default-features = false, features = ["axum"] }
 
 In your code:
 
-```rs
+```rust
 use axum::{routing::get, Router, Server};
 use std::{net::SocketAddr, sync::Arc};
 use topgg::{Vote, VoteHandler};
@@ -304,7 +304,7 @@ topgg = { version = "1.4", default-features = false, features = ["rocket"] }
 
 In your code:
 
-```rs
+```rust
 #![feature(decl_macro)]
 
 use rocket::{get, http::Status, post, routes};
@@ -349,7 +349,7 @@ topgg = { version = "1.4", default-features = false, features = ["warp"] }
 
 In your code:
 
-```rs
+```rust
 use std::{net::SocketAddr, sync::Arc};
 use topgg::{Vote, VoteHandler};
 use warp::Filter;

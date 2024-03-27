@@ -9,7 +9,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Top.gg Documentation',
-  tagline: 'Dinosaurs are cool',
+  tagline: 'Spice up your Discord experience with our diverse range of Discord Bots!',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -91,6 +91,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
+        additionalLanguages: ['csharp', 'java', 'javascript', 'php', 'ruby']
       },
     }),
 };
