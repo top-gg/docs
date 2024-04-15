@@ -16,78 +16,23 @@ The community-maintained Python Library for Top.gg, if you experience any issues
 $ pip install topggpy
 ```
 
-## Examples
+## Documentation
 
-Manual server count post every 30 minutes:
+Documentation can be found [here](https://topggpy.rtfd.io).
 
-```py
-from discord.ext import tasks
+## Features
 
-import topgg
+- POST server count
+- GET bot info, server count, upvote info
+- GET user info
+- GET widgets (large and small) including custom ones. See [docs.top.gg](https://docs.top.gg) for more info.
+- GET weekend status
+- Built-in webhook to handle Top.gg votes
+- Automated server count posting
+- Searching for bots via the API
 
-# This example uses tasks provided by discord.ext to create a task that posts guild count to Top.gg every 30 minutes.
+## Additional information
 
-dbl_token = "Top.gg token"  # set this to your bot's Top.gg token
-bot.topggpy = topgg.DBLClient(bot, dbl_token)
-
-
-@tasks.loop(minutes=30)
-async def update_stats():
-    """This function runs every 30 minutes to automatically update your server count."""
-    try:
-        await bot.topggpy.post_guild_count()
-        print(f"Posted server count ({bot.topggpy.guild_count})")
-    except Exception as e:
-        print(f"Failed to post server count\n{e.__class__.__name__}: {e}")
-
-
-update_stats.start()
-```
-
-Webhook:
-
-```py
-import topgg
-
-# This example uses topggpy's webhook system.
-bot.topgg_webhook = topgg.WebhookManager(bot).dbl_webhook("/dblwebhook", "password")
-
-# The port must be a number between 1024 and 49151.
-bot.topgg_webhook.run(5000)  # this method can be awaited as well
-
-
-@bot.event
-async def on_dbl_vote(data):
-    """An event that is called whenever someone votes for the bot on Top.gg."""
-    if data["type"] == "test":
-        # this is roughly equivalent to
-        # `return await on_dbl_test(data)` in this case
-        return bot.dispatch("dbl_test", data)
-
-    print(f"Received a vote:\n{data}")
-
-
-@bot.event
-async def on_dbl_test(data):
-    """An event that is called whenever someone tests the webhook system for your bot on Top.gg."""
-    print(f"Received a test vote:\n{data}")
-```
-
-Automatically post server count every 30 minutes:
-
-```py
-import topgg
-
-# This example uses topggpy's autopost feature to post guild count to Top.gg every 30 minutes
-# as well as the shard count if applicable.
-
-dbl_token = "Top.gg token"  # set this to your bot's Top.gg token
-bot.topggpy = topgg.DBLClient(bot, dbl_token, autopost=True, post_shard_count=True)
-
-
-@bot.event
-async def on_autopost_success():
-    print(
-        f"Posted server count ({bot.topggpy.guild_count}), shard count ({bot.shard_count})"
-    )
-```
+- Before using the webhook provided by this library, make sure that you have specified port open.
+- Optimal values for port are between 1024 and 49151.
+- If you happen to need help implementing topggpy in your bot, feel free to ask in the `#development` or `#api` channels in our [Discord server](https://discord.gg/dbl)
