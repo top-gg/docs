@@ -7,7 +7,7 @@ Hi developer 🥰, welcome to top.gg developer docs. You are currently viewing *
 
 ## Getting Started
 
-If you're looking for API usage, [click here](/api/@reference/) or go to the `API` section on the sidebar.
+If you're looking for API usage, [click here](/docs/API/@reference/) or go to the `API` section on the sidebar.
 
 ## Getting Help
 
