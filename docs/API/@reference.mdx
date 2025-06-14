@@ -5,20 +5,42 @@ title: 🌟 Getting Started
 description: Basics of the API
 ---
 
-Our API is HTTPS/REST for general operations such as sending `POST` requests and receiving `GET` requests.
+## 🔗 Overview
 
-#### Base Url
+Top.gg's API is a standard **RESTful** interface using **HTTPS**.  
+You interact with it via common HTTP verbs like:
 
-[https://top.gg/api](https://top.gg/api)
+- `GET` to retrieve data
+- `POST` to submit or update data
 
-## Authentication
+---
 
-To access our API you need to authorize yourself, this can be done by using your discord bot list token. Your token can be obtained from your bot page settings under **Webhooks** (https://top.gg/bot/:yourbotid/webhooks replacing `:yourbotid` with the ID of your bot).
+## 🌐 Base URL
 
-Authentication is performed with the `Authorization` HTTP header as such
+All requests are made to:
 
-```json:title=HTTP%20Headers
+```
+https://top.gg/api
+```
+
+---
+
+## 🔐 Authentication
+
+To access the API, you must authenticate with your **bot's API token**.
+
+> You can find your token under your bot's page:  
+> `https://top.gg/bot/:yourbotid/webhooks`  
+> *(replace `:yourbotid` with your actual bot ID)*
+
+Include the token in the `Authorization` header:
+
+```json title="HTTP Headers"
 {
   "Authorization": "your-topgg-token-here"
 }
 ```
+
+---
+
+✅ You're now ready to begin using the Top.gg API. Continue to the [Bots](/docs/API/bot) or [Users](/docs/API/users) sections for full endpoints.
