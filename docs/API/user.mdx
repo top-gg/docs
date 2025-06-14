@@ -5,43 +5,54 @@ description: API resource for Top.gg users
 
 import HTTPHeader from "../../src/components/HTTPHeader";
 
-A user represents a User account in top.gg. It is not associated with any other platform like Discord.
+> A **user** represents an account registered on Top.gg.  
+> It is **not** directly associated with any platform like Discord.
 
-## Find One User
+---
+
+## 👤 Find One User
 
 <HTTPHeader type="GET" path="users/:user_id" />
 
-Retrieves information about a particular user by their Discord user id.
+Retrieves information about a specific user by their Discord user ID.
+
+### Example cURL
 
 ```bash
 curl -X GET https://top.gg/api/users/140862798832861184 \
- -H 'Content-Type: application/json' \
- -H 'Authorization: your-topgg-token'
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: your-topgg-token'
 ```
 
-## Structure
+---
 
-| Field             | Type        | Description                                                       |
-| ----------------- | ----------- | ----------------------------------------------------------------- |
-| id                | `snowflake` | The id of the user                                                |
-| username          | `string`    | The username of the user                                          |
-| discriminator     | `string`    | The discriminator of the user                                     |
-| avatar?           | `string`    | The avatar hash of the user's avatar                              |
-| defAvatar         | `string`    | The cdn hash of the user's avatar if the user has none            |
-| bio?              | `string`    | The bio of the user                                               |
-| banner?           | `string`    | The banner image url of the user                                  |
-| social            | `object`    | The social usernames of the user                                  |
-| social.youtube?   | `string`    | The youtube channel id of the user                                |
-| social.reddit?    | `string`    | The reddit username of the user                                   |
-| social.twitter?   | `string`    | The twitter username of the user                                  |
-| social.instagram? | `string`    | The instagram username of the user                                |
-| social.github?    | `string`    | The github username of the user                                   |
-| color?            | `string`    | The custom hex color of the user (not guaranteed to be valid hex) |
-| supporter         | `boolean`   | The supporter status of the user                                  |
-| certifiedDev      | `boolean`   | The certified status of the user                                  |
-| mod               | `boolean`   | The mod status of the user                                        |
-| webMod            | `boolean`   | The website moderator status of the user                          |
-| admin             | `boolean`   | The admin status of the user                                      |
+## 🧱 User Object Structure
+
+| Field              | Type        | Description                                                       |
+|--------------------|-------------|-------------------------------------------------------------------|
+| id                 | `snowflake` | Discord user ID                                                   |
+| username           | `string`    | Username of the user                                              |
+| discriminator      | `string`    | Discord discriminator (e.g., `0001`)                              |
+| avatar?            | `string`    | Avatar hash (if set)                                              |
+| defAvatar          | `string`    | Default avatar hash if no custom avatar                          |
+| bio?               | `string`    | User’s profile bio                                                |
+| banner?            | `string`    | Banner image URL                                                  |
+| social             | `object`    | Social links object                                               |
+| social.youtube?    | `string`    | YouTube channel ID                                                |
+| social.reddit?     | `string`    | Reddit username                                                   |
+| social.twitter?    | `string`    | Twitter username                                                  |
+| social.instagram?  | `string`    | Instagram username                                                |
+| social.github?     | `string`    | GitHub username                                                   |
+| color?             | `string`    | Custom hex profile color (may not be valid hex)                  |
+| supporter          | `boolean`   | Whether user is a Top.gg supporter                                |
+| certifiedDev       | `boolean`   | Whether user is a certified developer                             |
+| mod                | `boolean`   | Whether user is a moderator                                       |
+| webMod             | `boolean`   | Whether user is a website moderator                               |
+| admin              | `boolean`   | Whether user is an administrator                                  |
+
+---
+
+### 🧾 Example Response
 
 ```json
 {
@@ -58,3 +69,5 @@ curl -X GET https://top.gg/api/users/140862798832861184 \
   "social": {}
 }
 ```
+
+---
