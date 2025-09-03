@@ -1,0 +1,22 @@
+---
+title: Projects
+description: API resource for a projects such as bots or servers submitted on Top.gg
+---
+
+import HTTPHeader from "../../../src/components/HTTPHeader";
+
+> Project endpoints are subject to [stricter rate limits](/docs/Resources/ratelimits#resource-specific-ratelimits) than others.
+
+## Update Bot Commands
+
+<HTTPHeader type="POST" path="v1/projects/:topgg_id/commands" />
+
+Updates the commands for a specific bot.
+
+### Post Body
+
+This endpoint accepts an array of objects following [Discord's application command structure](https://discord.com/developers/docs/interactions/application-commands#application-command-object).
+
+### Example Response
+
+if the request is successful, the response will be a 201 No Content status.
