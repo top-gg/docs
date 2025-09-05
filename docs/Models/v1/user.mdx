@@ -1,0 +1,15 @@
+---
+title: User Models
+description: Definitions for User objects in Top.gg's V1 API
+---
+
+## User Source
+
+A User Source is an enum that represents a user account from an external platform that is linked to a Top.gg user account. Each source has a unique identifer type that we might validate against. If none is passed to any endpoint that accepts a source parameter, it will default to `topgg`.
+
+### Valid Sources
+
+| Value      | User Id Type                      |
+| ---------- | --------------------------------- |
+| `topgg`    | Snowflake                         |
+| `discord`  | Snowflake                         |

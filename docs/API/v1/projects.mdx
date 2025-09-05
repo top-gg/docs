@@ -7,9 +7,9 @@ import HTTPHeader from "../../../src/components/HTTPHeader";
 
 > Project endpoints are subject to [stricter rate limits](/docs/Resources/ratelimits#resource-specific-ratelimits) than others.
 
-## Update Bot Commands
+## Update Discord Bot Commands
 
-<HTTPHeader type="POST" path="v1/projects/:topgg_id/commands" />
+<HTTPHeader type="POST" path="v1/projects/@me/commands" />
 
 Updates the commands for a specific bot.
 
@@ -17,6 +17,32 @@ Updates the commands for a specific bot.
 
 This endpoint accepts an array of objects following [Discord's application command structure](https://discord.com/developers/docs/interactions/application-commands#application-command-object).
 
+## Get Vote Status By User
+
+<HTTPHeader type="GET" path="v1/projects/@me/votes/:user_id" />
+
+Gets the vote status for an individual user.
+
+### Query Parameters
+
+| Parameter | Type      | Description                                  |
+| --------- | --------- | -------------------------------------------- |
+| source?   | [Source](/docs/Models/v1/user#user-source)    | The source where the user ID is coming from. |
+
+### Response Body
+
+| Field      | Type      | Description                                        |
+| ---------- | --------- | -------------------------------------------------- |
+| created_at | `Date`    | The timestamp of when the user last voted.         |
+| expires_at | `Date`    | The timestamp of when the user can vote again.     |
+| weight     | `number`  | The amount of votes this vote counted for.         |
+
 ### Example Response
 
-if the request is successful, the response will be a 201 No Content status.
+```json
+{
+  "created_at": "2023-10-01T12:34:56.789Z",
+  "expires_at": "2023-10-01T18:34:56.789Z",
+  "weight": 1
+}
+```
