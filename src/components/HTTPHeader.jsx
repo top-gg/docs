@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useColorMode } from "@docusaurus/theme-common";
 
-const mappings = {
+const darkModeMappings = {
   POST: {
     color: "#78b993",
     background: "#0e1712",
@@ -15,9 +16,24 @@ const mappings = {
   },
 };
 
+const lightModeMappings = {
+  POST: {
+    color: "#317854",
+    background: "#e4f5ea",
+    border: "#c1e3d0",
+  },
+  GET: {
+    color: "#4a4aa5",
+    background: "#e8e8fb",
+    border: "#c9c9ee",
+  },
+};
+
+const getStyle = (method, colorMode) => (colorMode === "dark" ? darkModeMappings : lightModeMappings)[method];
+
 const HeaderWrapper = styled.div`
-  border: 1px solid ${(props) => mappings[props.method].border};
-  background: ${(props) => mappings[props.method].background};
+  border: 1px solid ${(props) => getStyle(props.method, props.mode).border};
+  background: ${(props) => getStyle(props.method, props.mode).background};
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -28,16 +44,14 @@ const HeaderWrapper = styled.div`
 `;
 
 const MethodName = styled.h2`
-  color: ${(props) => mappings[props.method].color};
+  color: ${(props) => getStyle(props.method, props.mode).color};
   font-weight: 700;
   font-size: 14px;
   margin: 0 10px 0 0;
 `;
 
-const EndpointUrl = styled.span``;
-
 const CopyButton = styled.button`
-  color: ${(props) => mappings[props.method].color};
+  color: ${(props) => getStyle(props.method, props.mode).color};
   background: inherit;
   font-size: 14px;
   border: none;
@@ -47,7 +61,7 @@ const CopyButton = styled.button`
   font-weight: 500;
   padding: 0 10px;
   &:hover {
-    filter: brightness(0.6);
+    filter: brightness(0.8);
   }
 `;
 
@@ -57,28 +71,34 @@ const Header = styled.span`
   align-items: center;
 `;
 
+const EndpointUrl = styled.span``;
+
+const BASE_URL = "https://top.gg/api";
+
 export default function HTTPHeader({ type, path }) {
   const [copied, setCopy] = React.useState(false);
+  const { colorMode } = useColorMode();
+
   React.useEffect(() => {
     if (copied) {
       setTimeout(() => setCopy(false), 3000);
     }
   }, [copied]);
-  const BASE_URL = "https://top.gg/api/";
-  const fullUrl = new URL(path, BASE_URL).href;
-  const url = path;
+  
+  const fullUrl = BASE_URL + path
+  
   return (
-    <HeaderWrapper method={type}>
+    <HeaderWrapper method={type} mode={colorMode}>
       <Header>
-        <MethodName method={type}>{type}</MethodName>
+        <MethodName method={type} mode={colorMode}>{type}</MethodName>
         <EndpointUrl
           dangerouslySetInnerHTML={{
-            __html: url.replace(/:[a-z_]+/g, "<b>$&</b>"),
+            __html: path.replace(/:[a-z_]+/g, "<b>$&</b>"),
           }}
         />
       </Header>
-      <CopyToClipboard text={fullUrl} onCopy={() => setCopy(true)}>
-        <CopyButton method={type}>{copied ? "Copied!" : "Copy URL"}</CopyButton>
+      <CopyToClipboard text={fullUrl} onCopy={() => setCopy(true)} mode={colorMode}>
+        <CopyButton method={type} mode={colorMode}>{copied ? "Copied!" : "Copy URL"}</CopyButton>
       </CopyToClipboard>
     </HeaderWrapper>
   );

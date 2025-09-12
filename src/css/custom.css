@@ -4,6 +4,9 @@
  * work well for content-centric websites.
  */
 
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #ff3366;
@@ -13,7 +16,9 @@
   --ifm-color-primary-light: #ff3366;
   --ifm-color-primary-lighter: #ff3366;
   --ifm-color-primary-lightest: #ff3366;
+  --ifm-font-family-base: 'Manrope';
   --ifm-code-font-size: 95%;
+
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
   --background: #fff;
@@ -79,11 +84,13 @@ body {
   border-left: 1px solid rgba(var(--ui), 0.1);
 }
 
-a {
-  color: unset;
-  text-decoration: underline;
-}
-a:hover {
-  color: unset;
-  opacity: 0.8;
+deprecated::after {
+  content: 'Deprecated';
+  font-size: 12px;
+  margin-left: 3px;
+  padding: 3px 5px;
+  border-radius: 5px;
+  background-color: #ccc;
+  color: black;
+  font-weight: bold;
 }

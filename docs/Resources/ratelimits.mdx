@@ -1,36 +1,22 @@
 ---
 title: Ratelimits
-description: Global and route-specific rate limits
+description: Top.gg API's endpoint ratelimits
 ---
 
-The HTTP API implements a process for limiting and preventing spam requests. API users that regularly hit and ignore the limit will be blocked from our platform. These rate limits are in place to help prevent the abuse and overload of our services.
+The Top.gg API imposes a ratelimiting mechanism to limit and prevent spam requests.
 
-## Global Ratelimit
+## Global ratelimits
 
-Global rate limits are applied on all routes
+Global ratelimits are imposed on **all routes** (`*`) regardless of HTTP method (`GET`, `POST`). **These endpoints should receive more than `100` requests per second.**
 
-| Route | Request Type | Max Requests | Throttle     |
-| ----- | ------------ | ------------ | ------------ |
-| `*`   | \*           | 100/second   | 1 hour block |
+## Resource-specific ratelimits
 
-## Resource-Specific Ratelimits
+Certain endpoints have tighter restrictions on their ratelimits. Note that global ratelimits **will still** apply to requests sent to these endpoints.
 
-Certain endpoints have tighter restrictions on their rate limits. Global rate limits still apply to requests sent to these.
+| Route     | HTTP method  | Max requests           |
+| --------- | ------------ | ---------------------- |
+| `/bots/*` | `*`          | 60 requests per minute |
 
-| Route     | Request Type | Max Requests | Throttle     |
-| --------- | ------------ | ------------ | ------------ |
-| `/bots/*` | \*           | 60/minute    | 1 hour block |
+## Exceeding a ratelimit
 
-## Exceeding a Rate Limit
-
-If you exceed the set rate limit for the API you will receive a HTTP 429 and be blocked from posting to the API for one hour.
-
-```json:title=HTTP%20429
-{
-  "retry-after": 3600
-}
-```
-
-| Field       | Type    | Description                                                                                                                                                                   |
-| ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| retry-after | integer | The timeout in seconds before you are able to send requests again. Learn more about this header [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After) |
+If you exceed a set ratelimit, you will **receive a `429` status code** and be **blocked from requesting to our API for one hour**. Meanwhile, in the HTTP response, you will receive a `Retry-After` header which represents the time needed **in seconds** before you are able to send requests again. You can learn more about this header [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After).

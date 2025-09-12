@@ -1,81 +1,195 @@
 ---
-title: Dotnet
-description: Top.gg Dotnet library
+title: .NET
+description: Top.gg .NET library
 ---
 
-# Dotnet Library
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-The community-maintained .NET Library for Top.gg. If you experience any issues please submit an issue on Github.
+# .NET SDK
 
-- [GitHub Link](https://github.com/top-gg/DBL-dotnet-Library)
+The community-maintained .NET library for Top.gg. If you experience any issues, please submit an issue on [its GitHub repository](https://github.com/Top-gg-Community/dotnet-sdk).
 
 ## Installation
 
-### Nuget
+### Main API wrapper
 
-If you're using Nuget you can use and/or find it with the ID <code>DiscordBotsList.Api</code> or use.
+<Tabs>
+  <TabItem value="library_agnostic" label="Library agnostic" default>
+    ```powershell
+    > Install-Package DiscordBotsList.Api
+    ```
+  </TabItem>
+  <TabItem value="discord_net_based" label="Discord.NET-based">
+    ```powershell
+    > Install-Package DiscordBotsList.Api.Adapter.Discord.Net
+    ```
+  </TabItem>
+</Tabs>
 
+### Webhooks only
+
+```powershell
+> Install-Package DiscordBotsList.Api.Webhooks
 ```
-Install-Package DiscordBotsList.Api
-```
+
+## Setting up
+
+<Tabs>
+  <TabItem value="library_agnostic" label="Library agnostic" default>
+    ```cs
+    var client = new DiscordBotListApi(DISCORD_ID, "TOPGG_TOKEN");
+    ```
+  </TabItem>
+  <TabItem value="discord_net_based" label="Discord.NET-based">
+    ```cs
+    var discordNetClient = ...;
+    var client = new DiscordNetDblApi(discordNetClient, "TOPGG_TOKEN");
+    ```
+  </TabItem>
+</Tabs>
 
 ## Usage
 
-### Unauthorized API Usage
-
-#### Setting Up
+### Getting a bot
 
 ```cs
-DiscordBotListApi DblApi = new DiscordBotListApi();
+var bot = await client.GetBotAsync(264811613708746752U);
 ```
 
-#### Getting Bots
+### Getting several bots
+
+<Tabs>
+  <TabItem value="defaults" label="With defaults" default>
+    ```cs
+    var bots = await client.GetBotsAsync();
+    var firstBot = bots.Items.First();
+    ```
+  </TabItem>
+  <TabItem value="explicit_arguments" label="With explicit arguments">
+    ```cs
+    //                                   Sort by                   Limit  Offset
+    var bots = await client.GetBotsAsync(SortBotsBy.MonthlyPoints, 100,   1);
+    var firstBot = bots.Items.First();
+    ```
+  </TabItem>
+</Tabs>
+
+### Getting your project's voters
+
+<Tabs>
+  <TabItem value="first_page" label="First page" default>
+    ```cs
+    var voters = await client.GetVotersAsync();
+    ```
+  </TabItem>
+  <TabItem value="subsequent_pages" label="Subsequent pages">
+    ```cs
+    var voters = await client.GetVotersAsync(2);
+    ```
+  </TabItem>
+</Tabs>
+
+### Check if a user has voted for your project
 
 ```cs
-//                            discord id
-IBot bot = DblApi.GetBotAsync(160105994217586689);
+var voted = await client.HasVoted(661200758510977084U);
 ```
 
-#### Getting Users
+### Getting your bot's server count
 
 ```cs
-//                              discord id
-IUser bot = DblApi.GetUserAsync(121919449996460033);
+var serverCount = await client.GetServerCountAsync();
 ```
 
-### Authorized API Usage
-
-#### Setting Up
+### Posting your bot's server count
 
 ```cs
-AuthDiscordBotListApi DblApi = new AuthDiscordBotListApi(BOT_DISCORD_ID, YOUR_TOKEN);
+await client.UpdateServerCountAsync(bot.GetServerCount());
 ```
 
-#### Updating Stats
+### Automatically posting your bot's server count every few minutes
+
+With Discord.NET:
 
 ```cs
-ISelfBot me = await DblApi.GetMeAsync();
-await me.UpdateStatsAsync(
-  // indexShard
-  24,
-  // shardCount
-  50,
-  // shards
-  new[] { 12, 421, 62, 241, 524, 534 }
-);
+var submissionAdapter = client.CreateListener();
 
-// Update stats           guildCount
-await me.UpdateStatsAsync(2133);
+submissionAdapter.Start();
+
+// ...
+
+submissionAdapter.Stop(); // Optional
 ```
 
-### Widgets
+### Checking if the weekend vote multiplier is active
 
 ```cs
-string widgetUrl = new SmallWidgetOptions()
-	.SetType(WidgetType.OWNER)
-	.SetLeftColor(255, 255, 255)
-	.Build(160105994217586689);
+var isWeekend = await client.IsWeekendAsync();
 ```
 
-Generates the following:
-![](https://camo.githubusercontent.com/32783ef6b26ffe1a732b96a63d5dfc63608ef8d9/68747470733a2f2f646973636f7264626f74732e6f72672f6170692f7769646765742f7374617475732f3136303130353939343231373538363638392e7376673f6c656674636f6c6f723d464646464646)
+### Generating widget URLs
+
+<Tabs>
+  <TabItem value="large" label="Large" default>
+    ```cs
+    var widgetUrl = Widget.Large(WidgetType.DISCORD_BOT, 1026525568344264724U);
+    ```
+  </TabItem>
+  <TabItem value="votes" label="Votes">
+    ```cs
+    var widgetUrl = Widget.Votes(WidgetType.DISCORD_BOT, 1026525568344264724U);
+    ```
+  </TabItem>
+  <TabItem value="owner" label="Owner">
+    ```cs
+    var widgetUrl = Widget.Owner(WidgetType.DISCORD_BOT, 1026525568344264724U);
+    ```
+  </TabItem>
+  <TabItem value="social" label="Social">
+    ```cs
+    var widgetUrl = Widget.Social(WidgetType.DISCORD_BOT, 1026525568344264724U);
+    ```
+  </TabItem>
+</Tabs>
+
+### Webhooks
+
+#### Being notified whenever someone voted for your project
+
+With ASP.NET Core or Blazor:
+
+```cs
+using DiscordBotsList.Api.Webhooks;
+
+namespace MyServer
+{
+    internal class MyVoteListener : IReceiver<Vote>
+    {
+        public Task Callback(Vote vote)
+        {
+            Console.WriteLine($"A user with the ID of {vote.VoterId} has voted us on Top.gg!");
+
+            return Task.CompletedTask;
+        }
+    }
+
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+            var app = builder.Build();
+
+            app.UseMiddleware<VoteMiddleware<MyVoteListener>>("/votes", Environment.GetEnvironmentVariable("MY_TOPGG_WEBHOOK_SECRET"), new MyVoteListener());
+
+            app.Map("/", async context =>
+            {
+                await context.Response.WriteAsync("Hello, World!");
+            });
+
+            app.Run("http://localhost:8080");
+        }
+    }
+}
+```

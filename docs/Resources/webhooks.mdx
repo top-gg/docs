@@ -1,69 +1,177 @@
 ---
 title: Webhooks
-description: Webhook integration for receiving vote data
+description: Top.gg API's webhooks integration
 ---
 
-Instead of requesting our API to see the users who have voted for your bot, you can now use webhooks! Webhooks will send a `POST` request to a URL of your choice when your bot has been voted for.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-## Getting Started
+With webhooks, you can get notified from the Top.gg server in near real-time. This eliminates the need to call our API directly every time you want to check something, which could easily hit ratelimits. Basically, the Top.gg server will attempt to send a `POST` request to a recipient URL of your choice whenever a certain event has just fired (like receiving a vote,) then your server validates this request and processes the data we sent with your own logic!
 
-Start by setting up your webhook URL in the edit form of your bot on this site, it can be found at https://top.gg/bot/:your-bot-id/webhooks (Replace `:your-bot-id` with your bot's ID!). Once you've entered the URL you want the webhook to be sent to, you're all set! If you need help setting up webhooks inside of your bot don't be afraid to ask in our [discord server](https://discord.gg/dbl) in the `#topgg-api` channel.
+It should be noted that Top.gg webhooks are **not** the same as Discord webhooks. You would need to implement **your own** logic to be able to send Top.gg events to Discord.
 
-## Security
+## Setting up
 
-On the edit page you can see another input for `Authorization`. Here you can provide a shared secret that you can check for on the server side.
+For example, let's say you have an express app like this:
 
-To verify requests are coming from us, look for the value in the `Authorization` header and make sure it is the same as the value you provided in the form.
+```js
+const express = require('express');
+const app = express();
 
-If you're running a firewall, you can whitelist the following IPs, which will be used to deliver webhooks for the foreseeable future.
+app.use(express.json());
 
-| IP                |
-| ----------------- |
-| `159.203.105.187` |
+// highlight-start
+app.post('/votes', (req, res) => {
+  // ...
+});
+// highlight-end
+
+app.listen(8080, () => console.log('Server running on port 8080'));
+```
+
+To set up your webhook, open the webhooks section in your bot/server's Top.gg page settings, and enter your full recipient URL in the `Webhook URL` box. In your example, it's `https://yourserver.com/votes`.
+
+### Authentication
+
+Your webhook endpoint also need to validate incoming requests in order to differentiate which request is really coming from Top.gg and which is just bogus. This way, you can help prevent abuse in case your webhook endpoint gets leaked.
+
+This is possible by using secrets (or passwords.) Essentially, you make up your secret password, tell Top.gg that it needs to send requests to your server with this password, and your server validates it upon receiving a request. Make sure to not share this password with anyone else!
+
+To achieve this, you can enter your custom secret/password in the `Authorization` box under the `Webhook URL` box. After clicking save, you can add the password to your server's environment variables (for example `MY_TOPGG_WEBHOOK_SECRET`) and validate incoming requests like so:
+
+```js
+const express = require('express');
+const app = express();
+
+// highlight-next-line
+const TOPGG_WEBHOOK_SECRET = process.env.MY_TOPGG_WEBHOOK_SECRET;
+
+app.use(express.json());
+
+app.post('/votes', (req, res) => {
+  // highlight-start
+  if (req.headers['Authorization'] === TOPGG_WEBHOOK_SECRET) {
+    return res.sendStatus(204);
+  } else {
+    return res.sendStatus(401);
+  }
+  // highlight-end
+});
+
+app.listen(8080, () => console.log('Server running on port 8080'));
+```
+
+Now, your server's Top.gg webhook endpoint is properly secured! Incoming requests that carries your password will be authenticated and receive a `204` (No Content) status code, while invalid requests will receive a `401` (Unauthorized) status code instead, *womp womp!*
+
+### IP
+
+If your server is running a firewall, you can whitelist the following IP which represents our server sending webhook data to your webhook endpoint:
+
+```
+59.203.105.187
+```
 
 ## Acknowledgement
 
-Webhooks sent by top.gg **must** be acknowledged with a 200 response in order to be considered successful. Unsuccessful webhooks are [retried](#retrial).
+Make sure that your webhook endpoint is able to acknowledge our webhook request by returning `2xx` response within 5 seconds.
 
-Top.gg libraries that handle webhooks acknowledge webhooks automatically.
+If your server is unable to meet this demand, our server will retry by sending the same request 10 times. The retry delay is increased exponentially per retry by `2^n` seconds, from a minimum delay of 1 second for the first retry up to 17 minutes for the tenth.
 
-## Timeouts
+:::note
+If your server returns a `4xx` status code, our server will **not** send retry requests because these are considered user errors.
+:::
 
-Responses to webhooks must be returned within 5 seconds, otherwise they are considered a timeout and will be queued for a retry (if available).
+## Data structure
 
-## Retrial
+We carry the webhook event data to you inside the request's JSON body. This data's contents depends on the webhook type you selected.
 
-Webhook requests that time out or return a `5XX` status response (like 500) will be retried up to 10 times. The retry delay is increased exponentially per retry by `2^N` seconds, from a minimum delay of 1 second for the first retry up to 17 minutes for the tenth.
+### Votes
 
-Errors resulting with status `4XX` (like 404) will not be retried as these are considered user errors.
+<Tabs>
+  <TabItem value="bot" label="Bot" default>
+    This is the data we carry whenever a user has voted for your bot. It is structured like this:
 
-## Data Format
+    <Tabs>
+      <TabItem value="table" label="Table" default>
+        | Field       | Type        | Description                                                                                                                                                          |
+        | ----------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+        | `bot`       | `snowflake` | Discord ID of the bot that received a vote.                                                                                                                          |
+        | `user`      | `snowflake` | Discord ID of the user who voted.                                                                                                                                    |
+        | `type`      | `string`    | The vote type. If the event is fired manually from your behalf via a "test" button in the Top.gg page settings, it will be `test`. Otherwise, it will be `"upvote"`. |
+        | `isWeekend` | `boolean`   | Whether the weekend multiplier is active, where a single vote counts as two.                                                                                         |
+        | `query`?    | `string`    | Query string parameters found in the `/bot/:bot_id/vote` page URL. For example: `?a=1&b=2`.                                                                          |
+      </TabItem>
+      <TabItem value="json" label="JSON example">
+        ```json
+        {
+          "bot": "1026525568344264724",
+          "user": "661200758510977084",
+          "type": "test",
+          "isWeekend": false
+        }
+        ```
+      </TabItem>
+    </Tabs>
 
-The format of the data your webhook URL will receive in a `POST` request.
+    The following example code notifies a Discord webhook whenever someone has voted for your bot:
+  </TabItem>
+  <TabItem value="server" label="Server">
+    This is the data we carry whenever a user has voted for your server. It is structured like this:
 
-### Schema
+    <Tabs>
+      <TabItem value="table" label="Table" default>
+        | Field       | Type        | Description                                                                                                                                                          |
+        | ----------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+        | `guild`     | `snowflake` | Discord ID of the server that received a vote.                                                                                                                       |
+        | `user`      | `snowflake` | Discord ID of the user who voted.                                                                                                                                    |
+        | `type`      | `string`    | The vote type. If the event is fired manually from your behalf via a "test" button in the Top.gg page settings, it will be `test`. Otherwise, it will be `"upvote"`. |
+        | `query`?    | `string`    | Query string parameters found in the `/bot/:bot_id/vote` page URL. For example: `?a=1&b=2`.                                                                          |
+      </TabItem>
+      <TabItem value="json" label="JSON example">
+        ```json
+        {
+          "guild": "264445053596991498",
+          "user": "661200758510977084",
+          "type": "test"
+        }
+        ```
+      </TabItem>
+    </Tabs>
 
-#### Bot Webhooks
+    The following example code notifies a Discord webhook whenever someone has voted for your server:
+  </TabItem>
+</Tabs>
 
-| Field     | Type        | Description                                                                                         |
-| --------- | ----------- | --------------------------------------------------------------------------------------------------- |
-| bot       | `snowflake` | Discord ID of the bot that received a vote.                                                         |
-| user      | `snowflake` | Discord ID of the user who voted.                                                                   |
-| type      | `string`    | The type of the vote (should always be `"upvote"` except when using the test button it's `"test"`). |
-| isWeekend | `boolean`   | Whether the weekend multiplier is in effect, meaning users votes count as two.                      |
-| query?    | `string`    | Query string params found on the /bot/:ID/vote page. Example: ?a=1&b=2.                             |
+```js
+const express = require('express');
+const app = express();
 
-#### Server Webhooks
+const TOPGG_WEBHOOK_SECRET = process.env.MY_TOPGG_WEBHOOK_SECRET;
+// highlight-next-line
+const DISCORD_WEBHOOK_URL = process.env.MY_DISCORD_WEBHOOK_URL;
 
-| Field  | Type        | Description                                                                                         |
-| ------ | ----------- | --------------------------------------------------------------------------------------------------- |
-| guild  | `snowflake` | Discord ID of the guild that received a vote.                                                       |
-| user   | `snowflake` | Discord ID of the user who voted.                                                                   |
-| type   | `string`    | The type of the vote (should always be `"upvote"` except when using the test button it's `"test"`). |
-| query? | `string`    | Query string params found on the /servers/:ID/vote page. Example: ?a=1&b=2.                         |
+app.use(express.json());
 
-## More Events
+app.post('/votes', (req, res) => {
+  if (req.headers['Authorization'] === TOPGG_WEBHOOK_SECRET) {
+    // highlight-start
+    fetch(DISCORD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: 'Top.gg',
+        content: `A user with the ID of \`${req.body.user}\` has voted us on Top.gg!`
+      })
+    });
+    // highlight-end
 
-Looking for webhooks events other than votes? They are only available starting from **v1** of the API.
+    return res.sendStatus(204);
+  } else {
+    return res.sendStatus(401);
+  }
+});
 
-<footer className="text-tertiary">You are currently viewing v0.</footer>
+app.listen(8080, () => console.log('Server running on port 8080'));
+```

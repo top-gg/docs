@@ -1,7 +1,10 @@
-content/libraries/python.mdx @null8626
-content/libraries/javascript.mdx @jpbberry @xetera
-content/libraries/dotnet.mdx @velddev @faith-ie
-content/libraries/go.mdx @rumblefrog
-content/libraries/php.mdx @goverfl0w
-content/libraries/java.mdx @nikammerlaan
-content/libraries/rust.mdx @null8626
+docs/Libraries/cpp.mdx @null8626
+docs/Libraries/dotnet.mdx @velddev @faith-ie
+docs/Libraries/go.mdx @rumblefrog
+docs/Libraries/java.mdx @nikammerlaan
+docs/Libraries/lua.mdx @matthew-st
+docs/Libraries/nodejs.mdx @jpbberry @xetera
+docs/Libraries/php.mdx @goverfl0w
+docs/Libraries/python.mdx @null8626
+docs/Libraries/ruby.mdx @sksmta
+docs/Libraries/rust.mdx @null8626

@@ -3,114 +3,310 @@ title: Java
 description: Top.gg Java library
 ---
 
-# Java Library
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-The community-maintained Java library for Top.gg. If you experience any issues/bugs please submit an issue on Github.
+# Java SDK
 
-- [GitHub](https://github.com/top-gg/Java-SDK)
+The community-maintained Java library for Top.gg. If you experience any issues, please submit an issue on [its GitHub repository](https://github.com/Top-gg-Community/java-sdk).
 
 ## Installation
 
-Replace `VERSION` with the latest version or commit hash. The latest version can be found under [releases](https://github.com/top-gg/java-sdk/releases).
+[![Release](https://jitpack.io/v/top-gg/java-sdk.svg)](https://jitpack.io/#top-gg/java-sdk)
 
-#### Maven
+Replace `VERSION` here with the latest version or commit hash. The latest version can be found [under GitHub releases](https://github.com/top-gg-community/java-sdk/releases).
 
-```xml
-<repositories>
-    <repository>
+<Tabs>
+  <TabItem value="maven" label="Maven" default>
+    ```xml
+    <repositories>
+      <repository>
         <id>jitpack.io</id>
         <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>org.discordbots</groupId>
-        <artifactId>DBL-Java-Library</artifactId>
+      </repository>
+    </repositories>
+    
+    <dependencies>
+      <dependency>
+        <groupId>com.github.top-gg</groupId>
+        <artifactId>java-sdk</artifactId>
         <version>VERSION</version>
-    </dependency>
-</dependencies>
-```
+      </dependency>
+    </dependencies>
+    ```
+  </TabItem>
+  <TabItem value="gradle" label="Gradle">
+    ```gradle
+    repositories {
+      maven { url 'https://jitpack.io' }
+    }
+    
+    dependencies {
+      compile 'com.github.top-gg:java-sdk:VERSION'
+    }
+    ```
+  </TabItem>
+</Tabs>
 
-#### Gradle
+## Setting up
 
-```gradle
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-```
-
-```gradle
-dependencies {
-    compile 'org.discordbots:DBL-Java-Library:VERSION'
-}
+```java
+final DiscordBotListAPI client = new DiscordBotListAPI
+  .Builder()
+  .token(System.getEnv("TOPGG_TOKEN"))
+  .botId("BOT_ID")
+  .build();
 ```
 
 ## Usage
 
-First, build a DiscordBotListAPI object.
+### Getting a bot
 
 ```java
-DiscordBotListAPI api = new DiscordBotListAPI.Builder()
-	.token("token")
-	.botId("botId")
-	.build();
+final Bot bot = client.getBot("264811613708746752").toCompletableFuture().get();
 ```
 
-## Posting bot stats
+### Getting several bots
 
-Top.gg provides three ways to post your bots stats.
-**#1** Post the server count for the whole bot.
+<Tabs>
+  <TabItem value="defaults" label="With defaults" default>
+    ```java
+    final BotResult result = client.getBots().toCompletableFuture().get();
+    final List<Bot> bots = result.getResults();
+    ```
+  </TabItem>
+  <TabItem value="explicit_arguments" label="With explicit arguments">
+    ```java
+    //                                      Limit  Offset  Sort by
+    final BotResult result = client.getBots(50,    0,      "date").toCompletableFuture().get();
+    final List<Bot> bots = result.getResults();
+    ```
+  </TabItem>
+</Tabs>
+
+### Getting your project's voters
+
+<Tabs>
+  <TabItem value="first_page" label="First page" default>
+    ```java
+    final List<SimpleUser> voters = client.getVoters().toCompletableFuture().get();
+    ```
+  </TabItem>
+  <TabItem value="subsequent_pages" label="Subsequent pages">
+    ```java
+    final List<SimpleUser> voters = client.getVoters(2).toCompletableFuture().get();
+    ```
+  </TabItem>
+</Tabs>
+
+### Check if a user has voted for your project
 
 ```java
-int serverCount = ...; // the total amount of servers across all shards
-
-api.setStats(serverCount);
+final boolean hasVoted = client.hasVoted("661200758510977084").toCompletableFuture().get();
 ```
 
-**#2** Post the server count for an individual shard
+### Getting your bot's server count
 
 ```java
-int shardId = ...; // the id of this shard
-int shardCount = ...; // the amount of shards
-int serverCount = ...; // the server count of this shard
-
-api.setStats(shardId, shardCount, serverCount);
+final long serverCount = client.getServerCount().toCompletableFuture().get();
 ```
 
-**#3** Post the server counts for every shard within a single request.
+### Posting your bot's server count
 
 ```java
-List<Integer> shardServerCounts = ...; // a list of all the shards' server counts
-
-api.setStats(shardServerCounts);
+client.postServerCount(bot.getServerCount()).toCompletableFuture().get();
 ```
 
-## Checking votes
+### Automatically posting your bot's server count every few minutes
 
-You can use this to tell if a user has voted for your bot before.
+<Tabs>
+  <TabItem value="defaults" label="With defaults" default>
+    ```java
+    client.startAutoposter(() -> {
+      return bot.getServerCount();
+    });
+    ```
+  </TabItem>
+  <TabItem value="callback" label="With a callback">
+    ```java
+    client.startAutoposter(() -> {
+      return bot.getServerCount();
+    }, new BiConsumer<>() {
+      @Override
+      public void accept(Integer serverCount, Throwable error) {
+        if (serverCount != null) {
+          System.out.println("Successfully posted " + serverCount + " servers to Top.gg!");
+        } else {
+          System.err.println("Post error: " + error.getMessage());
+    
+          client.stopAutoposter();
+        }
+      }
+    });
+    ```
+  </TabItem>
+  <TabItem value="delay" label="With a custom delay">
+    ```java
+    // Posts once every 30 minutes
+    client.startAutoposter(1800, () -> {
+      return bot.getServerCount();
+    }, new BiConsumer<>() {
+      @Override
+      public void accept(Integer serverCount, Throwable error) {
+        if (serverCount != null) {
+          System.out.println("Successfully posted " + serverCount + " servers to Top.gg!");
+        } else {
+          System.err.println("Post error: " + error.getMessage());
+    
+          client.stopAutoposter();
+        }
+      }
+    });
+    ```
+  </TabItem>
+</Tabs>
+
+### Checking if the weekend vote multiplier is active
 
 ```java
-String userId = ...; // ID of the user you're checking
-api.hasVoted(userId).whenComplete((hasVoted, e) -> {
-	if(hasVoted)
-		System.out.println("This person has voted!");
-	else
-		System.out.println("This person has not voted!");
-});
+final boolean multiplierActive = client.getVotingMultiplier().toCompletableFuture().get().isWeekend();
 ```
 
-## Get vote multiplier
+### Generating widget URLs
 
-Use this to check if there is a vote multiplier applied at the moment.
+<Tabs>
+  <TabItem value="large" label="Large" default>
+    ```java
+    final String widgetUrl = Widget.large(Widget.Type.DISCORD_BOT, "574652751745777665");
+    ```
+  </TabItem>
+  <TabItem value="votes" label="Votes">
+    ```java
+    final String widgetUrl = Widget.votes(Widget.Type.DISCORD_BOT, "574652751745777665");
+    ```
+  </TabItem>
+  <TabItem value="owner" label="Owner">
+    ```java
+    final String widgetUrl = Widget.owner(Widget.Type.DISCORD_BOT, "574652751745777665");
+    ```
+  </TabItem>
+  <TabItem value="social" label="Social">
+    ```java
+    final String widgetUrl = Widget.social(Widget.Type.DISCORD_BOT, "574652751745777665");
+    ```
+  </TabItem>
+</Tabs>
 
-```java
-api.getVotingMultiplier().whenComplete((multiplier, e) -> {
-	if(multiplier.isWeekend())
-		System.out.println("It's the weekend, so votes are worth 2x!");
-	else
-		System.out.println("It's not the weekend :pensive:");
-});
-```
+### Webhooks
+
+#### Being notified whenever someone voted for your project
+
+<Tabs>
+  <TabItem value="spring_boot" label="Spring Boot" default>
+    In your `TopggWebhookFilterConfig.java`:
+    
+    ```java
+    import org.discordbots.api.client.entity.Vote;
+    import org.discordbots.api.client.webhooks.SpringBoot;
+    
+    import org.springframework.boot.web.servlet.FilterRegistrationBean;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    
+    @Configuration
+    public class TopggWebhookFilterConfig {
+        @Bean
+        public FilterRegistrationBean<SpringBoot<Vote>> registerVoteWebhook() {
+            final FilterRegistrationBean<SpringBoot<Vote>> registrationBean = new FilterRegistrationBean<>();
+            
+            registrationBean.setFilter(new SpringBoot<>(Vote.class, System.getenv("MY_TOPGG_WEBHOOK_SECRET")) {
+                @Override
+                public void callback(final Vote vote) {
+                    System.out.println("A user with the ID of " + vote.getVoterId() + " has voted us on Top.gg!");
+                }
+            });
+            
+            registrationBean.addUrlPatterns("/votes");
+            registrationBean.setOrder(1);
+    
+            return registrationBean;
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem value="dropwizard" label="Dropwizard">
+    In your `MyVoteListener.java`:
+    
+    ```java
+    import org.discordbots.api.client.entity.Vote;
+    import org.discordbots.api.client.webhooks.Dropwizard;
+    
+    import jakarta.ws.rs.Path;
+    
+    @Path("/votes")
+    public class MyVoteListener extends Dropwizard<Vote> {
+        public MyVoteListener() {
+            super(Vote.class, System.getenv("MY_TOPGG_WEBHOOK_SECRET"));
+        }
+    
+        @Override
+        public void callback(final Vote vote) {
+            System.out.println("A user with the ID of " + vote.getVoterId() + " has voted us on Top.gg!");
+        }
+    }
+    ```
+    
+    In your `MyServer.java`:
+
+    ```java
+    import io.dropwizard.core.Application;
+    import io.dropwizard.core.Configuration;
+    import io.dropwizard.core.setup.Environment;
+    import io.dropwizard.jersey.setup.JerseyEnvironment;
+    
+    public class MyServer extends Application<Configuration> {
+        public static void main(String[] args) throws Exception {
+            new MyServer().run(args);
+        }
+    
+        @Override
+        public void run(Configuration config, Environment env) {
+            final JerseyEnvironment jersey = env.jersey();
+            
+            jersey.register(new MyVoteListener());
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem value="eclipse_jetty" label="Eclipse Jetty">
+    In your `MyServer.java`:
+    
+    ```java
+    import org.discordbots.api.client.entity.Vote;
+    import org.discordbots.api.client.webhooks.EclipseJetty;
+    
+    import org.eclipse.jetty.server.Server;
+    import org.eclipse.jetty.servlet.ServletContextHandler;
+    import org.eclipse.jetty.servlet.ServletHolder;
+    
+    public class MyServer {
+        public static void main(String[] args) throws Exception {
+            final Server server = new Server(8080);
+            final ServletContextHandler handler = new ServletContextHandler();
+    
+            handler.setContextPath("/");
+            handler.addServlet(new ServletHolder(new EclipseJetty<>(Vote.class, System.getenv("MY_TOPGG_WEBHOOK_SECRET")) {
+                @Override
+                public void callback(final Vote vote) {
+                    System.out.println("A user with the ID of " + vote.getVoterId() + " has voted us on Top.gg!");
+                }
+            }), "/votes");
+    
+            server.setHandler(handler);
+            server.start();
+            server.join();
+        }
+    }
+    ```
+  </TabItem>
+</Tabs>

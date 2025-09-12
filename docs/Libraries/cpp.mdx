@@ -1,0 +1,743 @@
+---
+title: C++
+description: Top.gg C++ library
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# C++ SDK
+
+The community-maintained C++17 library for Top.gg. If you experience any issues, please submit an issue on [its GitHub repository](https://github.com/Top-gg-Community/cpp-sdk).
+
+## Building from source
+
+First, clone the git repository like so:
+
+```sh
+$ git clone https://github.com/Top-gg-Community/cpp-sdk --depth 1
+$ cd cpp-sdk
+$ git submodule update --init --recursive
+```
+
+The C++ SDK provides building options that you can enable or disable by setting the corresponding variables to `ON` or `OFF`. They are as follows:
+
+| Option name                   | Description                                      | Default |
+| ----------------------------- | ------------------------------------------------ | ------- |
+| `BUILD_SHARED_LIBS`           | Build shared libraries.                          | `ON`    |
+| `ENABLE_API`                  | Build primary API support.                       | `ON`    |
+| `ENABLE_CPP_HTTPLIB_WEBHOOKS` | Build support for webhooks via `cpp-httplib`.    | `OFF`   |
+| `ENABLE_DROGON_WEBHOOKS`      | Build support for webhooks via `drogon`.         | `OFF`   |
+| `ENABLE_CORO`                 | Add support for C++20 coroutines.                | `OFF`   |
+| `TESTING`                     | Enable this only if you are testing the library. | `OFF`   |
+
+### Main API wrapper
+
+<Tabs>
+  <TabItem value="linux_debian_like" label="Linux (Debian-like)" default>
+    Install D++:
+    
+    ```sh
+    $ wget -O dpp.deb https://dl.dpp.dev/latest
+    $ sudo dpkg -i dpp.deb
+    ```
+    
+    Build `topgg`:
+    
+    ```sh
+    $ cmake -B build .
+    $ cmake --build build --config Release
+    ```
+  </TabItem>
+  <TabItem value="linux_centos_like" label="Linux (CentOS-like)">
+    Install D++:
+    
+    ```sh
+    $ sudo yum install wget
+    $ wget -O dpp.rpm https://dl.dpp.dev/latest/linux-x64/rpm
+    $ sudo yum localinstall dpp.rpm
+    ```
+    
+    Build `topgg`:
+    
+    ```sh
+    $ cmake -B build .
+    $ cmake --build build --config Release
+    ```
+  </TabItem>
+  <TabItem value="macos" label="macOS">
+    Install D++:
+    
+    ```sh
+    $ brew install libdpp
+    $ brew link libdpp
+    ```
+    
+    Build `topgg`:
+    
+    ```sh
+    $ cmake -B build .
+    $ cmake --build build --config Release
+    ```
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+    Install D++ and build `topgg`:
+
+    ```bat
+    > cmake -B build .
+    > cmake --build build --config Release
+    ```
+  </TabItem>
+</Tabs>
+
+### Webhooks only
+
+<Tabs>
+  <TabItem value="cpp_httplib" label="cpp-httplib" default>
+    Install `cpp-httplib` and build `topgg`:
+
+    ```bat
+    > cmake -DENABLE_API=OFF -DENABLE_CPP_HTTPLIB_WEBHOOKS=ON -B build .
+    > cmake --build build --config Release
+    ```
+  </TabItem>
+  <TabItem value="drogon" label="Drogon">
+    <Tabs>
+      <TabItem value="linux_debian_like" label="Linux (Debian-like)" default>
+        Install the C/C++ compiler(s):
+    
+        ```sh
+        $ sudo apt install git gcc g++ cmake
+        ```
+    
+        Install Drogon's dependencies:
+    
+        ```sh
+        $ sudo apt install libjsoncpp-dev uuid-dev zlib1g-dev
+        ```
+        
+        Install Drogon and build `topgg`:
+    
+        ```sh
+        $ cmake -DENABLE_API=OFF -DENABLE_DROGON_WEBHOOKS=ON -B build .
+        $ cmake --build build --config Release
+        ```
+      </TabItem>
+      <TabItem value="linux_arch_like" label="Linux (Arch-like)">
+        Install the C/C++ compiler(s):
+    
+        ```sh
+        $ sudo pacman -S git gcc make cmake
+        ```
+    
+        Install Drogon's dependencies:
+    
+        ```sh
+        $ sudo pacman -S jsoncpp uuid zlib
+        ```
+        
+        Install Drogon and build `topgg`:
+    
+        ```sh
+        $ cmake -DENABLE_API=OFF -DENABLE_DROGON_WEBHOOKS=ON -B build .
+        $ cmake --build build --config Release
+        ```
+      </TabItem>
+      <TabItem value="linux_centos_like" label="Linux (CentOS-like)">
+        Install the C/C++ compiler(s):
+    
+        ```sh
+        $ sudo yum install git gcc gcc-c++
+        ```
+    
+        Install the latest version of CMake from source if you haven't already:
+    
+        ```sh
+        $ git clone https://github.com/Kitware/CMake --depth 1
+        $ cd CMake
+        $ ./bootstrap && make && make install
+        $ cd ..
+        ```
+    
+        Update your system's GCC:
+    
+        ```sh
+        $ sudo yum install centos-release-scl devtoolset-11
+        $ scl enable devtoolset-11 bash
+        ```
+    
+        Install Drogon's dependencies:
+    
+        ```sh
+        $ git clone https://github.com/open-source-parsers/jsoncpp --depth 1
+        $ cd jsoncpp
+        $ mkdir build && cd build
+        $ cmake .. && make && make install
+        $ cd ../..
+        $ sudo yum install libuuid-devel zlib-devel
+        ```
+        
+        Install Drogon and build `topgg`:
+    
+        ```sh
+        $ cmake -DENABLE_API=OFF -DENABLE_DROGON_WEBHOOKS=ON -B build .
+        $ cmake --build build --config Release
+        ```
+      </TabItem>
+      <TabItem value="macos" label="macOS">
+        Install Drogon's dependencies:
+    
+        ```sh
+        $ brew upgrade
+        $ brew install jsoncpp ossp-uuid zlib-devel
+        ```
+        
+        Install Drogon and build `topgg`:
+    
+        ```sh
+        $ cmake -DENABLE_API=OFF -DENABLE_DROGON_WEBHOOKS=ON -B build .
+        $ cmake --build build --config Release
+        ```
+      </TabItem>
+      <TabItem value="windows" label="Windows">
+        Install `conan` if you haven't already:
+        
+        ```bat
+        > pip install conan
+        ```
+    
+        Install Drogon's dependencies:
+    
+        ```bat
+        > conan profile detect --force
+        > conan install . -s compiler="msvc" -s compiler.version=193 -s compiler.cppstd=17 -s build_type=Release --output-folder . --build=missing -g CMakeToolchain
+        ```
+        
+        Install Drogon and build `topgg`:
+    
+        ```bat
+        > cmake -DENABLE_API=OFF -DENABLE_DROGON_WEBHOOKS=ON -B build .
+        > cmake --build build --config Release
+        ```
+      </TabItem>
+    </Tabs>
+  </TabItem>
+</Tabs>
+
+## Setting up
+
+```cpp
+// If you compiled this library statically, uncomment the following:
+// #ifndef TOPGG_STATIC
+// #define TOPGG_STATIC
+// #endif
+
+#include <topgg/topgg.h>
+#include <dpp/dpp.h>
+
+#include <iostream>
+#include <utility>
+
+int main() {
+  const auto discord_token{std::getenv("BOT_TOKEN")};
+  const auto topgg_token{std::getenv("TOPGG_TOKEN")};
+
+  if (discord_token == nullptr) {
+    std::cerr << "error: missing BOT_TOKEN environment variable" << std::endl;
+    return 1;
+  } else if (topgg_token == nullptr) {
+    std::cerr << "error: missing TOPGG_TOKEN environment variable" << std::endl;
+    return 1;
+  }
+
+  dpp::cluster bot{discord_token};
+  topgg::client client{bot, topgg_token};
+
+  return 0;
+}
+```
+
+## Usage
+
+### Getting a bot
+
+<Tabs>
+  <TabItem value="cpp17_callbacks" label="With C++17 callbacks" default>
+    ```cpp
+    client.get_bot(264811613708746752, [](const auto& result) {
+      try {
+        const auto topgg_bot = result.get();
+
+        std::cout << topgg_bot.username << std::endl;
+      } catch (const std::exception& exc) {
+        std::cerr << "error: " << exc.what() << std::endl;
+      }
+    });
+    ```
+  </TabItem>
+  <TabItem value="cpp20_coroutines" label="With C++20 coroutines">
+    ```cpp
+    try {
+      const auto topgg_bot = co_await client.co_get_bot(264811613708746752);
+
+      std::cout << topgg_bot.username << std::endl;
+    } catch (const std::exception& exc) {
+      std::cerr << "error: " << exc.what() << std::endl;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Getting several bots
+
+<Tabs>
+  <TabItem value="cpp17_callbacks" label="With C++17 callbacks" default>
+    ```cpp
+    client
+      .get_bots()
+      .limit(250)
+      .skip(50)
+      .sort_by_monthly_votes()
+      .send([](const auto& result) {
+        try {
+          const auto bots = result.get();
+
+          for (const auto& bot: bots) {
+            std::cout << bot.username << std::endl;
+          }
+        } catch (const std::exception& exc) {
+          std::cerr << "error: " << exc.what() << std::endl;
+        }
+      });
+    ```
+  </TabItem>
+  <TabItem value="cpp20_coroutines" label="With C++20 coroutines">
+    ```cpp
+    try {
+      const auto bots = co_await client
+        .get_bots()
+        .limit(250)
+        .skip(50)
+        .sort_by_monthly_votes()
+        .send();
+
+      for (const auto& bot: bots) {
+        std::cout << topgg_bot.username << std::endl;
+      }
+    } catch (const std::exception& exc) {
+      std::cerr << "error: " << exc.what() << std::endl;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Getting your project's voters
+
+<Tabs>
+  <TabItem value="cpp17_callbacks" label="With C++17 callbacks" default>
+    ```cpp
+    // First page
+    client.get_voters([](const auto& result) {
+      try {
+        auto voters = result.get();
+
+        for (auto& voter: voters) {
+          std::cout << voter.username << std::endl;
+        }
+      } catch (const std::exception& exc) {
+        std::cerr << "error: " << exc.what() << std::endl;
+      }
+    });
+
+    // Subsequent pages
+    client.get_voters(2, [](const auto& result) {
+      try {
+        auto voters = result.get();
+
+        for (auto& voter: voters) {
+          std::cout << voter.username << std::endl;
+        }
+      } catch (const std::exception& exc) {
+        std::cerr << "error: " << exc.what() << std::endl;
+      }
+    });
+    ```
+  </TabItem>
+  <TabItem value="cpp20_coroutines" label="With C++20 coroutines">
+    ```cpp
+    // First page
+    try {
+      const auto voters = co_await client.co_get_voters();
+
+      for (const auto& voter: voters) {
+        std::cout << voter.username << std::endl;
+      }
+    } catch (const std::exception& exc) {
+      std::cerr << "error: " << exc.what() << std::endl;
+    }
+
+    // Subsequent pages
+    try {
+      const auto voters = co_await client.co_get_voters(2);
+
+      for (const auto& voter: voters) {
+        std::cout << voter.username << std::endl;
+      }
+    } catch (const std::exception& exc) {
+      std::cerr << "error: " << exc.what() << std::endl;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Getting your project's vote information of a user
+
+<Tabs>
+  <TabItem value="cpp17_callbacks" label="With C++17 callbacks" default>
+    <Tabs>
+      <TabItem value="discord" label="Discord ID" default>
+        ```cpp
+        client.get_vote(661200758510977084, TOPGG_USER_SOURCE_DISCORD, [](const auto& result) {
+          try {
+            const auto vote{result.get()};
+        
+            if (vote.has_value()) {
+              const auto data{vote.value()};
+        
+              std::cout << "User has voted with a weight of " << data.weight << '.' << std::endl;
+            } else {
+              std::cout << "User has not voted." << std::endl;
+            }
+          } catch (const std::exception& exc) {
+            std::cerr << "error: " << exc.what() << std::endl;
+          }
+        });
+        ```
+      </TabItem>
+      <TabItem value="topgg" label="Top.gg ID">
+        ```cpp
+        client.get_vote(8226924471638491136, TOPGG_USER_SOURCE_TOPGG, [](const auto& result) {
+          try {
+            const auto vote{result.get()};
+        
+            if (vote.has_value()) {
+              const auto data{vote.value()};
+        
+              std::cout << "User has voted with a weight of " << data.weight << '.' << std::endl;
+            } else {
+              std::cout << "User has not voted." << std::endl;
+            }
+          } catch (const std::exception& exc) {
+            std::cerr << "error: " << exc.what() << std::endl;
+          }
+        });
+        ```
+      </TabItem>
+    </Tabs>
+  </TabItem>
+  <TabItem value="cpp20_coroutines" label="With C++20 coroutines">
+    <Tabs>
+      <TabItem value="discord" label="Discord ID" default>
+        ```cpp
+        try {
+          const auto vote{co_await client.co_get_vote(661200758510977084, TOPGG_USER_SOURCE_DISCORD)};
+        
+          if (vote.has_value()) {
+            const auto data{vote.value()};
+        
+            std::cout << "User has voted with a weight of " << data.weight << '.' << std::endl;
+          } else {
+            std::cout << "User has not voted." << std::endl;
+          }
+        } catch (const std::exception& exc) {
+          std::cerr << "error: " << exc.what() << std::endl;
+        }
+        ```
+      </TabItem>
+      <TabItem value="topgg" label="Top.gg ID">
+        ```cpp
+        try {
+          const auto vote{co_await client.co_get_vote(8226924471638491136, TOPGG_USER_SOURCE_TOPGG)};
+        
+          if (vote.has_value()) {
+            const auto data{vote.value()};
+        
+            std::cout << "User has voted with a weight of " << data.weight << '.' << std::endl;
+          } else {
+            std::cout << "User has not voted." << std::endl;
+          }
+        } catch (const std::exception& exc) {
+          std::cerr << "error: " << exc.what() << std::endl;
+        }
+        ```
+      </TabItem>
+    </Tabs>
+  </TabItem>
+</Tabs>
+
+### Getting your bot's server count
+
+<Tabs>
+  <TabItem value="cpp17_callbacks" label="With C++17 callbacks" default>
+    ```cpp
+    client.get_bot_server_count([](const auto& result) {
+      try {
+        auto server_count = result.get();
+
+        std::cout << server_count.value_or(0) << std::endl;
+      } catch (const std::exception& exc) {
+        std::cerr << "error: " << exc.what() << std::endl;
+      }
+    });
+    ```
+  </TabItem>
+  <TabItem value="cpp20_coroutines" label="With C++20 coroutines">
+    ```cpp
+    try {
+      const auto server_count = co_await client.co_get_bot_server_count();
+
+      std::cout << server_count.value_or(0) << std::endl;
+    } catch (const std::exception& exc) {
+      std::cerr << "error: " << exc.what() << std::endl;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Posting your bot's server count
+
+<Tabs>
+  <TabItem value="cpp17_callbacks" label="With C++17 callbacks" default>
+    ```cpp
+    client.post_bot_server_count([](const auto success) {
+      if (success) {
+        std::cout << "Stats posted!" << std::endl;
+      }
+    });
+    ```
+  </TabItem>
+  <TabItem value="cpp20_coroutines" label="With C++20 coroutines">
+    ```cpp
+    const auto success = co_await client.co_post_bot_server_count();
+
+    if (success) {
+      std::cout << "Stats posted!" << std::endl;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Posting your bot's application commands list
+
+<Tabs>
+  <TabItem value="cpp17_callbacks" label="With C++17 callbacks" default>
+    ```cpp
+    client.post_bot_commands([](const auto success) {
+      if (success) {
+        std::cout << "Discord bot commands posted!" << std::endl;
+      }
+    });
+    ```
+  </TabItem>
+  <TabItem value="cpp20_coroutines" label="With C++20 coroutines">
+    ```cpp
+    const auto success{co_await client.co_post_bot_commands()};
+    
+    if (success) {
+      std::cout << "Discord bot commands posted!" << std::endl;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Automatically posting your bot's server count every few minutes
+
+<Tabs>
+  <TabItem value="without_callback" label="Without a callback" default>
+    ```cpp
+    client.start_bot_autoposter();
+    ```
+  </TabItem>
+  <TabItem value="with_callback" label="With a callback">
+    ```cpp
+    client.start_bot_autoposter([](const auto& result) {
+      if (result) {
+        std::cout << "Successfully posted " << *result << " servers to Top.gg!" << std::endl;
+      }
+    });
+    ```
+  </TabItem>
+  <TabItem value="from_custom_source" label="From a custom source">
+    ```cpp
+    class my_bot_autoposter_source: private topgg::bot_autoposter_source {
+    public:
+      virtual size_t get_bot_server_count(dpp::cluster& bot) {
+        return ...;
+      }
+    };
+    
+    client.start_bot_autoposter(reinterpret_cast<topgg::bot_autoposter_source*>(new my_bot_autoposter_source), [](const auto& result) {
+      if (result) {
+        std::cout << "Successfully posted " << *result << " servers to Top.gg!" << std::endl;
+      }
+    });
+    ```
+  </TabItem>
+</Tabs>
+
+### Checking if the weekend vote multiplier is active
+
+<Tabs>
+  <TabItem value="cpp17_callbacks" label="With C++17 callbacks" default>
+    ```cpp
+    client.is_weekend([](const auto& result) {
+      try {
+        if (result.get()) {
+          std::cout << "The weekend multiplier is active" << std::endl;
+        }
+      } catch (const std::exception& exc) {
+        std::cerr << "error: " << exc.what() << std::endl;
+      }
+    });
+    ```
+  </TabItem>
+  <TabItem value="cpp20_coroutines" label="With C++20 coroutines">
+    ```cpp
+    try {
+      const auto is_weekend = co_await client.co_is_weekend();
+
+      if (is_weekend) {
+        std::cout << "The weekend multiplier is active" << std::endl;
+      }
+    } catch (const std::exception& exc) {
+      std::cerr << "error: " << exc.what() << std::endl;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Generating widget URLs
+
+<Tabs>
+  <TabItem value="large" label="Large" default>
+    ```cpp
+    const auto widget_url{topgg::widget::large(TOPGG_WIDGET_DISCORD_BOT, 264811613708746752)};
+    ```
+  </TabItem>
+  <TabItem value="votes" label="Votes">
+    ```cpp
+    const auto widget_url{topgg::widget::votes(TOPGG_WIDGET_DISCORD_BOT, 264811613708746752)};
+    ```
+  </TabItem>
+  <TabItem value="owner" label="Owner">
+    ```cpp
+    const auto widget_url{topgg::widget::owner(TOPGG_WIDGET_DISCORD_BOT, 264811613708746752)};
+    ```
+  </TabItem>
+  <TabItem value="social" label="Social">
+    ```cpp
+    const auto widget_url{topgg::widget::social(TOPGG_WIDGET_DISCORD_BOT, 264811613708746752)};
+    ```
+  </TabItem>
+</Tabs>
+
+### Webhooks
+
+#### Being notified whenever someone voted for your project
+
+<Tabs>
+  <TabItem value="cpp_httplib" label="cpp-httplib" default>
+    ```cpp
+    // If you compiled this library statically, uncomment the following:
+    // #ifndef TOPGG_STATIC
+    // #define TOPGG_STATIC
+    // #endif
+
+    #include <cpp-httplib/cpp-httplib.h>
+    #include <topgg/webhooks/cpp-httplib.h>
+    
+    #include <iostream>
+    #include <string>
+    
+    template<class T>
+    using cpp_httplib_webhook = topgg::webhook::cpp_httplib<T>;
+    using topgg::webhook::vote_event;
+    
+    class my_vote_listener: public cpp_httplib_webhook<vote_event> {
+    public:
+      inline my_vote_listener(const std::string& authorization): cpp_httplib_webhook<vote_event>(authorization) {}
+    
+      void callback(const vote_event& v) override {
+        std::cout << "A user with the ID of " << v.voter_id << " has voted us on Top.gg!" << std::endl;
+      }
+    };
+    
+    int main() {
+      const auto authorization{std::getenv("MY_TOPGG_WEBHOOK_SECRET")};
+
+      if (authorization == nullptr) {
+        std::cerr << "error: missing MY_TOPGG_WEBHOOK_SECRET environment variable" << std::endl;
+        return 1;
+      }
+
+      httplib::Server server{};
+      my_vote_listener webhook{authorization};
+    
+      server.Post("/votes", webhook.endpoint());
+      server.listen("localhost", 8080);
+      
+      return 0;
+    }
+    ```
+  </TabItem>
+  <TabItem value="drogon" label="Drogon">
+    ```cpp
+    // If you compiled this library statically, uncomment the following:
+    // #ifndef TOPGG_STATIC
+    // #define TOPGG_STATIC
+    // #endif
+
+    #include <topgg/webhooks/drogon.h>
+    
+    #include <iostream>
+    #include <memory>
+    #include <string>
+    
+    template<class T>
+    using drogon_webhook = topgg::webhook::drogon<T>;
+    using topgg::webhook::vote_event;
+    
+    class my_vote_listener: public ::drogon::HttpSimpleController<my_vote_listener, false>, public drogon_webhook<vote_event> {
+    public:
+      inline my_vote_listener(const std::string& authorization): drogon_webhook<vote_event>(authorization) {}
+    
+      TOPGG_DROGON_WEBHOOK();
+    
+      PATH_LIST_BEGIN
+      PATH_ADD("/votes", ::drogon::Post);
+      PATH_LIST_END
+    
+      void callback(const vote_event& v) override {
+        std::cout << "A user with the ID of " << v.voter_id << " has voted us on Top.gg!" << std::endl;
+      }
+    };
+    
+    int main() {
+      const auto authorization{std::getenv("MY_TOPGG_WEBHOOK_SECRET")};
+
+      if (authorization == nullptr) {
+        std::cerr << "error: missing MY_TOPGG_WEBHOOK_SECRET environment variable" << std::endl;
+        return 1;
+      }
+    
+      auto& app{drogon::app()};
+    
+      app.registerController(std::make_shared<my_vote_listener>(authorization));
+      app.addListener("127.0.0.1", 8080);
+      app.run();
+    
+      return 0;
+    }
+    ```
+  </TabItem>
+</Tabs>
