@@ -1,4 +1,3 @@
-import React from "react";
 import { ReactComponent as Topgg } from "../assets/logo.svg";
 
 function Logo() {

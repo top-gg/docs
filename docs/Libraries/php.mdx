@@ -3,131 +3,186 @@ title: PHP
 description: Top.gg PHP library
 ---
 
-# PHP Library
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-The community-maintained PHP Library for Top.gg. If you experience any issues, please submit an issue on GitHub.
+# PHP SDK
 
-- [GitHub Link](https://github.com/top-gg/php-sdk)
+The community-maintained PHP library for Top.gg. If you experience any issues, please submit an issue on [its GitHub repository](https://github.com/Top-gg-Community/php-sdk).
 
 ## Installation
 
-### Install via composer (recommended)
-
-```
-composer require top-gg/php-sdk
+```sh
+$ composer require top-gg/php-sdk
 ```
 
-## Examples
-
-### Getting Started
-
-This library does certain things differently from other API wrappers because it follows PHP's PSR standards. 
-Below is sample code on how to initialize and use the API wrapper.
+## Setting up
 
 ```php
-# Automatically load up the source library code.
-include_once __DIR__ . "vendor/autoload.php";
+include_once __DIR__ . "/vendor/autoload.php";
 
 use DBL\DBL;
 
-$api = new DBL([
-      "token" => "YOUR TOP.GG API TOKEN HERE."
+$client = new DBL([
+  "token" => "Insert your Top.gg API token here."
 ]);
 ```
 
-Below are the currently accepted list of parameters when initializing the API.
+## Usage
 
-| Option       | Type      | Description                      | Optional? |
-| ------------ | --------- | -------------------------------- | --------- |
-| `token`      | `string`  | The token key of the Top.gg API. | No        |
-| `auto_stats` | `array[]` | Details for automatic stats.     | Yes       |
-| `safety`     | `bool`    | Webserver code protection.       | Yes       |
-
-The API wrapper also presents you with a boolean instance, `connected` which may be used
-to check if your API token key is still valid or not.
-
-### Get statistics from Top.gg
-
-In order to get statistics about a bot or user from Top.gg, you are able to select between
-the two interchangably with the same method: `find_info()`.
+### Getting a bot
 
 ```php
-public function find_info(string $type, int $id): array
+$bot = $client->get_bot();
 ```
 
-| Argument | Type     | Description                               |
-| -------- | -------- | ----------------------------------------- |
-| `$type`  | `string` | Whether you're looking for a bot or user. |
-| `$id`    | `int`    | The bot/user ID.                          |
+### Getting several bots
+
+<Tabs>
+  <TabItem value="defaults" label="With defaults" default>
+    ```php
+    $bots = $client->get_bots();
+    ```
+  </TabItem>
+  <TabItem value="explicit_arguments" label="With explicit arguments">
+    ```php
+    //                        Limit  Offset  Sort by
+    $bots = $client->get_bots(50,    0,      "date");
+    ```
+  </TabItem>
+</Tabs>
+
+### Getting your project's voters
+
+<Tabs>
+  <TabItem value="first_page" label="First page" default>
+    ```php
+    $voters = $client->get_voters();
+    ```
+  </TabItem>
+  <TabItem value="subsequent_pages" label="Subsequent pages">
+    ```php
+    $voters = $client->get_voters(2);
+    ```
+  </TabItem>
+</Tabs>
+
+### Check if a user has voted for your project
 
 ```php
-use DBL\API\Http;
+$has_voted = $client->has_voted(205680187394752512);
+```
 
-if($api->connected)
-{
-      /**
-       * You will always be presented two constants to choose.
-       *
-       * Http::BOT = "bots"
-       * Http::USER = "users"
-       */
-      $user = $api->find_info(Http::USER, 242351388137488384);
-      $bot = $api->find_info(Http::BOT, 799697654279307314);
+### Getting your bot's server count
 
-      print_r($user) . print_r($bot) . PHP_EOL;
+```php
+$server_count = $client->get_server_count();
+```
+
+### Posting your bot's server count
+
+```php
+$client->post_server_count($bot->get_server_count());
+```
+
+### Automatically posting your bot's server count every few minutes
+
+:::note
+Considering PHP's shortcomings, this is only possible via a URL.
+:::
+
+In your original client declaration:
+
+```php
+$client = new DBL([
+  "token" => "Insert your Top.gg API token here.",
+  "auto_stats" => [
+    "url": "Your URL",
+    "callback": => function () use ($bot) {
+      return $bot->get_server_count();
+    }
+  ]
+]);
+```
+
+### Checking if the weekend vote multiplier is active
+
+```php
+$is_weekend = $client->is_weekend();
+```
+
+### Generating widget URLs
+
+<Tabs>
+  <TabItem value="large" label="Large" default>
+    ```php
+    use DBL\Widget;
+    use DBL\WidgetType;
+
+    $widget_url = Widget::large(WidgetType::DiscordBot, 574652751745777665);
+    ```
+  </TabItem>
+  <TabItem value="votes" label="Votes">
+    ```php
+    use DBL\Widget;
+    use DBL\WidgetType;
+
+    $widget_url = Widget::votes(WidgetType::DiscordBot, 574652751745777665);
+    ```
+  </TabItem>
+  <TabItem value="owner" label="Owner">
+    ```php
+    use DBL\Widget;
+    use DBL\WidgetType;
+
+    $widget_url = Widget::owner(WidgetType::DiscordBot, 574652751745777665);
+    ```
+  </TabItem>
+  <TabItem value="social" label="Social">
+    ```php
+    use DBL\Widget;
+    use DBL\WidgetType;
+
+    $widget_url = Widget::social(WidgetType::DiscordBot, 574652751745777665);
+    ```
+  </TabItem>
+</Tabs>
+
+### Webhooks
+
+#### Being notified whenever someone voted for your project
+
+**With Laravel:**
+
+In your `config/logging.php`:
+
+```php
+"channels" => [
+  "stdout" => [
+    "driver" => "single",
+    "path" => "php://stdout",
+    "level" => "debug"
+  ]
+]
+```
+
+In your `routes/api.php`:
+
+```php
+use DBL\Webhook;
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
+
+class MyVoteListener extends Webhook {
+  public function getAuthorization() {
+    return getenv("MY_TOPGG_WEBHOOK_SECRET");
+  }
+
+  public function callback(array $vote) {
+    Log::channel("stdout")->info("A user with the ID of " . $vote["user"] . " has voted us on Top.gg!");
+  }
 }
-```
 
-### Search for specific bots
-
-Similar to the same premise as using `find_info()`, you are able to additionally plug in
-query information that will be automatically formatted as a query-string URL search when
-an HTTP request is made by the API wrapper for you. This is known as `show_info()`.
-
-```php
-public function show_info(string $type, array $json = []): array
-```
-
-| Argument | Type     | Description                               |
-| -------- | -------- | ----------------------------------------- |
-| `$type`  | `string` | Whether you're looking for a bot or user. |
-| `$json`  | `array`  | Information to plug into the search.      |
-
-```php
-use DBL\API\Http;
-
-if($api->connected)
-{
-      $small_list = $api->show_info(
-            Http::BOT,
-            [
-                  "limit" => 20,
-                  "sort" => "-"
-            ]
-      );
-
-      print_r($small_list) . PHP_EOL;
-}
-```
-
-### Checking a vote from a user
-
-It's very important to be able and see if a user has voted for your bot.
-Below is the given example of how to do this.
-
-```php
-public function get_user_vote(int $id, int $user): array
-```
-
-| Argument | Type  | Description              |
-| -------- | ----- | ------------------------ |
-| `$id`    | `int` | The bot ID.              |
-| `$user`  | `int` | The user's snowflake ID. |
-
-```php
-if($api->connected)
-{
-      $isVoted = $api->get_user_vote(799697654279307314, 242351388137488384);
-      if($isVoted) echo "This user voted!";
-}
+Route::post('/votes', [MyVoteListener::class, "main"]);
 ```

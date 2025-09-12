@@ -1,0 +1,159 @@
+---
+title: Structures
+description: Top.gg API's response data structures
+---
+
+import HTTPHeader from "../../src/components/HTTPHeader";
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## Bot
+
+In the API, a `Bot` structure carries information about a Discord bot listed in Top.gg. It is structured like this:
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    | Field                            | Type                  | Description                                                                     |
+    | -------------------------------- | --------------------- | ------------------------------------------------------------------------------- |
+    | `id`                             | `snowflake`           | The Top.gg ID of the bot.                                                       |
+    | `clientid`                       | `snowflake`           | The Discord ID of the bot.                                                      |
+    | `username`                       | `string`              | The username of the bot.                                                        |
+    | `discriminator` <deprecated/>    | `string`              | The discriminator of the bot.                                                   |
+    | `avatar`                         | `string`              | The avatar URL of the bot.                                                      |
+    | `defAvatar`? <deprecated/>       | `string`              | The CDN hash of the bot's avatar if the bot has none.                           |
+    | `lib` <deprecated/>              | `string`              | The library of the bot.                                                         | 
+    | `prefix`                         | `string`              | The prefix of the bot.                                                          |
+    | `shortdesc`                      | `string`              | The short description of the bot.                                               |
+    | `longdesc`?                      | `string`              | The long description of the bot. Can contain HTML and/or Markdown.              |
+    | `tags`                           | `string[]`            | The tags of the bot.                                                            |
+    | `website`?                       | `string`              | The website URL of the bot.                                                     |
+    | `support`?                       | `string`              | The support URL of the bot.                                                     |
+    | `github`?                        | `string`              | The link to the github repo of the bot.                                         |
+    | `owners`                         | `snowflake[]`         | The owners of the bot. First one in the array is the main owner.                |
+    | `guilds` <deprecated/>           | `snowflake[]`         | The servers featured on the bot page.                                           |
+    | `invite`?                        | `string`              | The custom invite URL of the bot.                                               |
+    | `date`                           | `datestring`          | The date when the bot was submitted.                                            |
+    | `server_count`?                  | `number`              | The amount of servers the bot has according to posted stats.                    |
+    | `shard_count`? <deprecated/>     | `number`              | The amount of shards the bot has according to posted stats.                     |
+    | `certifiedBot` <deprecated/>     | `boolean`             | The certified status of the bot.                                                |
+    | `vanity`?                        | `string`              | The vanity URL of the bot.                                                      |
+    | `points`                         | `number`              | The amount of votes the bot has.                                                |
+    | `monthlyPoints`                  | `number`              | The amount of votes the bot has this month.                                     |
+    | `donatebotguildid` <deprecated/> | `snowflake`           | The server ID for the donatebot setup.                                          |
+    | `reviews`                        | [`Reviews`](#reviews) | A [`Reviews`](#reviews) structure containing user reviews the bot has received. |
+  </TabItem>
+  <TabItem value="json" label="JSON example">
+    ```json
+    {
+      "invite": "https://discord.com/api/oauth2/authorize?client_id=432610292342587392&permissions=537159744&scope=applications.commands%20bot",
+      "website": "https://www.patreon.com/mudae",
+      "support": "https://discord.gg/EEGkGSh",
+      "longdesc": "<p>\n  Database of 115,000 waifu and husbando. Make and customize your own collection bound to the Discord server you are playing on: compete with your friends to get the best unique collection!<br>\n  All characters are from existing animes, manga, comics or video games.<br>\n  They were suggested by the community along with over 800,000 images and gifs: details are constantly added and reviewed by users.\n  Hundreds of commands are available, from original multiplayer word-based games to fun commands such as random anime quotes.\n</p>\n\n<p>\n  <br>\n  Fully translated in French<br>\n  Partially translated in Spanish and Brazilian Portuguese.<br>\n  Follow on Twitter: @Mudaebot\n  Join the main server: https://discord.gg/EEGkGSh\n</p>",
+      "shortdesc": "Database of 110,000 anime/game characters: make and customize the best collection in your server. 400 commands, multiplayer games and more!",
+      "prefix": "$",
+      "lib": "",
+      "clientid": "432610292342587392",
+      "avatar": "https://cdn.discordapp.com/avatars/432610292342587392/29cb28fbf65a3958105026ab03abd306.png",
+      "id": "432610292342587392",
+      "username": "Mudae",
+      "date": "2018-04-21T21:17:57.793Z",
+      "server_count": 3371839,
+      "shard_count": 0,
+      "guilds": [],
+      "shards": [],
+      "monthlyPoints": 1931775,
+      "points": 226691280,
+      "certifiedBot": false,
+      "owners": [
+        "275748765166469120"
+      ],
+      "tags": [
+        "anime",
+        "fun",
+        "game"
+      ],
+      "reviews": {
+        "averageScore": 4.521475580187046,
+        "count": 11548
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Reviews
+
+In the API, a `Reviews` structure carries a brief information about an Top.gg project's user reviews. It is structured like this:
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    | Field          | Type          | Description                                               |
+    | -------------- | ------------- | --------------------------------------------------------- |
+    | `averageScore` | `number`      | The average/mean user review score out of 5.              |
+    | `count`        | `string`      | The amount of user reviews received by this project.      |
+  </TabItem>
+  <TabItem value="json" label="JSON example">
+    ```json
+    {
+      "averageScore": 4.521475580187046,
+      "count": 11548
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## UserSource
+
+In the API, a `UserSource` is an enum that refers to a user account from an external platform that is linked to a Top.gg user account. Possible values are as follows:
+
+| Value     | Corresponding user identification type |
+| --------- | -------------------------------------- |
+| `topgg`   | `snowflake`                            |
+| `discord` | `snowflake`                            |
+
+## Vote
+
+In the API, a `Vote` structure carries information about a vote a Top.gg user has made on a project in Top.gg.
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    | Field                            | Type                  | Description                                                                     |
+    | -------------------------------- | --------------------- | ------------------------------------------------------------------------------- |
+    | `created_at`                     | `datestring`          | When the vote was cast.                                                         |
+    | `expires_at`                     | `datestring`          | When the vote expires and the user is required to vote again.                   |
+    | `weight`                         | `number`              | This vote's weight.                                                             |
+  </TabItem>
+  <TabItem value="json" label="JSON example">
+    ```json
+    {
+      "created_at": "2025-09-12T07:47:11.183519+00:00",
+      "expires_at": "2025-09-12T19:47:11.183519+00:00",
+      "weight": 2
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Voter
+
+In the API, a `Voter` structure carries a brief information about a Top.gg user who has voted for a project in Top.gg. It is structured like this:
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    | Field                            | Type                  | Description                                                                     |
+    | -------------------------------- | --------------------- | ------------------------------------------------------------------------------- |
+    | `id`                             | `snowflake`           | The Discord ID of the voter.                                                    |
+    | `username`                       | `string`              | The username of the voter.                                                     |
+    | `avatar`                         | `string`              | The avatar URL of the voter.                                                    |
+  </TabItem>
+  <TabItem value="json" label="JSON example">
+    ```json
+    {
+      "username": "Xetera",
+      "id": "140862798832861184",
+      "avatar": "https://cdn.discordapp.com/avatars/1026525568344264724/cd70e62e41f691f1c05c8455d8c31e23.png"
+    }
+    ```
+  </TabItem>
+</Tabs>

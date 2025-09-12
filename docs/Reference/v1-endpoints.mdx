@@ -1,0 +1,172 @@
+---
+title: v1 Endpoints
+description: Top.gg API's v1 endpoints
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+import HTTPHeader from "../../src/components/HTTPHeader";
+
+:::warning
+v1 endpoints (except [widgets](#widgets)) do NOT support legacy API tokens.
+:::
+
+## Fetch a user's vote
+
+<HTTPHeader type="GET" path="/v1/projects/@me/votes/:user_id" />
+
+Fetches your project's vote information of a user.
+
+### Parameters
+
+This endpoint takes in the `user_id` parameter which corresponds to the user's ID. By default, it refers to the user's Top.gg ID, but this can be changed in the query parameters.
+
+This endpoint also takes in additional parameters via query parameters. All of these parameters are optional.
+
+| Field     | Type                                                  | Description         | Default |
+| --------- | ----------------------------------------------------- | ------------------- | ------- |
+| `source`? | [`UserSource`](/docs/Reference/structures#usersource) | The ID type to use. | `topgg` |
+
+### Response
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    This endpoint returns a [`Vote`](/docs/Reference/structures#vote) structure if the user has voted for your bot in the past 12 hours.
+  </TabItem>
+  <TabItem value="json_200" label="JSON example (200)">
+    ```json title="/v1/projects/@me/votes/661200758510977084?source=discord"
+    {
+      "created_at": "2025-09-12T07:47:11.183519+00:00",
+      "expires_at": "2025-09-12T19:47:11.183519+00:00",
+      "weight": 2
+    }
+    ```
+  </TabItem>
+  <TabItem value="json_404_vote_expired" label="JSON example (404; vote expired)">
+    ```json title="/v1/projects/@me/votes/661200758510977084?source=discord"
+    {
+      "title": "Vote expired",
+      "status": 404,
+      "detail": "User has not voted in the last 12 hours."
+    }
+    ```
+  </TabItem>
+  <TabItem value="json_404_invalid_id" label="JSON example (404; invalid ID)">
+    ```json title="/v1/projects/@me/votes/696969696969696969?source=discord"
+    {
+      "title": "User not found",
+      "status": 404,
+      "detail": "The user was not resolved into a valid Top.gg user. The user ID might be invalid, or the user may have deleted their account."
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Post your bot's commands
+
+<HTTPHeader type="POST" path="/v1/projects/@me/commands" />
+
+Posts your bot's application commands to be displayed on your bot's Top.gg page. For example:
+
+![Command page example](/img/bot-page-commands.png)
+
+### Parameters
+
+This endpoint takes in a list of commands via a JSON body. These commands are in the form of an array of [Discord API's raw application command objects](https://discord.com/developers/docs/interactions/application-commands#application-command-object). This parameter is required.
+
+### Response
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    This endpoint returns an empty `204` (No Content) response if successful.
+  </TabItem>
+  <TabItem value="json_400" label="JSON example (400)">
+    ```json title="/v1/projects/@me/commands"
+    {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "": [
+          "A non-empty request body is required."
+        ],
+        "createPackets": [
+          "The createPackets field is required."
+        ]
+      },
+      "traceId": "00-42edae3696c2b51612604e804ff6cd5c-a65c65b73ba04870-01"
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Widgets
+
+Widgets are simple endpoints that generates widgets to be shared or embedded in your application. There are many kinds of widgets for every project type.
+
+:::note
+These endpoints do not require a token.
+:::
+
+### Large widgets
+
+<Tabs>
+  <TabItem value="bots" label="Bots" default>
+    <HTTPHeader type="GET" path="/v1/widgets/large/discord/bot/:bot_id" />
+
+    ![](https://top.gg/api/v1/widgets/large/discord/bot/432610292342587392)
+  </TabItem>
+  <TabItem value="servers" label="Servers">
+    <HTTPHeader type="GET" path="/v1/widgets/large/discord/server/:server_id" />
+
+    ![](https://top.gg/api/v1/widgets/large/discord/server/264445053596991498)
+  </TabItem>
+</Tabs>
+
+### Small widgets
+
+#### Votes widgets
+
+<Tabs>
+  <TabItem value="bots" label="Bots" default>
+    <HTTPHeader type="GET" path="/v1/widgets/small/votes/discord/bot/:bot_id" />
+
+    ![](https://top.gg/api/v1/widgets/small/votes/discord/bot/432610292342587392)
+  </TabItem>
+  <TabItem value="servers" label="Servers">
+    <HTTPHeader type="GET" path="/v1/widgets/small/votes/discord/server/:server_id" />
+
+    ![](https://top.gg/api/v1/widgets/small/votes/discord/server/264445053596991498)
+  </TabItem>
+</Tabs>
+
+#### Owner widgets
+
+<Tabs>
+  <TabItem value="bots" label="Bots" default>
+    <HTTPHeader type="GET" path="/v1/widgets/small/owner/discord/bot/:bot_id" />
+
+    ![](https://top.gg/api/v1/widgets/small/owner/discord/bot/432610292342587392)
+  </TabItem>
+  <TabItem value="servers" label="Servers">
+    <HTTPHeader type="GET" path="/v1/widgets/small/owner/discord/server/:server_id" />
+
+    ![](https://top.gg/api/v1/widgets/small/owner/discord/server/264445053596991498)
+  </TabItem>
+</Tabs>
+
+#### Social widgets
+
+<Tabs>
+  <TabItem value="bots" label="Bots" default>
+    <HTTPHeader type="GET" path="/v1/widgets/small/social/discord/bot/:bot_id" />
+
+    ![](https://top.gg/api/v1/widgets/small/social/discord/bot/432610292342587392)
+  </TabItem>
+  <TabItem value="servers" label="Servers">
+    <HTTPHeader type="GET" path="/v1/widgets/small/social/discord/server/:server_id" />
+
+    ![](https://top.gg/api/v1/widgets/small/social/discord/server/264445053596991498)
+  </TabItem>
+</Tabs>

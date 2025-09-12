@@ -3,381 +3,441 @@ title: Rust
 description: Top.gg Rust library
 ---
 
-# [topgg](https://crates.io/crates/topgg) [![crates.io][crates-io-image]][crates-io-url] [![crates.io downloads][crates-io-downloads-image]][crates-io-url]
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-[crates-io-image]: https://img.shields.io/crates/v/topgg?style=flat-square
-[crates-io-downloads-image]: https://img.shields.io/crates/d/topgg?style=flat-square
-[crates-io-url]: https://crates.io/crates/topgg
+# Rust SDK
 
-The official Rust SDK for the [Top.gg API](https://docs.top.gg).
+> For more information, see the documentation here: https://docs.rs/topgg.
 
-## Getting Started
+The community-maintained Rust library for Top.gg. If you experience any issues, please submit an issue on [its GitHub repository](https://github.com/Top-gg-Community/rust-sdk).
 
-Make sure to have a [Top.gg API](https://docs.top.gg) token handy. If not, then [view this tutorial on how to retrieve yours](https://github.com/top-gg/rust-sdk/assets/60427892/d2df5bd3-bc48-464c-b878-a04121727bff). After that, add the following line to the `dependencies` section of your `Cargo.toml`:
-
-```toml
-topgg = "1.4"
-```
-
-For more information, please read [the documentation](https://docs.rs/topgg)!
-
-## Features
-
-This library provides several feature flags that can be enabled/disabled in `Cargo.toml`. Such as:
-
-- **`api`**: Interacting with the [Top.gg API](https://docs.top.gg) and accessing the `top.gg/api/*` endpoints. (enabled by default)
-  - **`autoposter`**: Automating the process of periodically posting bot statistics to the [Top.gg API](https://docs.top.gg).
-- **`webhook`**: Accessing the [serde deserializable](https://docs.rs/serde/latest/serde/de/trait.DeserializeOwned.html) `topgg::Vote` struct.
-  - **`actix-web`**: Wrapper for working with the [actix-web](https://actix.rs/) web framework.
-  - **`axum`**: Wrapper for working with the [axum](https://crates.io/crates/axum) web framework.
-  - **`rocket`**: Wrapper for working with the [rocket](https://rocket.rs/) web framework.
-  - **`warp`**: Wrapper for working with the [warp](https://crates.io/crates/warp) web framework.
-- **`serenity`**: Extra helpers for working with [serenity](https://crates.io/crates/serenity) library (with bot caching disabled).
-  - **`serenity-cached`**: Extra helpers for working with [serenity](https://crates.io/crates/serenity) library (with bot caching enabled).
-- **`twilight`**: Extra helpers for working with [twilight](https://twilight.rs) library (with bot caching disabled).
-  - **`twilight-cached`**: Extra helpers for working with [twilight](https://twilight.rs) library (with bot caching enabled).
-
-## Examples
-
-### Fetching a user from its Discord ID
-
-```rust
-use topgg::Client;
-
-#[tokio::main]
-async fn main() {
-  let client = Client::new(env!("TOPGG_TOKEN").to_string());
-  let user = client.get_user(661200758510977084).await.unwrap();
-  
-  assert_eq!(user.username, "null");
-  assert_eq!(user.id, 661200758510977084);
-  
-  println!("{:?}", user);
-}
-```
-
-### Posting your bot's statistics
-
-```rust
-use topgg::{Client, Stats};
-
-#[tokio::main]
-async fn main() {
-  let client = Client::new(env!("TOPGG_TOKEN").to_string());
-
-  let server_count = 12345;
-  client
-    .post_stats(Stats::from(server_count))
-    .await
-    .unwrap();
-}
-```
-
-### Checking if a user has voted your bot
-
-```rust
-use topgg::Client;
-
-#[tokio::main]
-async fn main() {
-  let client = Client::new(env!("TOPGG_TOKEN").to_string());
-
-  if client.has_voted(661200758510977084).await.unwrap() {
-    println!("checks out");
-  }
-}
-```
-
-### Autoposting with [serenity](https://crates.io/crates/serenity)
+## Installation
 
 In your `Cargo.toml`:
 
 ```toml
 [dependencies]
-# using serenity with guild caching disabled
-topgg = { version = "1.4", features = ["autoposter", "serenity"] }
-
-# using serenity with guild caching enabled
-topgg = { version = "1.4", features = ["autoposter", "serenity-cached"] }
+topgg = "2"
 ```
 
-In your code:
+## Setting up
 
 ```rust
-use core::time::Duration;
-use serenity::{client::{Client, Context, EventHandler}, model::{channel::Message, gateway::Ready}};
-use topgg::Autoposter;
+let client = topgg::Client::new(env!("TOPGG_TOKEN").to_string());
+```
 
-struct Handler;
+## Usage
 
-#[serenity::async_trait]
-impl EventHandler for Handler {
-  async fn message(&self, ctx: Context, msg: Message) {
-    if msg.content == "!ping" {
-      if let Err(why) = msg.channel_id.say(&ctx.http, "Pong!").await {
-        println!("Error sending message: {why:?}");
+### Getting a bot
+
+```rust
+let bot = client.get_bot(264811613708746752).await.unwrap();
+```
+
+### Getting several bots
+
+```rust
+let bots = client
+  .get_bots()
+  .limit(250)
+  .skip(50)
+  .sort_by_monthly_votes()
+  .await
+  .unwrap();
+
+for bot in bots {
+  println!("{}", bot.name);
+}
+```
+
+### Getting your project's voters
+
+```rust
+//                             Page number
+let voters = client.get_voters(1).await.unwrap();
+
+for voter in voters {
+  println!("{}", voter.username);
+}
+```
+
+### Getting your project's vote information of a user
+
+<Tabs>
+  <TabItem value="discord" label="Discord ID" default>
+    ```rust
+    use topgg::UserSource;
+
+    let vote = client.get_vote(UserSource::Discord(661200758510977084)).await.unwrap();
+    ```
+  </TabItem>
+  <TabItem value="topgg" label="Top.gg ID">
+    ```rust
+    use topgg::UserSource;
+
+    let vote = client.get_vote(UserSource::Topgg(8226924471638491136)).await.unwrap();
+    ```
+  </TabItem>
+</Tabs>
+
+### Getting your bot's server count
+
+```rust
+let server_count = client.get_bot_server_count().await.unwrap();
+```
+
+### Posting your bot's server count
+
+```rust
+client.post_bot_server_count(bot.server_count()).await.unwrap();
+```
+
+### Posting your bot's application commands list
+
+<Tabs>
+  <TabItem value="serenity" label="Serenity" default>
+    ```rust
+    client.post_bot_commands(&ctx).await.unwrap();
+    ```
+  </TabItem>
+  <TabItem value="twilight" label="Twilight">
+    ```rust
+    let application_id = bot.current_user_application().await.unwrap().model().await.unwrap().id;
+    let interaction = bot.interaction(application_id);
+    
+    client.post_bot_commands(interaction.global_commands()).await.unwrap();
+    ```
+  </TabItem>
+  <TabItem value="others" label="Others">
+    ```rust
+    let commands = vec![...]; // Array of application commands that
+                              // can be serialized to Discord API's raw JSON format.
+    client.post_bot_commands(commands).await.unwrap();
+    ```
+  </TabItem>
+</Tabs>
+
+### Automatically posting your bot's server count every few minutes
+
+<Tabs>
+  <TabItem value="serenity" label="Serenity" default>
+    In your `Cargo.toml`:
+
+    ```toml
+    [dependencies]
+    # using serenity with guild caching disabled
+    topgg = { version = "2", features = ["bot-autoposter", "serenity"] }
+    
+    # using serenity with guild caching enabled
+    topgg = { version = "2", features = ["bot-autoposter", "serenity-cached"] }
+    ```
+
+    In your code:
+
+    ```rust
+    use std::time::Duration;
+    use serenity::{client::{Client, Context, EventHandler}, model::gateway::{GatewayIntents, Ready}};
+    use topgg::BotAutoposter;
+    
+    struct BotAutoposterHandler;
+    
+    #[serenity::async_trait]
+    impl EventHandler for BotAutoposterHandler {
+      async fn ready(&self, _: Context, ready: Ready) {
+        println!("{} is now ready!", ready.user.name);
       }
     }
-  }
+    
+    #[tokio::main]
+    async fn main() {
+      let client = topgg::Client::new(env!("TOPGG_TOKEN").to_string());
 
-  async fn ready(&self, _: Context, ready: Ready) {
-    println!("{} is connected!", ready.user.name);
-  }
-}
-
-#[tokio::main]
-async fn main() {
-  let topgg_client = topgg::Client::new(env!("TOPGG_TOKEN").to_string());
-  let autoposter = Autoposter::serenity(&topgg_client, Duration::from_secs(1800));
-  
-  let bot_token = env!("DISCORD_TOKEN").to_string();
-  let intents = GatewayIntents::GUILD_MESSAGES | GatewayIntents::GUILDS | GatewayIntents::MESSAGE_CONTENT;
-
-  let mut client = Client::builder(&bot_token, intents)
-    .event_handler(Handler)
-    .event_handler_arc(autoposter.handler())
-    .await
-    .unwrap();
-
-  if let Err(why) = client.start().await {
-    println!("Client error: {why:?}");
-  }
-}
-```
-
-### Autoposting with [twilight](https://twilight.rs)
-
-In your `Cargo.toml`:
-
-```toml
-[dependencies]
-# using twilight with guild caching disabled
-topgg = { version = "1.4", features = ["autoposter", "twilight"] }
-
-# using twilight with guild caching enabled
-topgg = { version = "1.4", features = ["autoposter", "twilight-cached"] }
-```
-
-In your code:
-
-```rust
-use core::time::Duration;
-use topgg::Autoposter;
-use twilight_gateway::{Event, Intents, Shard, ShardId};
-
-#[tokio::main]
-async fn main() {
-  let client = topgg::Client::new(env!("TOPGG_TOKEN").to_string());
-  let autoposter = Autoposter::twilight(&client, Duration::from_secs(1800));
-
-  let mut shard = Shard::new(
-    ShardId::ONE,
-    env!("DISCORD_TOKEN").to_string(),
-    Intents::GUILD_MEMBERS | Intents::GUILDS,
-  );
-
-  loop {
-    let event = match shard.next_event().await {
-      Ok(event) => event,
-      Err(source) => {
-        if source.is_fatal() {
-          break;
+      // Posts once every 30 minutes
+      let mut bot_autoposter = BotAutoposter::serenity(&client, Duration::from_secs(1800));
+      
+      let bot_token = env!("BOT_TOKEN").to_string();
+      let intents = GatewayIntents::GUILDS;
+    
+      let mut bot = Client::builder(&bot_token, intents)
+        .event_handler(BotAutoposterHandler)
+        .event_handler_arc(bot_autoposter.handler())
+        .await
+        .unwrap();
+    
+      let mut receiver = bot_autoposter.receiver();
+    
+      tokio::spawn(async move {
+        while let Some(result) = receiver.recv().await {
+          println!("Just posted: {result:?}");
         }
-
-        continue;
+      });
+      
+      if let Err(why) = bot.start().await {
+        println!("Client error: {why:?}");
       }
+    }
+    ```
+  </TabItem>
+  <TabItem value="twilight" label="Twilight">
+    In your `Cargo.toml`:
+    
+    ```toml
+    [dependencies]
+    # using twilight with guild caching disabled
+    topgg = { version = "2", features = ["bot-autoposter", "twilight"] }
+    
+    # using twilight with guild caching enabled
+    topgg = { version = "2", features = ["bot-autoposter", "twilight-cached"] }
+    ```
+
+    In your code:
+
+    ```rust
+    use std::time::Duration;
+    use topgg::{BotAutoposter, Client};
+    use twilight_gateway::{Event, Intents, Shard, ShardId};
+    
+    #[tokio::main]
+    async fn main() {
+      let client = Client::new(env!("TOPGG_TOKEN").to_string());
+      let bot_autoposter = BotAutoposter::twilight(&client, Duration::from_secs(1800));
+    
+      let mut shard = Shard::new(
+        ShardId::ONE,
+        env!("BOT_TOKEN").to_string(),
+        Intents::GUILD_MESSAGES | Intents::GUILDS,
+      );
+    
+      loop {
+        let event = match shard.next_event().await {
+          Ok(event) => event,
+          Err(source) => {
+            if source.is_fatal() {
+              break;
+            }
+    
+            continue;
+          }
+        };
+        
+        bot_autoposter.handle(&event).await;
+        
+        match event {
+          Event::Ready(_) => {
+            println!("Bot is now ready!");
+          },
+    
+          _ => {}
+        }
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Checking if the weekend vote multiplier is active
+
+```rust
+let is_weekend = client.is_weekend().await.unwrap();
+```
+
+### Generating widget URLs
+
+<Tabs>
+  <TabItem value="large" label="Large" default>
+    ```rust
+    let widget_url = topgg::widget::large(topgg::WidgetType::DiscordBot, 574652751745777665);
+    ```
+  </TabItem>
+  <TabItem value="votes" label="Votes">
+    ```rust
+    let widget_url = topgg::widget::votes(topgg::WidgetType::DiscordBot, 574652751745777665);
+    ```
+  </TabItem>
+  <TabItem value="owner" label="Owner">
+    ```rust
+    let widget_url = topgg::widget::owner(topgg::WidgetType::DiscordBot, 574652751745777665);
+    ```
+  </TabItem>
+  <TabItem value="social" label="Social">
+    ```rust
+    let widget_url = topgg::widget::social(topgg::WidgetType::DiscordBot, 574652751745777665);
+    ```
+  </TabItem>
+</Tabs>
+
+### Webhooks
+
+#### Being notified whenever someone voted for your project
+
+<Tabs>
+  <TabItem value="actix_web" label="actix-web" default>
+    In your `Cargo.toml`:
+    
+    ```toml
+    [dependencies]
+    topgg = { version = "2", default-features = false, features = ["actix-web"] }
+    ```
+
+    In your code:
+
+    ```rust
+    use actix_web::{
+      error::{Error, ErrorUnauthorized},
+      get, post, App, HttpServer,
     };
+    use topgg::{Incoming, VoteEvent};
+    use std::io;
     
-    autoposter.handle(&event).await;
+    #[post("/votes")]
+    async fn voted(vote: Incoming<VoteEvent>) -> Result<&'static str, Error> {
+      match vote.authenticate(env!("MY_TOPGG_WEBHOOK_SECRET")) {
+        Some(vote) => {
+          println!("A user with the ID of {} has voted us on Top.gg!", vote.voter_id);
     
-    match event {
-      Event::Ready(_) => {
-        println!("Bot is ready!");
-      },
-
-      _ => {}
+          Ok("ok")
+        },
+        _ => Err(ErrorUnauthorized("401")),
+      }
     }
-  }
-}
-```
-
-### Writing an [actix-web](https://actix.rs) webhook for listening to votes
-
-In your `Cargo.toml`:
-
-```toml
-[dependencies]
-topgg = { version = "1.4", default-features = false, features = ["actix-web"] }
-```
-
-In your code:
-
-```rust
-use actix_web::{
-  error::{Error, ErrorUnauthorized},
-  get, post, App, HttpServer,
-};
-use std::io;
-use topgg::IncomingVote;
-
-#[get("/")]
-async fn index() -> &'static str {
-  "Hello, World!"
-}
-
-#[post("/webhook")]
-async fn webhook(vote: IncomingVote) -> Result<&'static str, Error> {
-  match vote.authenticate(env!("TOPGG_WEBHOOK_PASSWORD")) {
-    Some(vote) => {
-      println!("{:?}", vote);
-
-      Ok("ok")
+    
+    #[get("/")]
+    async fn index() -> &'static str {
+      "Hello, World!"
     }
-    _ => Err(ErrorUnauthorized("401")),
-  }
-}
-
-#[actix_web::main]
-async fn main() -> io::Result<()> {
-  HttpServer::new(|| App::new().service(index).service(webhook))
-    .bind("127.0.0.1:8080")?
-    .run()
-    .await
-}
-```
-
-### Writing an [axum](https://crates.io/crates/axum) webhook for listening to votes
-
-In your `Cargo.toml`:
-
-```toml
-[dependencies]
-topgg = { version = "1.4", default-features = false, features = ["axum"] }
-```
-
-In your code:
-
-```rust
-use axum::{routing::get, Router, Server};
-use std::{net::SocketAddr, sync::Arc};
-use topgg::{Vote, VoteHandler};
-
-struct MyVoteHandler {}
-
-#[axum::async_trait]
-impl VoteHandler for MyVoteHandler {
-  async fn voted(&self, vote: Vote) {
-    println!("{:?}", vote);
-  }
-}
-
-async fn index() -> &'static str {
-  "Hello, World!"
-}
-
-#[tokio::main]
-async fn main() {
-  let state = Arc::new(MyVoteHandler {});
-
-  let app = Router::new().route("/", get(index)).nest(
-    "/webhook",
-    topgg::axum::webhook(env!("TOPGG_WEBHOOK_PASSWORD").to_string(), Arc::clone(&state)),
-  );
-
-  let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
-
-  Server::bind(&addr)
-    .serve(app.into_make_service())
-    .await
-    .unwrap();
-}
-```
-
-### Writing a [rocket](https://rocket.rs) webhook for listening to votes
-
-In your `Cargo.toml`:
-
-```toml
-[dependencies]
-topgg = { version = "1.4", default-features = false, features = ["rocket"] }
-```
-
-In your code:
-
-```rust
-#![feature(decl_macro)]
-
-use rocket::{get, http::Status, post, routes};
-use topgg::IncomingVote;
-
-#[get("/")]
-fn index() -> &'static str {
-  "Hello, World!"
-}
-
-#[post("/webhook", data = "<vote>")]
-fn webhook(vote: IncomingVote) -> Status {
-  match vote.authenticate(env!("TOPGG_WEBHOOK_PASSWORD")) {
-    Some(vote) => {
-      println!("{:?}", vote);
-
-      Status::Ok
-    },
-    _ => {
-      println!("found an unauthorized attacker.");
-
-      Status::Unauthorized
+    
+    #[actix_web::main]
+    async fn main() -> io::Result<()> {
+      HttpServer::new(|| App::new().service(index).service(voted))
+        .bind("127.0.0.1:8080")?
+        .run()
+        .await
     }
-  }
-}
+    ```
+  </TabItem>
+  <TabItem value="axum" label="axum">
+    In your `Cargo.toml`:
+    
+    ```toml
+    [dependencies]
+    topgg = { version = "2", default-features = false, features = ["axum"] }
+    ```
 
-fn main() {
-  rocket::ignite()
-    .mount("/", routes![index, webhook])
-    .launch();
-}
-```
+    In your code:
 
-### Writing a [warp](https://crates.io/crates/warp) webhook for listening to votes
+    ```rust
+    use axum::{routing::get, Router};
+    use topgg::{VoteEvent, Webhook};
+    use tokio::net::TcpListener;
+    use std::sync::Arc;
+    
+    struct MyVoteListener {}
+    
+    #[async_trait::async_trait]
+    impl Webhook<VoteEvent> for MyVoteListener {
+      async fn callback(&self, vote: VoteEvent) {
+        println!("A user with the ID of {} has voted us on Top.gg!", vote.voter_id);
+      }
+    }
+    
+    async fn index() -> &'static str {
+      "Hello, World!"
+    }
+    
+    #[tokio::main]
+    async fn main() {
+      let state = Arc::new(MyVoteListener {});
+    
+      let router = Router::new().route("/", get(index)).nest(
+        "/votes",
+        topgg::axum::webhook(env!("MY_TOPGG_WEBHOOK_SECRET").to_string(), Arc::clone(&state)),
+      );
+    
+      let listener = TcpListener::bind("127.0.0.1:8080").await.unwrap();
+    
+      axum::serve(listener, router).await.unwrap();
+    }
+    ```
+  </TabItem>
+  <TabItem value="rocket" label="rocket">
+    In your `Cargo.toml`:
+    
+    ```toml
+    [dependencies]
+    topgg = { version = "2", default-features = false, features = ["rocket"] }
+    ```
 
-In your `Cargo.toml`:
+    In your code:
 
-```toml
-[dependencies]
-topgg = { version = "1.4", default-features = false, features = ["warp"] }
-```
+    ```rust
+    use rocket::{get, http::Status, launch, post, routes};
+    use topgg::{Incoming, VoteEvent};
+    
+    #[post("/votes", data = "<vote>")]
+    fn voted(vote: Incoming<VoteEvent>) -> Status {
+      match vote.authenticate(env!("MY_TOPGG_WEBHOOK_SECRET")) {
+        Some(vote) => {
+          println!("A user with the ID of {} has voted us on Top.gg!", vote.voter_id);
+    
+          Status::NoContent
+        },
+        _ => Status::Unauthorized,
+      }
+    }
+    
+    #[get("/")]
+    fn index() -> &'static str {
+      "Hello, World!"
+    }
+    
+    #[launch]
+    fn start() -> _ {
+      rocket::build().mount("/", routes![index, voted])
+    }
+    ```
+  </TabItem>
+  <TabItem value="warp" label="warp">
+    In your `Cargo.toml`:
+    
+    ```toml
+    [dependencies]
+    topgg = { version = "2", default-features = false, features = ["warp"] }
+    ```
 
-In your code:
+    In your code:
 
-```rust
-use std::{net::SocketAddr, sync::Arc};
-use topgg::{Vote, VoteHandler};
-use warp::Filter;
-
-struct MyVoteHandler {}
-
-#[async_trait::async_trait]
-impl VoteHandler for MyVoteHandler {
-  async fn voted(&self, vote: Vote) {
-    println!("{:?}", vote);
-  }
-}
-
-#[tokio::main]
-async fn main() {
-  let state = Arc::new(MyVoteHandler {});
-
-  // POST /webhook
-  let webhook = topgg::warp::webhook(
-    "webhook",
-    env!("TOPGG_WEBHOOK_PASSWORD").to_string(),
-    Arc::clone(&state),
-  );
-
-  let routes = warp::get().map(|| "Hello, World!").or(webhook);
-
-  let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
-
-  warp::serve(routes).run(addr).await
-}
-```
+    ```rust
+    use std::{net::SocketAddr, sync::Arc};
+    use topgg::{VoteEvent, Webhook};
+    use warp::Filter;
+    
+    struct MyVoteListener {}
+    
+    #[async_trait::async_trait]
+    impl Webhook<VoteEvent> for MyVoteListener {
+      async fn callback(&self, vote: VoteEvent) {
+        println!("A user with the ID of {} has voted us on Top.gg!", vote.voter_id);
+      }
+    }
+    
+    #[tokio::main]
+    async fn main() {
+      let state = Arc::new(MyVoteListener {});
+    
+      // POST /votes
+      let webhook = topgg::warp::webhook(
+        "votes",
+        env!("MY_TOPGG_WEBHOOK_SECRET").to_string(),
+        Arc::clone(&state),
+      );
+    
+      let routes = warp::get().map(|| "Hello, World!").or(webhook);
+    
+      let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
+    
+      warp::serve(routes).run(addr).await
+    }
+    ```
+  </TabItem>
+</Tabs>

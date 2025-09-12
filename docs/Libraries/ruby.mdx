@@ -1,52 +1,168 @@
 ---
 title: Ruby
-description: A community maintained Top.gg Ruby Library
+description: Top.gg Ruby library
 ---
 
-# Ruby Library
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-This is a community maintained Ruby Library for top.gg, if you have any issues/bugs please submit an issue on our github.
+# Ruby SDK
 
-- [GitHub Link](https://github.com/top-gg/ruby-sdk)
-
-## Documentation
-
-- [Api Reference](https://rubydoc.info/gems/topgg/)
+The community-maintained Ruby library for Top.gg. If you experience any issues, please submit an issue on [its GitHub repository](https://github.com/Top-gg-Community/ruby-sdk).
 
 ## Installation
 
-```bash
-
-gem install topgg
-
+```sh
+$ gem install topgg
 ```
 
-## Autoposting Statistics
+## Setting up
 
-```ruby
-require 'topgg'
-require 'discordrb'
+```rb
+require "topgg"
 
-bot = Discordrb::Bot.new token: "TOKEN"
+client = Topgg.new(ENV["TOPGG_TOKEN"])
+```
 
-client = Topgg.new("AUTH_TOKEN", "BOTID")
- bot.ready do |event|
- client.auto_post_stats(bot) # The discordrb bot client.
+## Usage
+
+### Getting a bot
+
+```rb
+bot = client.get_bot("264811613708746752")
+```
+
+### Getting several bots
+
+```rb
+bots = client.get_bots({ sort: "date", limit: 50, offset: 0 })
+
+for bot in bots.results do
+  puts bot.username
 end
+```
+
+### Getting your project's voters
+
+<Tabs>
+  <TabItem value="first_page" label="First page" default>
+    ```rb
+    voters = client.get_voters
+    
+    for voter in voters.results do
+      puts voter.username
+    end
+    ```
+  </TabItem>
+  <TabItem value="subsequent_pages" label="Subsequent pages">
+    ```rb
+    voters = client.get_voters(2)
+    
+    for voter in voters.results do
+      puts voter.username
+    end
+    ```
+  </TabItem>
+</Tabs>
+
+### Check if a user has voted for your project
+
+```rb
+has_voted = client.voted?("661200758510977084")
+```
+
+### Getting your bot's server count
+
+```rb
+server_count = client.get_server_count
+```
+
+### Posting your bot's server count
+
+```rb
+client.post_server_count(bot.server_count)
+```
+
+### Automatically posting your bot's server count every few minutes
+
+For Discordrb:
+
+```rb
+require "discordrb"
+
+bot = Discordrb::Bot.new(token: env["BOT_TOKEN"], intents: [:servers])
+
+bot.ready do |event|
+  client.auto_post_stats(bot)
+  
+  puts "Bot is now ready!"
+end
+
 bot.run
 ```
 
-## Example Usage
+### Checking if the weekend vote multiplier is active
 
-Here's an example on how to use the library!
-
-```ruby
-require 'topgg'
-bot = Discordrb::Bot.new token: "TOKEN"
-
-client = Topgg.new("AUTH_TOKEN", "BOTID")
-# check if the speicified user id voted or not.
-p client.voted?("1234")
+```rb
+is_weekend = client.is_weekend?
 ```
 
-You can check out the [API Reference](https://rubydoc.info/gems/topgg/) to know about the other methods!
+### Generating widget URLs
+
+<Tabs>
+  <TabItem value="large" label="Large" default>
+    ```rb
+    widget_url = Dbl::Widget.large(:discord_bot, "574652751745777665")
+    ```
+  </TabItem>
+  <TabItem value="votes" label="Votes">
+    ```rb
+    widget_url = Dbl::Widget.votes(:discord_bot, "574652751745777665")
+    ```
+  </TabItem>
+  <TabItem value="owner" label="Owner">
+    ```rb
+    widget_url = Dbl::Widget.owner(:discord_bot, "574652751745777665")
+    ```
+  </TabItem>
+  <TabItem value="social" label="Social">
+    ```rb
+    widget_url = Dbl::Widget.social(:discord_bot, "574652751745777665")
+    ```
+  </TabItem>
+</Tabs>
+
+### Webhooks
+
+#### Being notified whenever someone voted for your project
+
+<Tabs>
+  <TabItem value="ruby_on_rails" label="Ruby on Rails" default>
+    In your `config/application.rb`:
+
+    ```rb
+    module MyServer
+      class Application < Rails::Application
+        # ...
+    
+        config.middleware.use Dbl::Webhook,
+        type: Dbl::Webhook::VOTE,
+        path: "/votes",
+        auth: ENV["MY_TOPGG_WEBHOOK_SECRET"] do |vote|
+          Rails.logger.info "A user with the ID of #{vote.voter_id} has voted us on Top.gg!"
+        end
+      end
+    end
+    ```
+  </TabItem>
+  <TabItem value="sinatra" label="Sinatra">
+    ```rb
+    use Dbl::Webhook,
+    type: Dbl::Webhook::VOTE,
+    path: "/votes",
+    auth: ENV["MY_TOPGG_WEBHOOK_SECRET"] do |vote|
+      puts "A user with the ID of #{vote.voter_id} has voted us on Top.gg!"
+    end
+    ```
+  </TabItem>
+</Tabs>

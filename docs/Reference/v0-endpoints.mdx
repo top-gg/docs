@@ -1,0 +1,323 @@
+---
+title: v0 Endpoints
+description: Top.gg API's v0 endpoints
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+import HTTPHeader from "../../src/components/HTTPHeader";
+
+:::note
+v0 endpoints support both legacy and newer API tokens.
+:::
+
+## Fetch a bot
+
+<HTTPHeader type="GET" path="/bots/:bot_id" />
+
+Fetches a single bot.
+
+### Parameters
+
+This endpoint only takes in the `bot_id` parameter which corresponds to the Discord ID of the bot to be queried.
+
+### Response
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    This endpoint returns a [`Bot`](/docs/Reference/structures#bot) structure if successful.
+  </TabItem>
+  <TabItem value="json_200" label="JSON example (200)">
+    ```json title="/bots/1026525568344264724"
+    {
+      "invite": "https://top.gg/discord",
+      "support": "https://discord.gg/dbl",
+      "github": "https://github.com/top-gg",
+      "longdesc": "A bot to grant API access to our Library Developers on the Top.gg site without them needing to submit a bot to pass verification just to be able to access the API.\n\nThis is not a real bot, so if you happen to find this page, do not try to invite it. It will not work.\n\nAccess to this bot's team can be requested by contacting a Community Manager in [our Discord server](https://top.gg/discord).",
+      "shortdesc": "API access for Top.gg Library Developers",
+      "prefix": "/",
+      "lib": "",
+      "clientid": "1026525568344264724",
+      "avatar": "https://cdn.discordapp.com/avatars/1026525568344264724/cd70e62e41f691f1c05c8455d8c31e23.png",
+      "id": "1026525568344264724",
+      "username": "Top.gg Lib Dev API Access",
+      "date": "2022-10-03T16:08:55.292Z",
+      "server_count": 2,
+      "shard_count": 0,
+      "guilds": [],
+      "shards": [],
+      "monthlyPoints": 2,
+      "points": 21,
+      "certifiedBot": false,
+      "owners": [
+        "121919449996460033"
+      ],
+      "tags": [
+        "api",
+        "library",
+        "topgg"
+      ],
+      "reviews": {
+        "averageScore": 5,
+        "count": 2
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="json_404" label="JSON example (404)">
+    ```json title="/bots/696969696969696969"
+    {
+      "message": "Bot not found"
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Fetch multiple bots
+
+<HTTPHeader type="GET" path="/bots" />
+
+Fetches a list of bots that matches a specific query.
+
+### Parameters
+
+This endpoint also takes in additional parameters via query parameters. All of these parameters are optional.
+
+| Field                  | Type     | Description                                                    | Default    |
+| ---------------------- | -------- | -------------------------------------------------------------- | ---------- |
+| `limit`                | `number` | The amount of bots to return. Max. 500                         | `50`       |
+| `offset`               | `number` | Amount of bots to skip                                         | `0`        |
+| `sort`                 | `string` | The field to sort by. Prefix with - to reverse the order       |            |
+| `fields`               | `string` | A comma separated list of fields to show                       | All fields |
+| `search` <deprecated/> | `string` | A search query that filters out the results.                   |            |
+
+### Response
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    | Field     | Type                                      | Description                                                                                                     |
+    | --------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+    | `results` | [`Bot[]`](/docs/Reference/structures#bot) | An array of [`Bot`](/docs/Reference/structures#bot) structures containing the information of every matched bot. |
+    | `limit`   | `number`                                  | The maximum amount of bots to be returned in this API request.                                                  |
+    | `count`   | `number`                                  | The _actual_ amount of bots returned in this API response, equivalent to the size of the `results` array.       |
+    | `total`   | `number`                                  | The total amount of bots that could be queried in Top.gg's database.                                            |
+  </TabItem>
+  <TabItem value="json" label="JSON example">
+    ```json title="/bots?limit=1"
+    {
+      "results": [
+        {
+          "invite": "https://discord.com/api/oauth2/authorize?client_id=432610292342587392&permissions=537159744&scope=applications.commands%20bot",
+          "website": "https://www.patreon.com/mudae",
+          "support": "https://discord.gg/EEGkGSh",
+          "longdesc": "<p>\n  Database of 115,000 waifu and husbando. Make and customize your own collection bound to the Discord server you are playing on: compete with your friends to get the best unique collection!<br>\n  All characters are from existing animes, manga, comics or video games.<br>\n  They were suggested by the community along with over 800,000 images and gifs: details are constantly added and reviewed by users.\n  Hundreds of commands are available, from original multiplayer word-based games to fun commands such as random anime quotes.\n</p>\n\n<p>\n  <br>\n  Fully translated in French<br>\n  Partially translated in Spanish and Brazilian Portuguese.<br>\n  Follow on Twitter: @Mudaebot\n  Join the main server: https://discord.gg/EEGkGSh\n</p>",
+          "shortdesc": "Database of 110,000 anime/game characters: make and customize the best collection in your server. 400 commands, multiplayer games and more!",
+          "prefix": "$",
+          "lib": "",
+          "clientid": "432610292342587392",
+          "avatar": "https://cdn.discordapp.com/avatars/432610292342587392/29cb28fbf65a3958105026ab03abd306.png",
+          "id": "432610292342587392",
+          "username": "Mudae",
+          "date": "2018-04-21T21:17:57.793Z",
+          "server_count": 3371839,
+          "shard_count": 0,
+          "guilds": [],
+          "shards": [],
+          "monthlyPoints": 1931775,
+          "points": 226691280,
+          "certifiedBot": false,
+          "owners": [
+            "275748765166469120"
+          ],
+          "tags": [
+            "anime",
+            "fun",
+            "game"
+          ],
+          "reviews": {
+            "averageScore": 4.521475580187046,
+            "count": 11548
+          }
+        }
+      ],
+      "limit": 1,
+      "offset": 0,
+      "count": 1,
+      "total": 44429
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Fetch your bot's recent voters
+
+<HTTPHeader type="GET" path="/bots/:bot_id/votes" />
+
+Fetches the latest unique voters of your bot.
+
+:::note
+It's more recommended to [use webhooks](/docs/Resources/webhooks) and implement your own caching instead of manually checking a user every time, which could easily hit ratelimits.
+:::
+
+### Parameters
+
+:::note
+Developers are only restricted to receive **their own** bots' voters. Therefore, the only valid way to use this endpoint is to replace the `bot_id` parameter with **your bot's own Discord ID**.
+:::
+
+This endpoint also takes in an additional parameter via query parameters. All of these parameters are optional.
+
+| Field  | Type     | Description                                                    | Default    |
+| ------ | -------- | -------------------------------------------------------------- | ---------- |
+| `page` | `number` | The page number to be fetched. Starts at 1.                    | `1`        |
+
+### Response
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    This endpoint returns an array of [`Voter`](/docs/Reference/structures#voter) structures if successful.
+  </TabItem>
+  <TabItem value="json" label="JSON example">
+    ```json title="/bots/YOUR_BOT_ID/votes"
+    [
+      {
+        "username": "Xetera",
+        "id": "140862798832861184",
+        "avatar": "https://cdn.discordapp.com/avatars/1026525568344264724/cd70e62e41f691f1c05c8455d8c31e23.png"
+      },
+      {
+        "username": "Xetera's alt",
+        "id": "140862798832861185",
+        "avatar": "https://cdn.discordapp.com/avatars/1026525568344264725/cd70e62e41f691f1c05c8455d8c31e23.png"
+      },
+      {
+        "username": "Xetera's another alt",
+        "id": "140862798832861186",
+        "avatar": "https://cdn.discordapp.com/avatars/1026525568344264726/cd70e62e41f691f1c05c8455d8c31e23.png"
+      }
+    ]
+    ```
+  </TabItem>
+</Tabs>
+
+## Check if a user has voted for your project
+
+<HTTPHeader type="GET" path="/bots/check" />
+
+Checks if a user has voted for your bot in the past 12 hours.
+
+:::note
+It's more recommended to [use webhooks](/docs/Resources/webhooks) and implement your own caching instead of manually checking a user every time, which could easily hit ratelimits.
+:::
+
+### Parameters
+
+This endpoint takes in a parameter via query parameters. These parameters are required.
+
+| Field    | Type     | Description            |
+| -------- | -------- | ---------------------- |
+| `userId` | `number` | The user ID to check.  |
+
+### Response
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    | Field   | Type     | Description                                                 |
+    | ------- | -------- | ----------------------------------------------------------- |
+    | `voted` | `number` | `1` if the user has voted in the past 12 hours, `0` if not. |
+  </TabItem>
+  <TabItem value="json_200" label="JSON example (200)">
+    ```json title="/bots/check?userId=478881452604522499"
+    {
+      "voted": 0
+    }
+    ```
+  </TabItem>
+  <TabItem value="json_404" label="JSON example (404)">
+    ```json title="/bots/check?userId=696969696969696969"
+    {
+      "message": "User not found."
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Fetch your bot's posted statistics
+
+<HTTPHeader type="GET" path="/bots/stats" />
+
+Fetches the statistics your bot has posted to Top.gg.
+
+### Parameters
+
+This endpoint takes no parameters.
+
+### Response
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    | Field                        | Type       | Description                                                                      |
+    | ---------------------------- | ---------- | -------------------------------------------------------------------------------- |
+    | `server_count`?              | `number`   | The amount of servers your bot is in.                                            |
+    | `shards` <deprecated/>       | `number[]` | The amount of servers your bot is in per shard. Always present but can be empty. |
+    | `shard_count`? <deprecated/> | `number`   | The amount of shards your bot has.                                               |
+  </TabItem>
+  <TabItem value="json" label="JSON example">
+    ```json title="/bots/stats"
+    {
+      "server_count": 2,
+      "shards": [],
+      "shard_count": null
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Post your bot's statistics
+
+<HTTPHeader type="POST" path="/bots/stats" />
+
+Posts your bot's statistics to Top.gg. This way, Top.gg could display it in your bot's Top.gg page.
+
+### Parameters
+
+This endpoint takes in parameters via a JSON body. All of these parameters are optional except for `server_count`.
+
+| Field                       | Type       | Description                                                                                         |
+| --------------------------- | ---------- | --------------------------------------------------------------------------------------------------- |
+| `server_count`              | `number`   | The amount of servers your bot is in.                                                               |
+| `shards` <deprecated/>      | `number[]` | The amount of servers your bot is in per shard.                                                     |
+| `shard_id` <deprecated/>    | `number`   | The zero-indexed id of the shard posting. Makes `server_count` set the shard specific server count. |
+| `shard_count` <deprecated/> | `number`   | The amount of shards your bot has.                                                                  |
+
+### Response
+
+This endpoint returns an empty `200` (OK) response if successful.
+
+## Check if the weekend multiplier is active
+
+<HTTPHeader type="GET" path="/weekend" />
+
+Checks if the weekend multiplier is active, where a single vote counts as two.
+
+### Parameters
+
+This endpoint takes no parameters.
+
+### Response
+
+<Tabs>
+  <TabItem value="table" label="Table" default>
+    | Field                     | Type       | Description                                                                  |
+    | ------------------------- | ---------- | ---------------------------------------------------------------------------- |
+    | `is_weekend`              | `boolean`  | Whether the weekend multiplier is active.                                    |
+  </TabItem>
+  <TabItem value="json" label="JSON example">
+    ```json title="/weekend"
+    {
+      "is_weekend": true
+    }
+    ```
+  </TabItem>
+</Tabs>
