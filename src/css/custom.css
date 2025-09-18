@@ -4,6 +4,9 @@
  * work well for content-centric websites.
  */
 
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #ff3366;
@@ -13,11 +16,21 @@
   --ifm-color-primary-light: #ff3366;
   --ifm-color-primary-lighter: #ff3366;
   --ifm-color-primary-lightest: #ff3366;
+  --ifm-font-family-base: 'Manrope';
   --ifm-code-font-size: 95%;
+
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
   --background: #fff;
   --ui: 0,0,0;
+
+  --http-header-get-background: #e8e8fb;
+  --http-header-get-border: #c9c9ee;
+  --http-header-get-color: #4a4aa5;
+
+  --http-header-post-background: #e4f5ea;
+  --http-header-post-border: #c1e3d0;
+  --http-header-post-color: #317854;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -33,6 +46,14 @@
 
   --background: #070510;
   --ui: 255,255,255;
+
+  --http-header-get-background: #212133;
+  --http-header-get-border: #47476b;
+  --http-header-get-color: #7979d4;
+
+  --http-header-post-background: #0e1712;
+  --http-header-post-border: #193123;
+  --http-header-post-color: #78b993;
 }
 
 html {
@@ -79,11 +100,13 @@ body {
   border-left: 1px solid rgba(var(--ui), 0.1);
 }
 
-a {
-  color: unset;
-  text-decoration: underline;
-}
-a:hover {
-  color: unset;
-  opacity: 0.8;
+deprecated::after {
+  content: 'Deprecated';
+  font-size: 12px;
+  margin-left: 3px;
+  padding: 3px 5px;
+  border-radius: 5px;
+  background-color: #ccc;
+  color: black;
+  font-weight: bold;
 }
