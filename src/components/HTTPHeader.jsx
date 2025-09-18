@@ -4,8 +4,8 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useColorMode } from "@docusaurus/theme-common";
 
 const HeaderWrapper = styled.div`
-  border: 1px solid var(--http-header-border);
-  background: var(--http-header-background);
+  border: 1px solid var(--http-header-${(props) => props.method.toLowerCase()}-border);
+  background: var(--http-header-${(props) => props.method.toLowerCase()}-background);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -16,14 +16,14 @@ const HeaderWrapper = styled.div`
 `;
 
 const MethodName = styled.h2`
-  color: var(--http-header-color);
+  color: var(--http-header-${(props) => props.method.toLowerCase()}-color);
   font-weight: 700;
   font-size: 14px;
   margin: 0 10px 0 0;
 `;
 
 const CopyButton = styled.button`
-  color: var(--http-header-color);
+  color: var(--http-header-${(props) => props.method.toLowerCase()}-color);
   background: inherit;
   font-size: 14px;
   border: none;
@@ -60,7 +60,7 @@ export default function HTTPHeader({ type, path }) {
   const fullUrl = BASE_URL + path
   
   return (
-    <HeaderWrapper method={type} className={type} mode={colorMode}>
+    <HeaderWrapper method={type} mode={colorMode}>
       <Header>
         <MethodName method={type} mode={colorMode}>{type}</MethodName>
         <EndpointUrl

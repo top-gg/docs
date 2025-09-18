@@ -23,18 +23,14 @@
 
   --background: #fff;
   --ui: 0,0,0;
-  
-  .GET {
-    --http-header-background: #e8e8fb;
-    --http-header-border: #c9c9ee;
-    --http-header-color: #4a4aa5;
-  }
 
-  .POST {
-    --http-header-background: #e4f5ea;
-    --http-header-border: #c1e3d0;
-    --http-header-color: #317854;
-  }
+  --http-header-get-background: #e8e8fb;
+  --http-header-get-border: #c9c9ee;
+  --http-header-get-color: #4a4aa5;
+
+  --http-header-post-background: #e4f5ea;
+  --http-header-post-border: #c1e3d0;
+  --http-header-post-color: #317854;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -51,17 +47,13 @@
   --background: #070510;
   --ui: 255,255,255;
 
-  .GET {
-    --http-header-background: #212133;
-    --http-header-border: #47476b;
-    --http-header-color: #7979d4;
-  }
+  --http-header-get-background: #212133;
+  --http-header-get-border: #47476b;
+  --http-header-get-color: #7979d4;
 
-  .POST {
-    --http-header-background: #0e1712;
-    --http-header-border: #193123;
-    --http-header-color: #78b993;
-  }
+  --http-header-post-background: #0e1712;
+  --http-header-post-border: #193123;
+  --http-header-post-color: #78b993;
 }
 
 html {
