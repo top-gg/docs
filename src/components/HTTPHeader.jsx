@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useColorMode } from "@docusaurus/theme-common";
 
 const HeaderWrapper = styled.div`
   border: 1px solid var(--http-header-${(props) => props.method.toLowerCase()}-border);
@@ -49,7 +48,6 @@ const BASE_URL = "https://top.gg/api";
 
 export default function HTTPHeader({ type, path }) {
   const [copied, setCopy] = React.useState(false);
-  const { colorMode } = useColorMode();
 
   React.useEffect(() => {
     if (copied) {
@@ -60,17 +58,17 @@ export default function HTTPHeader({ type, path }) {
   const fullUrl = BASE_URL + path
   
   return (
-    <HeaderWrapper method={type} mode={colorMode}>
+    <HeaderWrapper method={type}>
       <Header>
-        <MethodName method={type} mode={colorMode}>{type}</MethodName>
+        <MethodName method={type}>{type}</MethodName>
         <EndpointUrl
           dangerouslySetInnerHTML={{
             __html: path.replace(/:[a-z_]+/g, "<b>$&</b>"),
           }}
         />
       </Header>
-      <CopyToClipboard text={fullUrl} onCopy={() => setCopy(true)} mode={colorMode}>
-        <CopyButton method={type} mode={colorMode}>{copied ? "Copied!" : "Copy URL"}</CopyButton>
+      <CopyToClipboard text={fullUrl} onCopy={() => setCopy(true)}>
+        <CopyButton method={type}>{copied ? "Copied!" : "Copy URL"}</CopyButton>
       </CopyToClipboard>
     </HeaderWrapper>
   );
