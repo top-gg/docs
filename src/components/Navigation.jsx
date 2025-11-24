@@ -213,8 +213,12 @@ export const navigation = [
     title: 'Endpoints',
     links: [
       { title: 'Getting Started', href: '/endpoints' },
-      { title: 'Bots', href: '/endpoints/bots' },
-      { title: 'Users', href: '/endpoints/users' }
+      { title: 'v0 - Overview', href: '/endpoints/v0' },
+      { title: 'v0 - Bots', href: '/endpoints/v0/bots' },
+      { title: 'v0 - Users', href: '/endpoints/v0/users' },
+      { title: 'v1 - Overview', href: '/endpoints/v1' },
+      { title: 'v1 - Projects', href: '/endpoints/v1/projects' },
+      { title: 'v1 - Users', href: '/endpoints/v1/users' }
     ],
   },
 ]

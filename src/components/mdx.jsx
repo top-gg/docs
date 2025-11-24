@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import clsx from 'clsx'
+import React from "react"
+import { useRouter } from "next/navigation"
+
 
 import { Heading } from '@/components/Heading'
 
@@ -28,11 +31,50 @@ function InfoIcon(props) {
 }
 
 export function Note({ children }) {
+  const router = useRouter()
+
+  const parsedChildren = React.Children.map(children, (child) => {
+    if (typeof child === "string") {
+      const parts = child.split(/(https?:\/\/[^\s]+)/g)
+      return parts.map((part, i) => {
+        if (part.match(/^https?:\/\//)) {
+          return (
+            <span
+              key={i}
+              onClick={() => router.push(part)}
+              className="cursor-pointer text-white hover:text-[#ff99b3] [text-decoration:underline!important] [text-decoration-thickness:2px!important] [text-underline-offset:3px!important]"
+            >
+              {part}
+            </span>
+          )
+        }
+        return part
+      })
+    }
+
+    if (React.isValidElement(child) && child.type === "a") {
+      const href = child.props.href
+      return (
+        <span
+          key={href}
+          onClick={() => router.push(href)}
+          className={
+            "cursor-pointer text-white hover:text-[#ff99b3] [text-decoration:underline!important] [text-decoration-thickness:2px!important] [text-underline-offset:3px!important]"
+          }
+        >
+          {child.props.children}
+        </span>
+      )
+    }
+
+    return child
+  })
+
   return (
-    <div className="my-6 flex gap-2.5 rounded-2xl border border-[#ff3366]/50 bg-[#ff3366]/25 p-4 leading-6 text-[#ff3366] dark:[--tw-prose-links-hover:theme(colors.brand.100)] dark:[--tw-prose-links:theme(colors.white)]">
+    <div className="my-6 flex gap-2.5 rounded-2xl border border-[#ff3366]/50 bg-[#ff3366]/25 p-4 leading-6 text-white">
       <InfoIcon className="mt-1 h-4 w-4 flex-none fill-[#ff3366] stroke-white dark:fill-[#ff3366]/75 dark:stroke-[#fff]" />
       <div className="[&>:first-child]:mt-0 [&>:last-child]:mb-0">
-        {children}
+        {parsedChildren}
       </div>
     </div>
   )
