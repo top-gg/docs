@@ -1,0 +1,71 @@
+# Dotnet Library
+
+The community-maintained .NET library for Top.gg. If you experience any issues, please submit an issue on [GitHub](https://github.com/top-gg/DBL-dotnet-Library). {{ className: "lead" }}
+
+## Installation
+
+### Nuget
+
+If you're using Nuget you can use and/or find it with the ID DiscordBotsList.Api or use:
+
+```bash
+Install-Package DiscordBotsList.Api
+```
+
+## Usage
+
+### Unauthorized API Usage
+
+This section covers the usage of the API *without* an authorization token.
+
+### Setting Up
+```csharp
+DiscordBotListApi DblApi = new DiscordBotListApi();
+```
+
+### Get Bots
+```csharp
+IBot bot = DblApi.GetBotAsync(BOTID); // Replace BOTID with the bot's ID
+```
+
+### Get User
+```csharp
+IUser bot = DblApi.GetUserAsync(USERID); // Replace USERID with the user's ID
+```
+
+
+### Authorized API Usage
+
+This section covers the usage of the API *with* an authorization token.
+
+### Setting Up
+```csharp
+AuthDiscordBotListApi DblApi = new AuthDiscordBotListApi(BOTID, AUTHTOKEN);
+```
+
+### Updating Stats
+```csharp
+ISelfBot me = await DblApi.GetMeAsync();
+await me.UpdateStatsAsync(
+  // indexShard
+  24,
+  // shardCount
+  50,
+  // shards
+  new[] { 12, 421, 62, 241, 524, 534 }
+);
+
+// Update stats           guildCount
+await me.UpdateStatsAsync(2133);
+```
+
+### Widgets
+```csharp
+string widgetUrl = new SmallWidgetOptions()
+	.SetType(WidgetType.OWNER)
+	.SetLeftColor(255, 255, 255)
+	.Build(160105994217586689);
+```
+Generates the following:
+
+[![Discord Bots](https://discordbots.org/api/widget/status/160105994217586689.svg?leftcolor=FFFFFF)](https://discordbots.org/bot/160105994217586689) {{ className: "-mt-8" }}

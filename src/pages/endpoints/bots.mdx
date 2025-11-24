@@ -1,0 +1,271 @@
+# Bot Endpoints
+
+<Note>
+  **Note:** The Bot endpoints are subject to **[stricter rate limits](/resources/ratelimits#resource-specific-ratelimits)** than others.
+</Note>
+
+---
+
+## Search Bots {{ tag: 'GET', label: '/bots' }}
+
+<Row>
+  <Col>
+
+    Gets a list of bots that match a specific query.
+
+    ### Query Parameters
+
+    <Properties>
+      <Property name="limit" type="number">
+        The amount of bots to return - max 500
+      </Property>
+      <Property name="offset" type="number">
+        Amount of bots to skip
+      </Property>
+      <Property name="search" type="string">
+        A search string in the format of `field: value field2: value2`
+      </Property>
+      <Property name="sort" type="string">
+        The field to sort by. Prefix with - to reverse the order
+      </Property>
+      <Property name="fields" type="string">
+        A comma separated list of fields to show
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/bots
+    ```
+
+    ```json {{ title: 'Response' }}
+    {
+      "results": [
+        {
+          "defAvatar": "6debd47ed13483642cf09e832ed0bc1b",
+          "invite": "https://discord.com/oauth2/authorize?client_id=264811613708746752&scope=bot",
+          "website": "https://top.gg",
+          "support": "KYZsaFb",
+          "github": "https://github.com/DiscordBotList/Luca",
+          "longdesc": "Bot's long description",
+          "shortdesc": "Bot's short description",
+          "prefix": "- or @Luca#1375",
+          "lib": "discord.js",
+          "clientid": "264811613708746752",
+          "avatar": "a7138418a83260e3331986619063ff78",
+          "id": "264811613708746752",
+          "discriminator": "1375",
+          "username": "Luca",
+          "date": "2017-04-26T18:08:17.125Z",
+          "server_count": 2,
+          "guilds": [],
+          "shards": [],
+          "monthlyPoints": 2,
+          "points": 561,
+          "certifiedBot": false,
+          "owners": [],
+          "tags": ["logging", "moderation", "role-management"],
+          "bannerUrl": null,
+          "donatebotguildid": null
+        }
+      ],
+      "limit": 1,
+      "offset": 0,
+      "count": 1,
+      "total": 7
+    }
+
+    ```
+  </Col>
+</Row>
+
+---
+
+## Find One Bot {{ tag: 'GET', label: '/bots/:id' }}
+
+<Row>
+  <Col>
+
+    Find a single bot by ID.
+
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/bots/:id
+    ```
+
+    ```json {{ title: 'Response' }}
+    {
+      "defAvatar": "6debd47ed13483642cf09e832ed0bc1b",
+      "invite": "https://discord.com/oauth2/authorize?client_id=264811613708746752&scope=bot",
+      "website": "https://top.gg",
+      "support": "KYZsaFb",
+      "github": "https://github.com/DiscordBotList/Luca",
+      "longdesc": "Bot's long description",
+      "shortdesc": "Bot's short description",
+      "prefix": "- or @Luca#1375",
+      "lib": "discord.js",
+      "clientid": "264811613708746752",
+      "avatar": "a7138418a83260e3331986619063ff78",
+      "id": "264811613708746752",
+      "discriminator": "1375",
+      "username": "Luca",
+      "date": "2017-04-26T18:08:17.125Z",
+      "server_count": 2,
+      "guilds": [],
+      "shards": [],
+      "monthlyPoints": 2,
+      "points": 561,
+      "certifiedBot": false,
+      "owners": [],
+      "tags": ["logging", "moderation", "role-management"],
+      "bannerUrl": null,
+      "donatebotguildid": null
+    }
+
+    ```
+  </Col>
+</Row>
+
+---
+
+## Last 1000 Votes {{ tag: 'GET', label: '/bots/:id/votes' }}
+
+<Row>
+  <Col>
+
+    Gets the last 1000 voters within the past month for your bot.
+    
+    <Note>
+      If your bot receives more than 1000 votes monthly you cannot use this endpoints and must use [webhooks](/resources/webhooks) and implement your own caching instead.
+    </Note>
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/bots/:id/votes
+    ```
+
+    ```json {{ title: 'Response' }}
+    [
+      {
+        "username": "Top.gg User",
+        "id": "906879761811406848",
+        "avatar": "024e6fbee0dd2e4bba8f462a02c0e705"
+      }
+    ]
+    ```
+  </Col>
+</Row>
+
+---
+
+## Find Bot Stats {{ tag: 'GET', label: '/bots/:id/stats' }}
+
+<Row>
+  <Col>
+
+    Get specific stats about a bot.
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/bots/:id/stats
+    ```
+
+    ```json {{ title: 'Response' }}
+    {
+      "server_count": 2,
+      "shards": [],
+      "shard_count": 0
+    }
+    ```
+  </Col>
+</Row>
+
+---
+
+## Individual User Vote {{ tag: 'GET', label: '/bots/:id/check' }}
+
+<Row>
+  <Col>
+
+    Checking whether or not a user has voted for your bot.
+
+    <Note>
+      <p className="text-white">If you are checking votes often, it is highly advised you use [webhooks](/resources/webhooks) and store votes yourself - this prevents the command not working due to API rate-limits!</p>
+    </Note>
+
+    ### Query Parameters
+
+    <Properties>
+      <Property name="userId" type="snowflake">
+        The user ID to check
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/bots/:id/check?userId=
+    ```
+
+    ```json {{ title: 'Response' }}
+    {
+      "voted": 1
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Post Stats {{ tag: 'POST', label: '/bots/:id/stats' }}
+
+<Row>
+  <Col>
+
+    Post your bot's stats to the API.
+
+    ### Post Body
+
+    <Properties>
+      <Property name="server_count" type="number | number[]">
+        The amount of servers your bot is in. If an Array, it acts like shards
+      </Property>
+      <Property name="shards" type="number[]">
+        Amount of servers the bot is in per shard. (Optional)
+      </Property>
+      <Property name="shard_id" type="number">
+        The zero-indexed id of the shard posting. Makes server_count set the shard specific server count. (Optional)
+      </Property>
+      <Property name="shard_count" type="number">
+        The amount of shards the bot has. (Optional)
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/bots/:id/stats
+    ```
+
+    ```json {{ title: 'Response' }}
+    {
+      "voted": 1
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
