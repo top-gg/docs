@@ -1,0 +1,32 @@
+# API v1
+
+The v1 API follows RESTful principles: each exposed resource has a dedicated endpoint and supports the appropriate HTTP methods. {{ className: "lead" }}
+
+## Base URL
+**`https://top.gg/api/v1`**
+
+##Authentication
+To access the API, authorize requests with your Top.gg token. You can do this by creating a token from your project's Integrations & API settings.
+
+Include it in the Authorization header:
+```json
+{
+  "Authorization": "Bearer $TOPGG_TOKEN"
+}
+```
+
+Legacy tokens without the Bearer prefix continue to work with v0 endpoints, but moving forward with v1, this is no longer allowed.
+
+## Error Handling
+All error responses follow the application/problem+json specification.
+
+A typical error looks like this:
+
+```ts
+type ProblemDetails = {
+  type: string,
+  title: string,
+  status: HTTPStatusCode,
+  detail: string
+}
+```

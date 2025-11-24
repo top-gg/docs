@@ -1,0 +1,27 @@
+# Getting Started
+
+Our API is HTTPS/REST for general operations such as sending **`POST`** requests and receiving **`GET`** requests. {{ className: "lead" }}
+
+## Base URL
+**`https://top.gg/api`**
+
+## API Versions
+
+We currently support two versions of our API:
+- **v0**
+- **v1**
+
+## Authentication
+To access our API you need to authorize yourself, this can be done by using your Top.gg auth token. Your token can be obtained from your bot page settings under Webhooks (https://top.gg/bot/BOTID/webhooks replacing **`BOTID`** with the ID of your bot). {{ className: "lead" }}
+
+Authentication is performed with the **`Authorization`** HTTP header.
+```json
+{
+  "Authorization": "your-topgg-token-here"
+}
+```
+
+## Rate Limits
+
+All endpoints are subject to rate limiting. Project endpoints in v1 have **stricter rate limits** than others. Please refer to our [rate limits documentation](/resources/ratelimits) for more details.
+

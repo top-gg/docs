@@ -1,0 +1,99 @@
+# User Endpoints
+
+A user represents a User account on Top.gg. It is not associated with any other platform like Discord. {{ className: "lead" }}
+
+## Find One User {{ tag: 'GET', label: '/users/:id' }}
+
+<Row>
+  <Col>
+
+    Retrieves information about a particular user by their Discord user id.
+
+    ### Response Schema
+
+    <Properties>
+      <Property name="id" type="snowflake">
+        The id of the user
+      </Property>
+      <Property name="username" type="string">
+        The username of the user
+      </Property>
+      <Property name="discriminator" type="string">
+        The discriminator of the user
+      </Property>
+      <Property name="avatar?" type="string">
+        The avatar hash of the user
+      </Property>
+      <Property name="defAvatar" type="string">
+        The default avatar hash of the user
+      </Property>
+      <Property name="bio?" type="string">
+        The bio of the user
+      </Property>
+      <Property name="banner?" type="string">
+        The banner URL of the user
+      </Property>
+      <Property name="social" type="object">
+        The social links of the user
+      </Property>
+      <Property name="social.youtube" type="string">
+        The YouTube channel ID of the user
+      </Property>
+      <Property name="social.reddit" type="string">
+        The Reddit username of the user
+      </Property>
+      <Property name="social.twitter" type="string">
+        The Twitter username of the user
+      </Property>
+      <Property name="social.instagram" type="string">
+        The Instagram username of the user
+      </Property>
+      <Property name="social.github" type="string">
+        The GitHub username of the user
+      </Property>
+      <Property name="color" type="string">
+        The custom hex color of the user (not guaranteed to be valid hex)
+      </Property>
+      <Property name="supporter" type="boolean">
+        The supporter status of the user
+      </Property>
+      <Property name="certifiedDev" type="boolean">
+        The certified status of the user
+      </Property>
+      <Property name="mod" type="boolean">
+        The moderator status of the user
+      </Property>
+      <Property name="webMod" type="boolean">
+        The web moderator status of the user
+      </Property>
+      <Property name="admin" type="boolean">
+        The admin status of the user
+      </Property>
+    </Properties>
+
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/users/:id
+    ```
+
+    ```json {{ title: 'Response' }}
+    {
+      "avatar": "0e6ce11ca2fefc2c38b1099d66ad66b5",
+      "id": "121919449996460033",
+      "username": "veld",
+      "defAvatar": "0e6ce11ca2fefc2c38b1099d66ad66b5",
+      "admin": true,
+      "webMod": true,
+      "mod": true,
+      "certifiedDev": true,
+      "supporter": true
+    }
+
+    ```
+  </Col>
+</Row>
+
+---

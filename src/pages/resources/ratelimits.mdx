@@ -1,0 +1,28 @@
+# Ratelimits
+
+The Top.gg API implements a ratelimiting system to help prevent spam requests. API users that regularly hit and ignore the limit will be blocked from our platform. These rate limits are in place to help prevent the abuse and overload of our services. {{ className: 'lead' }}
+
+## Global Ratelimit
+
+Global rate limits are applied on all routes. {{ className: 'lead' }}
+
+| Route | Request Type | Max Requests | Throttle     |
+| ----- | ------------ | ------------ | ------------ |
+| `*`   | `*`          | 100/second   | 1 hour block |
+
+## Resource-Specific Ratelimits
+
+Certain endpoints have tighter restrictions on their rate limits. Global rate limits still apply to requests sent to these.
+
+| Route     | Request Type | Max Requests | Throttle     |
+| --------- | ------------ | ------------ | ------------ |
+| `/bots/*` | \*           | 60/minute    | 1 hour block |
+
+## Exceeding a Rate Limit
+
+If you exceed the set rate limit for the API you will receive a HTTP 429 and be blocked from posting to the API for one hour.
+
+```json
+{
+  "retry-after": 3600
+}

@@ -1,0 +1,101 @@
+# Go Library
+
+The community-maintained Go library for Top.gg. If you experience any issues, please submit an issue on [GitHub](https://github.com/top-gg/go-sdk). {{ className: "lead" }}
+
+## Installation
+```
+go get -u github.com/top-gg/go-sdk
+```
+
+## Usage
+
+### Posting Bot Stats
+```go
+package main
+
+import (
+	"log"
+
+	"github.com/top-gg/go-sdk"
+)
+
+func main() {
+	dblClient, err := dbl.NewClient("token")
+	if err != nil {
+		log.Fatalf("Error creating new Discord Bot List client: %s", err)
+	}
+
+	err = dblClient.PostBotStats("botID", &dbl.BotStatsPayload{
+		Shards: []int{2500}, // If non-sharded, just pass total server count as the only integer element
+	})
+	if err != nil {
+		log.Printf("Error sending bot stats to Discord Bot List: %s", err)
+	}
+
+	// ...
+}
+```
+
+### Setting Options
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/top-gg/go-dbl"
+)
+
+const clientTimeout = 5 * time.Second
+
+func main() {
+	httpClient := &http.Client{}
+
+	dblClient, err := dbl.NewClient(
+		"token",
+		dbl.HTTPClientOption(httpClient), // Setting a custom HTTP client. Default is *http.Client with default timeout.
+		dbl.TimeoutOption(clientTimeout), // Setting timeout option. Default is 3 seconds
+	)
+	if err != nil {
+		log.Fatalf("Error creating new Discord Bot List client: %s", err)
+	}
+
+	// ...
+}
+```
+
+### Webhook
+```go
+package main
+
+import (
+	"errors"
+	"log"
+	"net/http"
+
+	"github.com/top-gg/go-dbl"
+)
+
+const listenerPort = ":9090"
+
+func main() {
+	listener := dbl.NewListener("token", handleVote)
+
+	// Serve is a blocking call
+	err := listener.Serve(listenerPort)
+	if !errors.Is(err, http.ErrServerClosed) {
+		log.Fatalf("HTTP server error: %s", err)
+	}
+}
+
+func handleVote(payload *dbl.WebhookPayload) {
+	// perform on payload
+}
+```
+
+## Rate Limits
+There's a local token bucket rate limiter, allowing for 60 requests a minute (single/burst) {{ className: "lead" }}
+
+Upon reaching the local rate limit, **`ErrLocalRatelimit`** error will be returned and **`RetryAfter`** in client fields will be updated with the retry time. {{ className: "lead -mt-4" }}

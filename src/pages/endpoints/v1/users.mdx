@@ -1,0 +1,44 @@
+# User Models
+
+User models in the v1 API provide information about user accounts from external platforms linked to Top.gg user accounts. {{ className: "lead" }}
+
+---
+
+## User Source
+
+A User Source is an enum that represents a user account from an external platform that is linked to a Top.gg user account. Each source has a unique identifier type that we might validate against. If none is passed to any endpoint that accepts a source parameter, it will default to `topgg`.
+
+### Valid Sources
+
+<Row>
+  <Col>
+
+    <Properties>
+      <Property name="topgg" type="source">
+        User ID Type: **Snowflake**
+      </Property>
+      <Property name="discord" type="source">
+        User ID Type: **Snowflake**
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```json {{ title: 'Example Usage' }}
+    {
+      "source": "discord"
+    }
+    ```
+
+    ```json {{ title: 'Example Usage' }}
+    {
+      "source": "topgg"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+

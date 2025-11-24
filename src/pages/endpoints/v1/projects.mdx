@@ -1,0 +1,80 @@
+# Projects
+
+<Note>
+  Project endpoints are subject to **stricter rate limits** than others.
+</Note>
+
+---
+
+## Update Discord Bot Commands {{ tag: 'POST', label: '/v1/projects/@me/commands' }}
+
+<Row>
+  <Col>
+
+    Updates the commands for a specific bot.
+
+    ### Post Body
+
+    This endpoint accepts an array of objects following Discord's application command structure.
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/v1/projects/@me/commands
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Get Vote Status By User {{ tag: 'GET', label: '/v1/projects/@me/votes/:user_id' }}
+
+<Row>
+  <Col>
+
+    Gets the vote status for an individual user.
+
+    ### Query Parameters
+
+    <Properties>
+      <Property name="source" type="string">
+        The source where the user ID is coming from. See [User Source](/endpoints/v1/users#user-source) for valid values. Defaults to `topgg`.
+      </Property>
+    </Properties>
+
+    ### Response Schema
+
+    <Properties>
+      <Property name="created_at" type="Date">
+        The timestamp of when the user last voted.
+      </Property>
+      <Property name="expires_at" type="Date">
+        The timestamp of when the user can vote again.
+      </Property>
+      <Property name="weight" type="number">
+        The amount of votes this vote counted for.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```bash {{ title: 'Request' }}
+    https://top.gg/api/v1/projects/@me/votes/:user_id
+    ```
+
+    ```json {{ title: 'Response' }}
+    {
+      "created_at": "2023-10-01T12:34:56.789Z",
+      "expires_at": "2023-10-01T18:34:56.789Z",
+      "weight": 1
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
