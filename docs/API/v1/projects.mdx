@@ -7,6 +7,55 @@ import HTTPHeader from "../../../src/components/HTTPHeader";
 
 > Project endpoints are subject to [stricter rate limits](/docs/Resources/ratelimits#resource-specific-ratelimits) than others.
 
+## Get Current Project
+
+<HTTPHeader type="GET" path="v1/projects/@me" />
+
+Gets the project associated with this token.
+
+### Response Body
+
+| Field        | Type        | Description                                              |
+| ------------ | ----------- | -------------------------------------------------------- |
+| id           | Snowflake   | The unique Top.gg-sourced identifier.                    | 
+| name         | string      | Name of the project sourced from the external platform.  |
+| platform     | [Platform](/docs/Models/v1/project#project-platform) | The platform this project originates from.               |
+| type         | [Type](/docs/Models/v1/project#project-type) | The type we classify this project as.                    |
+| headline     | string      | The short description provided during project creation.  |
+| tags         | string[]    | A list of all tag IDs.                                   |
+| votes        | number      | The current number of votes which count towards ranking. |
+| votes_total  | number      | The total number of votes this project has had.          |
+| review_score | number      | The average score of all reviews summed.                 |
+| review_count | number      | The total number of reviews left on this project.        |
+
+### Example Response
+
+```json
+{
+    "id": "218109768489992192",
+    "name": "Miki",
+    "type": "bot",
+    "platform": "discord",
+    "headline": "A great bot with tons of features! language | admin | cards | fun | levels | roles | marriage | currency | custom commands!",
+    "tags": [
+        "anime",
+        "customizable-behavior",
+        "economy",
+        "fun",
+        "game",
+        "leveling",
+        "multifunctional",
+        "role-management",
+        "roleplay",
+        "social"
+    ],
+    "votes": 1120,
+    "votes_total": 313389,
+    "review_score": 4.38,
+    "review_count": 62245
+}
+```
+
 ## Update Discord Bot Commands
 
 <HTTPHeader type="POST" path="v1/projects/@me/commands" />
