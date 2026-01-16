@@ -1,0 +1,72 @@
+---
+name: Lua
+description: A community maintained Top.gg Lua library
+---
+
+## Links
+
+[GitHub](https://github.com/top-gg/lua-sdk)
+
+## Installation
+
+You need to install the `git` CLI (Command Line Interface) and add it to the `PATH`.
+
+You can check GitHub's Git Guides on [installation of the Git CLI](https://github.com/git-guides/install-git).
+
+After installing the Git CLI, you can clone the GitHub repository listed [here](#links) by using:
+
+```bash
+$ git clone https://github.com/top-gg/lua-sdk
+```
+
+After cloning the GitHub repository, you should put the directory of the cloned GitHub repository in the root direcrory of your project's directory and require the library by using the following segment of code:
+
+```lua
+package.path = './?/init.lua' .. package.path;
+local topgg = require('topgg');
+```
+
+## Dependencies
+
+This library requires all 3 of the following dependencies to work properly:
+
+1. `creationix/coro-http@3.2.0`
+2. `luvit/json`
+3. `luvit/secure-socket`
+
+## Usage
+
+For full usage and documentation of the library, please refer to the GithHub repository listed [here](#links).
+
+## Posting stats
+
+```lua
+local topgg = require('topgg');
+local Api = topgg.Api:init('your-top.gg-token-goes-here');
+
+local postStats = coroutine.create(function()
+  local stats = Api:postStats({
+    serverCount = -- Your server count goes here (e.g. client.guilds.__len())
+  });
+
+  print(stats);
+end);
+
+coroutine.resume(postStats);
+```
+
+## Auto-posting
+
+```lua
+local topgg = require('topgg');
+
+local autoPoster = coroutine.create(function()
+  topgg.Autoposter:init('your-top.gg-token-goes-here', yourClientGoesHere);
+  topgg.Autoposter:on('posted', function()
+    print('Top.gg stats posted!');
+  end);
+end);
+
+coroutine.resume(autoPoster);
+```
+
