@@ -1,0 +1,8 @@
+{
+  "name": "docs",
+  "compatibility_date": "2026-01-28",
+  "assets": {
+    "directory": "./build",
+    "not_found_handling": "single-page-application"
+  }
+}
