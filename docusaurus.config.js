@@ -41,14 +41,12 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/top-gg/docs/tree/main/docs/',
+          sidebarCollapsed: false,
+          editUrl: 'https://github.com/top-gg/docs/tree/main/docs/',
         },
         theme: {
-          customCss: './src/css/custom.css',
-        },
+          customCss: './src/css/custom.css'
+        }
       }),
     ],
   ],
@@ -85,13 +83,18 @@ const config = {
             label: 'Community GitHub',
             position: 'right',
           },
+          {
+            href: 'https://discord.gg/EYHTgJX',
+            label: 'Discord Server',
+            position: 'right',
+          },
         ],
       },
 
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ['csharp', 'java', 'javascript', 'php', 'ruby']
+        additionalLanguages: ['csharp', 'java', 'javascript', 'php', 'ruby', 'powershell', 'gradle', 'toml', 'lua']
       },
     }),
 };

@@ -2,22 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
-const mappings = {
-  POST: {
-    color: "#78b993",
-    background: "#0e1712",
-    border: "#193123",
-  },
-  GET: {
-    color: "#7979d4",
-    background: "#212133",
-    border: "#47476b",
-  },
-};
-
 const HeaderWrapper = styled.div`
-  border: 1px solid ${(props) => mappings[props.method].border};
-  background: ${(props) => mappings[props.method].background};
+  border: 1px solid var(--http-header-${(props) => props.method.toLowerCase()}-border);
+  background: var(--http-header-${(props) => props.method.toLowerCase()}-background);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -28,16 +15,14 @@ const HeaderWrapper = styled.div`
 `;
 
 const MethodName = styled.h2`
-  color: ${(props) => mappings[props.method].color};
+  color: var(--http-header-${(props) => props.method.toLowerCase()}-color);
   font-weight: 700;
   font-size: 14px;
   margin: 0 10px 0 0;
 `;
 
-const EndpointUrl = styled.span``;
-
 const CopyButton = styled.button`
-  color: ${(props) => mappings[props.method].color};
+  color: var(--http-header-${(props) => props.method.toLowerCase()}-color);
   background: inherit;
   font-size: 14px;
   border: none;
@@ -47,7 +32,7 @@ const CopyButton = styled.button`
   font-weight: 500;
   padding: 0 10px;
   &:hover {
-    filter: brightness(0.6);
+    filter: brightness(0.8);
   }
 `;
 
@@ -57,23 +42,28 @@ const Header = styled.span`
   align-items: center;
 `;
 
+const EndpointUrl = styled.span``;
+
+const BASE_URL = "https://top.gg/api";
+
 export default function HTTPHeader({ type, path }) {
   const [copied, setCopy] = React.useState(false);
+
   React.useEffect(() => {
     if (copied) {
       setTimeout(() => setCopy(false), 3000);
     }
   }, [copied]);
-  const BASE_URL = "https://top.gg/api/";
-  const fullUrl = new URL(path, BASE_URL).href;
-  const url = path;
+  
+  const fullUrl = BASE_URL + path
+  
   return (
     <HeaderWrapper method={type}>
       <Header>
         <MethodName method={type}>{type}</MethodName>
         <EndpointUrl
           dangerouslySetInnerHTML={{
-            __html: url.replace(/:[a-z_]+/g, "<b>$&</b>"),
+            __html: path.replace(/:[a-z_]+/g, "<b>$&</b>"),
           }}
         />
       </Header>
