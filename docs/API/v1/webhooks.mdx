@@ -1,0 +1,149 @@
+---
+title: Webhooks
+description: Webhooks V2 for receiving real-time event data from Top.gg
+---
+
+Webhooks V2 allow you to receive real-time event notifications via `POST` requests to a URL of your choice. This is the recommended way to listen for events such as votes on your project.
+
+## Supported Scopes
+
+| Scope           | Description                              | 
+| --------------- | ---------------------------------------- | 
+| `webhook.test`  | Test webhook sent from the dashboard.    | 
+| `vote.create`   | Fired when a user votes for your project.| 
+
+## Security
+
+Each webhook integration is assigned a **webhook secret** (prefixed `whs_`). Use this secret to verify that incoming requests are genuinely from Top.gg.
+
+The secret is provided either during [integration setup](/docs/API/v1/integrations#handshake) or through your project's dashboard.
+
+### Signature Verification
+
+Every webhook request includes an `x-topgg-signature` header with the following format:
+
+```
+t={unix timestamp},v1={signature}
+```
+
+To verify a request:
+
+1. **Capture the raw body** — Preserve the exact bytes Top.gg sent before any parsing or formatting.
+2. **Extract the header** — Parse the `x-topgg-signature` header to get the timestamp (`t`) and signature (`v1`).
+3. **Compute the expected signature** — Create an HMAC SHA-256 digest using your webhook secret as the key and `{timestamp}.{rawBody}` as the message.
+4. **Compare** — If the computed digest matches the `v1` value from the header, the request is authentic.
+
+If verification fails, the request may have been tampered with, the secret may be incorrect, or the request did not originate from Top.gg. Reject it with an appropriate error status.
+
+### Headers
+
+| Header              | Description                                                        |
+| ------------------- | ------------------------------------------------------------------ |
+| `x-topgg-signature` | Signature in the format `t={timestamp},v1={hmac_sha256_hex}`.      |
+| `x-topgg-trace`     | A trace ID for debugging and correlating requests with Top.gg support. |
+
+## Acknowledgement
+
+Webhooks **must** be acknowledged with a `2xx` response to be considered successful. Unsuccessful webhooks are retried.
+
+## Timeouts
+
+Responses must be returned within **5 seconds**, otherwise they are considered timed out and will be queued for a retry.
+
+## Retrial
+
+Webhook requests that time out or return a `5XX` status response will be retried up to **3 times**. The retry delay increases exponentially per retry by `2^N` seconds, from a minimum delay of 1 second up to approximately 8 seconds for the third retry.
+
+## Events
+
+### `vote.create`
+
+Fired when a user votes for your project.
+
+#### Payload
+
+| Field                | Type        | Description                                                  |
+| -------------------- | ----------- | ------------------------------------------------------------ |
+| type                 | `string`    | Always `"vote.create"`.                                      |
+| data.id              | `snowflake` | Unique identifier for this vote.                             |
+| data.weight          | `number`    | The number of votes this vote counted for. This is a rounded integer value which determines how many points this individual vote was worth.                   |
+| data.created_at      | `Date`      | Timestamp of when the vote was cast.                         |
+| data.expires_at      | `Date`      | Timestamp of when the vote expires (user can vote again).    |
+| data.project.id      | `snowflake` | The Top.gg project ID.                                       |
+| data.project.type    | `string`    | The project type (e.g. `"bot"`).                             |
+| data.project.platform| `string`    | The platform the project belongs to (e.g. `"discord"`).      |
+| data.project.platform_id | `snowflake` | The platform-specific ID for the project.                |
+| data.user.id         | `snowflake` | The Top.gg user ID of the voter.                             |
+| data.user.platform_id| `snowflake` | The platform-specific ID of the voter.                       |
+| data.user.name       | `string`    | The voter's username.                                        |
+| data.user.avatar_url | `string`    | URL to the voter's avatar.                                   |
+
+#### Example Payload
+
+```json
+{
+  "type": "vote.create",
+  "data": {
+    "id": "808499215864008704",
+    "weight": 1,
+    "created_at": "2026-02-09T00:47:14.2510149+00:00",
+    "expires_at": "2026-02-09T12:47:14.2510149+00:00",
+    "project": {
+      "id": "803190510032756736",
+      "type": "bot",
+      "platform": "discord",
+      "platform_id": "160105994217586689"
+    },
+    "user": {
+      "id": "top.gg id",
+      "platform_id": "discord id",
+      "name": "username",
+      "avatar_url": "<avatar url>"
+    }
+  }
+}
+```
+
+### `webhook.test`
+
+A test event that can be triggered from the dashboard to verify your webhook endpoint is working correctly. This scope is always enabled and cannot be disabled.
+
+#### Payload
+
+| Field                    | Type        | Description                                                  |
+| ------------------------ | ----------- | ------------------------------------------------------------ |
+| type                     | `string`    | Always `"webhook.test"`.                                     |
+| data.user.id             | `snowflake` | The Top.gg user ID of the user who triggered the test.       |
+| data.user.platform_id    | `snowflake` | The platform-specific ID of the user.                        |
+| data.user.name           | `string`    | The user's username.                                         |
+| data.user.avatar_url     | `string`    | URL to the user's avatar.                                    |
+| data.project.id          | `snowflake` | The Top.gg project ID.                                       |
+| data.project.type        | `string`    | The project type (e.g. `"bot"`).                             |
+| data.project.platform    | `string`    | The platform the project belongs to (e.g. `"discord"`).      |
+| data.project.platform_id | `snowflake` | The platform-specific ID for the project.                    |
+
+#### Example Payload
+
+```json
+{
+  "type": "webhook.test",
+  "data": {
+    "user": {
+      "id": "top.gg id",
+      "platform_id": "discord id",
+      "name": "username",
+      "avatar_url": "<avatar url>"
+    },
+    "project": {
+      "id": "803190510032756736",
+      "type": "bot",
+      "platform": "discord",
+      "platform_id": "160105994217586689"
+    }
+  }
+}
+```
+
+## Example Implementation
+
+We've prepared an example of the full webhook recieve code for you to reference while you build your implementation. You can find the link on the [top-gg github here](https://github.com/top-gg/webhooks-v2-nodejs-example).

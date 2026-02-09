@@ -1,0 +1,80 @@
+---
+title: Integrations
+description: Build approved webhook integrations for Top.gg
+---
+
+Webhook integrations allow developers to build approved, installable integrations on Top.gg. Integrations use the same [Webhooks V2](/docs/API/v1/webhooks) system but operate as a bi-directional RPC-like flow during setup, enabling users to connect your service with a single click.
+
+> Integrations require approval from Top.gg before they can be listed.
+
+## How It Works
+
+When a user connects your integration, Top.gg initiates a handshake with your **integration config URL**. Your service responds with its webhook configuration, and the connection is established automatically.
+
+## Handshake
+
+The integration connection follows a four-step handshake:
+
+### 1. User Initiates Connection
+
+The user presses the **Connect** button on your integration page within Top.gg.
+
+### 2. Top.gg Sends `integration.create`
+
+Top.gg sends a `POST` request to your integration config URL with the `integration.create` event.
+
+#### `integration.create` Payload
+
+| Field                    | Type        | Description                                              |
+| ------------------------ | ----------- | -------------------------------------------------------- |
+| type                     | `string`    | Always `"integration.create"`.                           |
+| data.connection_id       | `string`    | Unique identifier for this connection.                   |
+| data.webhook_secret      | `string`    | The secret used to verify future webhook deliveries.     |
+| data.project.id          | `snowflake` | The Top.gg project ID.                                   |
+| data.project.platform    | `string`    | The platform the project belongs to (e.g. `"discord"`).  |
+| data.project.platform_id | `snowflake` | The platform-specific ID for the project.               |
+| data.project.type        | `string`    | The project type (e.g. `"bot"`).                         |
+
+#### Example Payload
+
+```json
+{
+  "type": "integration.create",
+  "data": {
+    "connection_id": "112402021105124",
+    "webhook_secret": "whs_abcd",
+    "project": {
+      "id": "1230954036934033243",
+      "platform": "discord",
+      "platform_id": "3949456393249234923",
+      "type": "bot"
+    }
+  }
+}
+```
+
+### 3. Respond With Configuration
+
+Defer the request, store the `connection_id` and `webhook_secret`, then immediately respond with your webhook configuration.
+
+#### Response Body
+
+| Field       | Type       | Description                                                                 |
+| ----------- | ---------- | --------------------------------------------------------------------------- |
+| webhook_url | `string`   | The URL where Top.gg should deliver webhook events for this connection.     |
+| routes      | `string[]` | An array of [webhook scopes](/docs/API/v1/webhooks#supported-scopes) to subscribe to. |
+
+#### Example Response
+
+```json
+{
+  "webhook_url": "https://your.bot/webhooks/xyz",
+  "routes": [
+    "vote.create"
+  ]
+}
+```
+
+### 4. Connected
+
+The integration is now active. Top.gg will deliver webhook events matching the subscribed `routes` to the provided `webhook_url`, signed with the `webhook_secret` from the handshake.
