@@ -88,3 +88,25 @@ Defer the request, store the `connection_id` and `webhook_secret`, then immediat
 ### 4. Connected
 
 The integration is now active. Top.gg will deliver webhook events matching the subscribed `routes` to the provided `webhook_url`, signed with the `webhook_secret` from the handshake.
+
+## Disconnecting an Integration
+
+Whenever the user deleted a managed webhook, a `integration.delete` event is pushed to the integration.
+
+### Payload
+
+| Field                    | Type        | Description                                                  |
+| ------------------------ | ----------- | ------------------------------------------------------------ |
+| type                     | `string`    | Always `"integration.delete"`.                               |
+| data.connection_id       | `string`    | Unique identifier for this connection.                       |
+
+### Example Json
+
+```json
+{
+  "type": "integration.delete",
+  "data": {
+    "connection_id": "112402021105124",
+  }
+}
+```
