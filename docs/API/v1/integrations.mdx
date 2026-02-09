@@ -3,7 +3,7 @@ title: Integrations
 description: Build approved webhook integrations for Top.gg
 ---
 
-Webhook integrations allow developers to build approved, installable integrations on Top.gg. Integrations use the same [Webhooks V2](/docs/API/v1/webhooks) system but operate as a bi-directional RPC-like flow during setup, enabling users to connect your service with a single click.
+Webhook integrations allow developers to build approved, installable integrations on Top.gg. Integrations use the same [Webhooks](/docs/API/v1/webhooks) system but operate as a bi-directional RPC-like flow during setup, enabling users to connect your service with a single click.
 
 > Integrations require approval from Top.gg before they can be listed.
 
@@ -25,15 +25,19 @@ Top.gg sends a `POST` request to your integration config URL with the `integrati
 
 #### `integration.create` Payload
 
-| Field                    | Type        | Description                                              |
-| ------------------------ | ----------- | -------------------------------------------------------- |
-| type                     | `string`    | Always `"integration.create"`.                           |
-| data.connection_id       | `string`    | Unique identifier for this connection.                   |
-| data.webhook_secret      | `string`    | The secret used to verify future webhook deliveries.     |
-| data.project.id          | `snowflake` | The Top.gg project ID.                                   |
-| data.project.platform    | `string`    | The platform the project belongs to (e.g. `"discord"`).  |
-| data.project.platform_id | `snowflake` | The platform-specific ID for the project.               |
-| data.project.type        | `string`    | The project type (e.g. `"bot"`).                         |
+| Field                    | Type        | Description                                                  |
+| ------------------------ | ----------- | ------------------------------------------------------------ |
+| type                     | `string`    | Always `"integration.create"`.                               |
+| data.connection_id       | `string`    | Unique identifier for this connection.                       |
+| data.webhook_secret      | `string`    | The secret used to verify future webhook deliveries.         |
+| data.project.id          | `snowflake` | The Top.gg project ID.                                       | 
+| data.project.platform    | `string`    | The platform the project belongs to (e.g. `"discord"`).      |
+| data.project.platform_id | `snowflake` | The platform-specific ID for the project.                    |
+| data.project.type        | `string`    | The project type (e.g. `"bot"`).                             |
+| data.user.id             | `snowflake` | The Top.gg user ID of the adder.                             |
+| data.user.platform_id    | `snowflake` | The platform-specific ID of the adder.                       |
+| data.user.name           | `string`    | The username of the user who added your integration.         |
+| data.user.avatar_url     | `string`    | The icon url of the user who added your integration.         |
 
 #### Example Payload
 
@@ -48,6 +52,12 @@ Top.gg sends a `POST` request to your integration config URL with the `integrati
       "platform": "discord",
       "platform_id": "3949456393249234923",
       "type": "bot"
+    },
+    "user": {
+      "id": "top.gg id",
+      "platform_id": "discord id",
+      "name": "username",
+      "avatar_url": "<avatar url>"
     }
   }
 }
