@@ -66,6 +66,50 @@ Updates the commands for a specific bot.
 
 This endpoint accepts an array of objects following [Discord's application command structure](https://discord.com/developers/docs/interactions/application-commands#application-command-object).
 
+Here's the documentation for your new endpoint:
+
+---
+
+## Get Votes
+
+<HTTPHeader type="GET" path="v1/projects/@me/votes" />
+
+Gets a paginated list of votes for the authenticated project, ordered by creation date.
+
+### Query Parameters
+
+| Parameter  | Type     | Description                                                                                     |
+| ---------- | -------- | ----------------------------------------------------------------------------------------------- |
+| cursor?    | `string` | Pagination cursor from a previous response. If provided, `startDate` is ignored.                |
+| startDate? | `Date`   | ISO 8601 timestamp to start fetching votes from. Required if `cursor` is not provided. Maximum 1 year in the past. |
+
+**Note:** Either `cursor` or `startDate` must be provided.
+
+### Response Body
+
+| Field  | Type                                | Description                                            |
+| ------ | ----------------------------------- | ------------------------------------------------------ |
+| cursor | `string`                            | Cursor for fetching the next page of results.          |
+| data   | `[Vote](/Models/v1/project#Vote)[]` | Array of vote records for the current token's project. |
+
+### Example Response
+
+```json
+{
+  "cursor": "<cursor-token>",
+  "data": [
+    {
+      "user_id": "1234567890",
+      "platform_id": "1234567890",
+      "weight": 1,
+      "created_at": "2026-01-28T02:19:19.145733Z",
+      "expires_at": "2026-01-28T14:19:19.145733Z"
+    },
+    ...
+  ]
+}
+```
+
 ## Get Vote Status By User
 
 <HTTPHeader type="GET" path="v1/projects/@me/votes/:user_id" />
