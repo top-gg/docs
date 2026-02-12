@@ -66,10 +66,6 @@ Updates the commands for a specific bot.
 
 This endpoint accepts an array of objects following [Discord's application command structure](https://discord.com/developers/docs/interactions/application-commands#application-command-object).
 
-Here's the documentation for your new endpoint:
-
----
-
 ## Get Votes
 
 <HTTPHeader type="GET" path="v1/projects/@me/votes" />
@@ -90,7 +86,7 @@ Gets a cursor-based paginated list of votes for the authenticated project, order
 | Field  | Type                                | Description                                            |
 | ------ | ----------------------------------- | ------------------------------------------------------ |
 | cursor | `string`                            | Cursor for fetching the next page of results.          |
-| data   | `[Vote](/Models/v1/project#Vote)[]` | Array of vote records for the current token's project. |
+| data   | [Vote](/docs/Models/v1/project#vote)[] | Array of vote records for the current token's project. |
 
 ### Example Response
 
