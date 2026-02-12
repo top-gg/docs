@@ -18,3 +18,13 @@ The type of a project helps top.gg synchronize features. For example, a discord 
 ### Allowed Values
 
 `bot`, `server`, `game`
+
+### Vote
+
+| Field       | Type     | Description                                        |
+| ----------- | -------- | -------------------------------------------------- |
+| user_id     | `string` | The ID of the user who voted.                      |
+| platform_id | `string` | The user's ID on the project's platform.           |
+| weight      | `number` | The amount of votes this vote counted for.         |
+| created_at  | `Date`   | The timestamp of when the user voted.              |
+| expires_at  | `Date`   | The timestamp of when the user can vote again.     |
