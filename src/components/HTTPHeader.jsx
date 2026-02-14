@@ -47,7 +47,7 @@ const CopyButton = styled.button`
   font-weight: 500;
   padding: 0 10px;
   &:hover {
-    filter: brightness(0.6);
+    filter: brightness(0.9);
   }
 `;
 
