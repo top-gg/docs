@@ -22,7 +22,8 @@
     "react": "^18.0.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.0.0",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.1.1",
