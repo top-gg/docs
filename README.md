@@ -1,41 +1,5 @@
-# Website
+# Top.gg documentation (archived)
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This repository is archived and no longer maintained. It is read-only, so issues and pull requests can no longer be opened here.
 
-### Installation
-
-```
-$ yarn
-```
-
-### Local Development
-
-```
-$ yarn start
-```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-### Build
-
-```
-$ yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+The Top.gg documentation now lives in [top-gg/developer-docs](https://github.com/top-gg/developer-docs) and is published at [docs.top.gg](https://docs.top.gg). Please open issues and pull requests there.
